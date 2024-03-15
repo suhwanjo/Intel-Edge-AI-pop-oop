@@ -1,0 +1,4 @@
+﻿  미션 4일차.c
+D:\Project1\04일차\미션 4일차.c(50,1): warning C4716: 'addImage': 값을 반환해야 합니다.
+D:\Project1\04일차\미션 4일차.c(62,1): warning C4716: 'binaryImage': 값을 반환해야 합니다.
+  04일차.vcxproj -> D:\Project1\04일차\x64\Debug\04일차.exe

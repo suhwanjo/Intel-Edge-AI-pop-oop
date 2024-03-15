@@ -1,0 +1,6 @@
+﻿  06-06 Gray Scale 영상처리_RC 1.c
+D:\Project1\06일차\06-06 Gray Scale 영상처리_RC 1.c(131,29): warning C4244: '함수': '__int64'에서 'double'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Project1\06일차\06-06 Gray Scale 영상처리_RC 1.c(309,63): warning C4244: '=': 'double'에서 'unsigned char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Project1\06일차\06-06 Gray Scale 영상처리_RC 1.c(326,28): warning C4244: '=': 'double'에서 'unsigned char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\Project1\06일차\06-06 Gray Scale 영상처리_RC 1.c(334,28): warning C4244: '=': 'double'에서 'unsigned char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  06일차.vcxproj -> D:\Project1\06일차\x64\Debug\06일차.exe

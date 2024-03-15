@@ -1,0 +1,122 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Project1\\05\uC77C\uCC28\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{EFFAC117-2A08-4B86-8C60-315FF9EF54D7}|05\uC77C\uCC28.vcxproj|D:\\Project1\\05\uC77C\uCC28\\\uBBF8\uC158.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{EFFAC117-2A08-4B86-8C60-315FF9EF54D7}|05\uC77C\uCC28.vcxproj|solutionrelative:\uBBF8\uC158.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EFFAC117-2A08-4B86-8C60-315FF9EF54D7}|05\uC77C\uCC28.vcxproj|D:\\Project1\\05\uC77C\uCC28\\05-05 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Beta 1.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{EFFAC117-2A08-4B86-8C60-315FF9EF54D7}|05\uC77C\uCC28.vcxproj|solutionrelative:05-05 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Beta 1.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EFFAC117-2A08-4B86-8C60-315FF9EF54D7}|05\uC77C\uCC28.vcxproj|D:\\Project1\\05\uC77C\uCC28\\05-04 \uBC14\uC774\uB108\uB9AC \uD30C\uC77C \uCC98\uB9AC.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{EFFAC117-2A08-4B86-8C60-315FF9EF54D7}|05\uC77C\uCC28.vcxproj|solutionrelative:05-04 \uBC14\uC774\uB108\uB9AC \uD30C\uC77C \uCC98\uB9AC.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EFFAC117-2A08-4B86-8C60-315FF9EF54D7}|05\uC77C\uCC28.vcxproj|D:\\Project1\\05\uC77C\uCC28\\05-01 \uD568\uC218.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{EFFAC117-2A08-4B86-8C60-315FF9EF54D7}|05\uC77C\uCC28.vcxproj|solutionrelative:05-01 \uD568\uC218.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EFFAC117-2A08-4B86-8C60-315FF9EF54D7}|05\uC77C\uCC28.vcxproj|D:\\Project1\\05\uC77C\uCC28\\05-02 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Alpha 4.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{EFFAC117-2A08-4B86-8C60-315FF9EF54D7}|05\uC77C\uCC28.vcxproj|solutionrelative:05-02 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Alpha 4.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EFFAC117-2A08-4B86-8C60-315FF9EF54D7}|05\uC77C\uCC28.vcxproj|D:\\Project1\\05\uC77C\uCC28\\05-03 \uD14D\uC2A4\uD2B8 \uD30C\uC77C \uCC98\uB9AC.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{EFFAC117-2A08-4B86-8C60-315FF9EF54D7}|05\uC77C\uCC28.vcxproj|solutionrelative:05-03 \uD14D\uC2A4\uD2B8 \uD30C\uC77C \uCC98\uB9AC.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "\uBBF8\uC158.c",
+              "DocumentMoniker": "D:\\Project1\\05\uC77C\uCC28\\\uBBF8\uC158.c",
+              "RelativeDocumentMoniker": "\uBBF8\uC158.c",
+              "ToolTip": "D:\\Project1\\05\uC77C\uCC28\\\uBBF8\uC158.c",
+              "RelativeToolTip": "\uBBF8\uC158.c",
+              "ViewState": "AQIAAEUAAAAAAAAAAAAAAEwAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2024-03-12T05:21:07.475Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "05-05 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Beta 1.c",
+              "DocumentMoniker": "D:\\Project1\\05\uC77C\uCC28\\05-05 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Beta 1.c",
+              "RelativeDocumentMoniker": "05-05 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Beta 1.c",
+              "ToolTip": "D:\\Project1\\05\uC77C\uCC28\\05-05 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Beta 1.c",
+              "RelativeToolTip": "05-05 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Beta 1.c",
+              "ViewState": "AQIAAEIAAAAAAAAAAAAUwFcAAAADAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2024-03-12T04:11:33.096Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "05-04 \uBC14\uC774\uB108\uB9AC \uD30C\uC77C \uCC98\uB9AC.c",
+              "DocumentMoniker": "D:\\Project1\\05\uC77C\uCC28\\05-04 \uBC14\uC774\uB108\uB9AC \uD30C\uC77C \uCC98\uB9AC.c",
+              "RelativeDocumentMoniker": "05-04 \uBC14\uC774\uB108\uB9AC \uD30C\uC77C \uCC98\uB9AC.c",
+              "ToolTip": "D:\\Project1\\05\uC77C\uCC28\\05-04 \uBC14\uC774\uB108\uB9AC \uD30C\uC77C \uCC98\uB9AC.c",
+              "RelativeToolTip": "05-04 \uBC14\uC774\uB108\uB9AC \uD30C\uC77C \uCC98\uB9AC.c",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2024-03-12T02:50:03.851Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "05-01 \uD568\uC218.c",
+              "DocumentMoniker": "D:\\Project1\\05\uC77C\uCC28\\05-01 \uD568\uC218.c",
+              "RelativeDocumentMoniker": "05-01 \uD568\uC218.c",
+              "ToolTip": "D:\\Project1\\05\uC77C\uCC28\\05-01 \uD568\uC218.c",
+              "RelativeToolTip": "05-01 \uD568\uC218.c",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAHAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2024-03-12T00:34:53.743Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "05-03 \uD14D\uC2A4\uD2B8 \uD30C\uC77C \uCC98\uB9AC.c",
+              "DocumentMoniker": "D:\\Project1\\05\uC77C\uCC28\\05-03 \uD14D\uC2A4\uD2B8 \uD30C\uC77C \uCC98\uB9AC.c",
+              "RelativeDocumentMoniker": "05-03 \uD14D\uC2A4\uD2B8 \uD30C\uC77C \uCC98\uB9AC.c",
+              "ToolTip": "D:\\Project1\\05\uC77C\uCC28\\05-03 \uD14D\uC2A4\uD2B8 \uD30C\uC77C \uCC98\uB9AC.c",
+              "RelativeToolTip": "05-03 \uD14D\uC2A4\uD2B8 \uD30C\uC77C \uCC98\uB9AC.c",
+              "ViewState": "AQIAAAwAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2024-03-12T01:40:52.414Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "05-02 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Alpha 4.c",
+              "DocumentMoniker": "D:\\Project1\\05\uC77C\uCC28\\05-02 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Alpha 4.c",
+              "RelativeDocumentMoniker": "05-02 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Alpha 4.c",
+              "ToolTip": "D:\\Project1\\05\uC77C\uCC28\\05-02 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Alpha 4.c",
+              "RelativeToolTip": "05-02 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Alpha 4.c",
+              "ViewState": "AQIAAAwAAAAAAAAAAAAAABYAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2024-03-12T00:55:55.13Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
