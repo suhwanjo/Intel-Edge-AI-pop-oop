@@ -1,0 +1,2 @@
+﻿08-01 Gray Scale 영상처리_Preview 1.obj : error LNK2019: _getInvalue_emboss 함수에서 참조되는 확인할 수 없는 외부 기호
+C:\Users\shjo\Desktop\Intel-Edge-AI-SW-Academy\08일차\Debug\08일차.exe : fatal error LNK1120: 1개의 확인할 수 없는 외부 참조입니다.

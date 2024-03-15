@@ -113,12 +113,13 @@ void printImage() {
     for (int i = 0; i < outH; i++) {
         for (int j = 0; j < outW; j++) {
             int px = outImage[i][j];
-            SetPixel(hdc, j + 200, i + 200, RGB(px, px, px)); // 뿌릴 좌표, RGB 채널 값이 같으면 Gray Scale
+            SetPixel(hdc, j + 500, i + 500, RGB(px, px, px)); // 뿌릴 좌표, RGB 채널 값이 같으면 Gray Scale
         }
     }
 }
 void loadImage() { // 하나 열고 또 열면 오류 남
-    char fullName[200] = "C:/Users/IOT/Desktop/Project1/Intel-Edge-AI-SW-Academy/RAW/";
+    //char fullName[200] = "C:/Users/IOT/Desktop/Project1/Intel-Edge-AI-SW-Academy/RAW/";
+    char fullName[200] = "C:/Users/shjo/Desktop/Intel-Edge-AI-SW-Academy/RAW/";
     char tmpName[50];
     printf("파일명 : "); // flower512, LENA256
     scanf("%s", &tmpName);
@@ -754,7 +755,11 @@ void emboss() { // 엠보싱/블러링/샤프닝
     int size = 0;
     double embossMask[3][3];
     while (1) {
+        printf("영역 처리 타입을 선택하세요.(0.엠보싱 1.블러링 2.스무딩 3.샤프닝)\n");
         type = getInValue();
+        printf("적용 정도를 선택하세요.(홀수만 가능)\n");
+        size = getInValue();
+
         if (type == 0) { // 엠보싱 : 처음에 -1,  끝에 1
             double mask[3][3] = { // 마스크(. 필수)
                 { -1.0, 0.0, 0.0 },
@@ -781,7 +786,7 @@ void emboss() { // 엠보싱/블러링/샤프닝
         }
         else if (type == 2) { // 스무딩 : exp(-(x * x) / (2 * sigma * sigma)) / (sigma * sqrt(2 * PI))
             double mask[3][3] = {
-                { 1 / 16., 1 / 8, 1 / 16. },
+                { 1 / 16., 1 / 8., 1 / 16. },
                 {1 / 8., 1 / 4., 1 / 8. },
                 {1 / 16., 1 / 8., 1 / 16. } };
             for (int i = 0; i < size; i++) {
@@ -807,7 +812,7 @@ void emboss() { // 엠보싱/블러링/샤프닝
             printf("잘못된 입력입니다. 다시 시도하세요.(0~3)\n");
     }
     // 임시 이미지 할당(실수) : 패딩을 위한
-    double** tmpInImage = mallocDoubleMemory(inH + 2, inW + 2);
+    double** tmpInImage = mallocDoubleMemory(inH + 2, inW + 2); // 필터 크기에 따라 패딩 변화
     double** tmpOutImage = mallocDoubleMemory(outH + 2, outW + 2);
     // 임시 이미지 초기화(127)
     for (int i = 0; i < inH + 2; i++) {
@@ -845,7 +850,7 @@ void emboss() { // 엠보싱/블러링/샤프닝
         //임시 출력 영상 -> 출력 영상
     for (int i = 0; i < outH; i++) {
         for (int j = 0; j < outW; j++) {
-            if (tmpOutImage[i][j] < 0.0)
+            if (tmpOutImage[i][j] < 0.0) 
                 outImage[i][j] = 0;
             else if (tmpOutImage[i][j] > 255.0)
                 outImage[i][j] = 255;
