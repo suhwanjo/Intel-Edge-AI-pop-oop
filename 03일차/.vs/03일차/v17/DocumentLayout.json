@@ -1,22 +1,22 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Project1\\03\uC77C\uCC28\\",
+  "WorkspaceRootPath": "C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\03\uC77C\uCC28\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5E144115-47EF-4960-9417-01D7FA74471A}|03\uC77C\uCC28.vcxproj|D:\\Project1\\03\uC77C\uCC28\\03-02 \uACC4\uC0B0\uAE30 \uC751\uC6A912.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{5E144115-47EF-4960-9417-01D7FA74471A}|03\uC77C\uCC28.vcxproj|solutionrelative:03-02 \uACC4\uC0B0\uAE30 \uC751\uC6A912.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5E144115-47EF-4960-9417-01D7FA74471A}|03\uC77C\uCC28.vcxproj|D:\\Project1\\03\uC77C\uCC28\\03-01 \uACC4\uC0B0\uAE30 \uAE30\uBCF8.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{5E144115-47EF-4960-9417-01D7FA74471A}|03\uC77C\uCC28.vcxproj|solutionrelative:03-01 \uACC4\uC0B0\uAE30 \uAE30\uBCF8.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5E144115-47EF-4960-9417-01D7FA74471A}|03\uC77C\uCC28.vcxproj|D:\\Project1\\03\uC77C\uCC28\\03-04 \uB370\uC774\uD130 \uD615\uC2DD.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{5E144115-47EF-4960-9417-01D7FA74471A}|03\uC77C\uCC28.vcxproj|C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\03\uC77C\uCC28\\03-04 \uB370\uC774\uD130 \uD615\uC2DD.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{5E144115-47EF-4960-9417-01D7FA74471A}|03\uC77C\uCC28.vcxproj|solutionrelative:03-04 \uB370\uC774\uD130 \uD615\uC2DD.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5E144115-47EF-4960-9417-01D7FA74471A}|03\uC77C\uCC28.vcxproj|D:\\Project1\\03\uC77C\uCC28\\03-03 \uD559\uC810 \uCD9C\uB825.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{5E144115-47EF-4960-9417-01D7FA74471A}|03\uC77C\uCC28.vcxproj|C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\03\uC77C\uCC28\\03-03 \uD559\uC810 \uCD9C\uB825.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{5E144115-47EF-4960-9417-01D7FA74471A}|03\uC77C\uCC28.vcxproj|solutionrelative:03-03 \uD559\uC810 \uCD9C\uB825.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5E144115-47EF-4960-9417-01D7FA74471A}|03\uC77C\uCC28.vcxproj|C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\03\uC77C\uCC28\\03-01 \uACC4\uC0B0\uAE30 \uAE30\uBCF8.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{5E144115-47EF-4960-9417-01D7FA74471A}|03\uC77C\uCC28.vcxproj|solutionrelative:03-01 \uACC4\uC0B0\uAE30 \uAE30\uBCF8.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5E144115-47EF-4960-9417-01D7FA74471A}|03\uC77C\uCC28.vcxproj|C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\03\uC77C\uCC28\\03-02 \uACC4\uC0B0\uAE30 \uC751\uC6A912.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{5E144115-47EF-4960-9417-01D7FA74471A}|03\uC77C\uCC28.vcxproj|solutionrelative:03-02 \uACC4\uC0B0\uAE30 \uC751\uC6A912.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,17 +26,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "03-02 \uACC4\uC0B0\uAE30 \uC751\uC6A912.c",
-              "DocumentMoniker": "D:\\Project1\\03\uC77C\uCC28\\03-02 \uACC4\uC0B0\uAE30 \uC751\uC6A912.c",
+              "DocumentMoniker": "C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\03\uC77C\uCC28\\03-02 \uACC4\uC0B0\uAE30 \uC751\uC6A912.c",
               "RelativeDocumentMoniker": "03-02 \uACC4\uC0B0\uAE30 \uC751\uC6A912.c",
-              "ToolTip": "D:\\Project1\\03\uC77C\uCC28\\03-02 \uACC4\uC0B0\uAE30 \uC751\uC6A912.c",
+              "ToolTip": "C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\03\uC77C\uCC28\\03-02 \uACC4\uC0B0\uAE30 \uC751\uC6A912.c",
               "RelativeToolTip": "03-02 \uACC4\uC0B0\uAE30 \uC751\uC6A912.c",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAcAAAA",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAgwBsAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2024-03-08T04:47:45.079Z",
               "IsPinned": true,
@@ -44,39 +44,39 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "03-03 \uD559\uC810 \uCD9C\uB825.c",
-              "DocumentMoniker": "D:\\Project1\\03\uC77C\uCC28\\03-03 \uD559\uC810 \uCD9C\uB825.c",
+              "DocumentMoniker": "C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\03\uC77C\uCC28\\03-03 \uD559\uC810 \uCD9C\uB825.c",
               "RelativeDocumentMoniker": "03-03 \uD559\uC810 \uCD9C\uB825.c",
-              "ToolTip": "D:\\Project1\\03\uC77C\uCC28\\03-03 \uD559\uC810 \uCD9C\uB825.c",
+              "ToolTip": "C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\03\uC77C\uCC28\\03-03 \uD559\uC810 \uCD9C\uB825.c",
               "RelativeToolTip": "03-03 \uD559\uC810 \uCD9C\uB825.c",
-              "ViewState": "AQIAAA8AAAAAAAAAAAAAAAAAAAAAAAAA",
+              "ViewState": "AQIAABQAAAAAAAAAAAAgwCkAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2024-03-08T05:15:29.201Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "03-01 \uACC4\uC0B0\uAE30 \uAE30\uBCF8.c",
-              "DocumentMoniker": "D:\\Project1\\03\uC77C\uCC28\\03-01 \uACC4\uC0B0\uAE30 \uAE30\uBCF8.c",
+              "DocumentMoniker": "C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\03\uC77C\uCC28\\03-01 \uACC4\uC0B0\uAE30 \uAE30\uBCF8.c",
               "RelativeDocumentMoniker": "03-01 \uACC4\uC0B0\uAE30 \uAE30\uBCF8.c",
-              "ToolTip": "D:\\Project1\\03\uC77C\uCC28\\03-01 \uACC4\uC0B0\uAE30 \uAE30\uBCF8.c",
+              "ToolTip": "C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\03\uC77C\uCC28\\03-01 \uACC4\uC0B0\uAE30 \uAE30\uBCF8.c",
               "RelativeToolTip": "03-01 \uACC4\uC0B0\uAE30 \uAE30\uBCF8.c",
-              "ViewState": "AQIAABgAAAAAAAAAAAAAAA0AAAAPAAAA",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAgwB4AAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2024-03-08T04:23:03.001Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "03-04 \uB370\uC774\uD130 \uD615\uC2DD.c",
-              "DocumentMoniker": "D:\\Project1\\03\uC77C\uCC28\\03-04 \uB370\uC774\uD130 \uD615\uC2DD.c",
+              "DocumentMoniker": "C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\03\uC77C\uCC28\\03-04 \uB370\uC774\uD130 \uD615\uC2DD.c",
               "RelativeDocumentMoniker": "03-04 \uB370\uC774\uD130 \uD615\uC2DD.c",
-              "ToolTip": "D:\\Project1\\03\uC77C\uCC28\\03-04 \uB370\uC774\uD130 \uD615\uC2DD.c",
+              "ToolTip": "C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\03\uC77C\uCC28\\03-04 \uB370\uC774\uD130 \uD615\uC2DD.c",
               "RelativeToolTip": "03-04 \uB370\uC774\uD130 \uD615\uC2DD.c",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABcAAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAqAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2024-03-08T05:38:28.329Z",
               "EditorCaption": ""

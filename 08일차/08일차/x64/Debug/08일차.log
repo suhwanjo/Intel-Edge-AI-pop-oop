@@ -1,0 +1,6 @@
+﻿  08-01 Gray Scale 영상처리_Preview 1.c
+C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\08일차\08-01 Gray Scale 영상처리_Preview 1.c(137,27): warning C4244: '함수': '__int64'에서 'double'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\08일차\08-01 Gray Scale 영상처리_Preview 1.c(399,80): warning C4244: '=': 'double'에서 'unsigned char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\08일차\08-01 Gray Scale 영상처리_Preview 1.c(422,44): warning C4244: '=': 'double'에서 'unsigned char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\08일차\08-01 Gray Scale 영상처리_Preview 1.c(430,44): warning C4244: '=': 'double'에서 'unsigned char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  08일차.vcxproj -> C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\08일차\x64\Debug\08일차.exe
