@@ -243,7 +243,7 @@ double** mallocDoubleMemory(int h, int w) {
 void freeDoubleMemory(double **memory, int h) {
     if (memory == NULL)
         return;
-    for (int i = 0; i < outH; i++) {
+    for (int i = 0; i < h; i++) {
         free(memory[i]);
     }
     free(memory);
@@ -751,40 +751,42 @@ void emboss() { // 엠보싱/블러링/샤프닝
     outW = inW;
     mallocOutputMemory();
 
-    int type;
-    int size = 0;
-    double embossMask[3][3];
+    int type, size;
+    while (1) {
+        printf("처리 적용 정도를 입력하세요.(홀수만 가능)\n");
+        size = getInValue();
+        if (size % 2 == 0)
+            printf("잘못된 입력입니다. 다시 시도하세요.(홀수)\n");
+        else
+            break;
+    }
+    printf("%d", size);
+    double** embossMask = mallocDoubleMemory(size, size);
     while (1) {
         printf("영역 처리 타입을 선택하세요.(0.엠보싱 1.블러링 2.스무딩 3.샤프닝)\n");
         type = getInValue();
-        printf("적용 정도를 선택하세요.(홀수만 가능)\n");
-        size = getInValue();
-
         if (type == 0) { // 엠보싱 : 처음에 -1,  끝에 1
-            double mask[3][3] = { // 마스크(. 필수)
-                { -1.0, 0.0, 0.0 },
-                {0.0, 0.0, 0.0 },
-                {0.0, 0.0, 1.0 } };
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
-                    embossMask[i][j] = mask[i][j];
+                    if (i == 0 && j == 0)
+                        embossMask[i][j] = -1.0;
+                    else if (i == size - 1 && j == size - 1)
+                        embossMask[i][j] = 1.0;
+                    else
+                        embossMask[i][j] = 0.0;
                 }
             }
             break;
         }
         else if (type == 1) { // 블러링 : size * size 로 나눔
-            double mask[3][3] = {
-                { 1 / 9., 1 / 9., 1 / 9. },
-                {1 / 9., 1 / 9., 1 / 9. },
-                {1 / 9., 1 / 9., 1 / 9. } };
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
-                    embossMask[i][j] = mask[i][j];
+                        embossMask[i][j] = 1 / (double)(size * size);
                 }
             }
             break;
         }
-        else if (type == 2) { // 스무딩 : exp(-(x * x) / (2 * sigma * sigma)) / (sigma * sqrt(2 * PI))
+        else if (type == 2) { // 스무딩 : exp(-(x * x) / (2 * sigma * sigma)) / (sigma * sqrt(2 * PI)) -> 시그마 입력 받고 x(중심으로부터의 거리) 구하기 
             double mask[3][3] = {
                 { 1 / 16., 1 / 8., 1 / 16. },
                 {1 / 8., 1 / 4., 1 / 8. },
@@ -796,14 +798,13 @@ void emboss() { // 엠보싱/블러링/샤프닝
             }
             break;
         }
-        else if (type == 3) { // 샤프닝 : 주변은 -1, 중앙은 주변의 (-합)
-            double mask[3][3] = {
-                { -1.0, -1.0, -1.0 },
-                {-1.0, 9.0, -1.0 },
-                {-1.0, -1.0, -1.0 } };
+        else if (type == 3) { // 샤프닝 : 주변은 -1, 중앙은 배열 크기
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
-                    embossMask[i][j] = mask[i][j];
+                    if (i == (size / 2) && j == (size / 2))
+                        embossMask[i][j] = (double)size * size;
+                    else
+                        embossMask[i][j] = -1.0;
                 }
             }
             break;
@@ -812,11 +813,11 @@ void emboss() { // 엠보싱/블러링/샤프닝
             printf("잘못된 입력입니다. 다시 시도하세요.(0~3)\n");
     }
     // 임시 이미지 할당(실수) : 패딩을 위한
-    double** tmpInImage = mallocDoubleMemory(inH + 2, inW + 2); // 필터 크기에 따라 패딩 변화
-    double** tmpOutImage = mallocDoubleMemory(outH + 2, outW + 2);
+    double** tmpInImage = mallocDoubleMemory(inH + (size-1), inW + (size - 1)); // 필터 크기에 따라 패딩 변화
+    double** tmpOutImage = mallocDoubleMemory(outH + (size - 1), outW + (size - 1));
     // 임시 이미지 초기화(127)
-    for (int i = 0; i < inH + 2; i++) {
-        for (int j = 0; j < inW + 2; j++) {
+    for (int i = 0; i < inH + (size - 1); i++) {
+        for (int j = 0; j < inW + (size - 1); j++) {
             tmpInImage[i][j] = 127;
         }
     }
@@ -831,8 +832,8 @@ void emboss() { // 엠보싱/블러링/샤프닝
     for (int i = 0; i < inH; i++) {
         for (int j = 0; j < inW; j++) {
             sum = 0;
-            for (int k = 0; k < 3; k++) {
-                for (int q = 0; q < 3; q++) {
+            for (int k = 0; k < size; k++) {
+                for (int q = 0; q < size; q++) {
                     sum += tmpInImage[i + k][j + q] * embossMask[k][q];
                 }
             }
@@ -859,9 +860,8 @@ void emboss() { // 엠보싱/블러링/샤프닝
         }
     }
 
-    freeDoubleMemory(tmpInImage, inH + 2);
+    freeDoubleMemory(tmpInImage, inH + (size - 1));
     freeDoubleMemory(tmpOutImage, outH);
+    freeDoubleMemory(embossMask, size);
     printImage();
-        
-    
 }
