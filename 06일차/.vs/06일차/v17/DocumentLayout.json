@@ -1,26 +1,26 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Project1\\06\uC77C\uCC28\\",
+  "WorkspaceRootPath": "C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\06\uC77C\uCC28\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D74DBA51-DE5F-466F-B17F-F5F5CCFDEF41}|06\uC77C\uCC28.vcxproj|D:\\Project1\\06\uC77C\uCC28\\06-06 Gray Scale \uC601\uC0C1\uCC98\uB9AC_RC 1.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{D74DBA51-DE5F-466F-B17F-F5F5CCFDEF41}|06\uC77C\uCC28.vcxproj|C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\06\uC77C\uCC28\\06-06 Gray Scale \uC601\uC0C1\uCC98\uB9AC_RC 1.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{D74DBA51-DE5F-466F-B17F-F5F5CCFDEF41}|06\uC77C\uCC28.vcxproj|solutionrelative:06-06 Gray Scale \uC601\uC0C1\uCC98\uB9AC_RC 1.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D74DBA51-DE5F-466F-B17F-F5F5CCFDEF41}|06\uC77C\uCC28.vcxproj|D:\\Project1\\06\uC77C\uCC28\\06-04 2\uCC28\uC6D0 \uB3D9\uC801\uBC30\uC5F4.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{D74DBA51-DE5F-466F-B17F-F5F5CCFDEF41}|06\uC77C\uCC28.vcxproj|C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\06\uC77C\uCC28\\06-04 2\uCC28\uC6D0 \uB3D9\uC801\uBC30\uC5F4.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{D74DBA51-DE5F-466F-B17F-F5F5CCFDEF41}|06\uC77C\uCC28.vcxproj|solutionrelative:06-04 2\uCC28\uC6D0 \uB3D9\uC801\uBC30\uC5F4.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D74DBA51-DE5F-466F-B17F-F5F5CCFDEF41}|06\uC77C\uCC28.vcxproj|D:\\Project1\\06\uC77C\uCC28\\06-01 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Beta 4_5.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{D74DBA51-DE5F-466F-B17F-F5F5CCFDEF41}|06\uC77C\uCC28.vcxproj|solutionrelative:06-01 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Beta 4_5.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{D74DBA51-DE5F-466F-B17F-F5F5CCFDEF41}|06\uC77C\uCC28.vcxproj|C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\06\uC77C\uCC28\\06-02 \uD3EC\uC778\uD130.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D74DBA51-DE5F-466F-B17F-F5F5CCFDEF41}|06\uC77C\uCC28.vcxproj|solutionrelative:06-02 \uD3EC\uC778\uD130.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D74DBA51-DE5F-466F-B17F-F5F5CCFDEF41}|06\uC77C\uCC28.vcxproj|D:\\Project1\\06\uC77C\uCC28\\06-03 \uB3D9\uC801 \uBA54\uBAA8\uB9AC.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{D74DBA51-DE5F-466F-B17F-F5F5CCFDEF41}|06\uC77C\uCC28.vcxproj|C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\06\uC77C\uCC28\\06-03 \uB3D9\uC801 \uBA54\uBAA8\uB9AC.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{D74DBA51-DE5F-466F-B17F-F5F5CCFDEF41}|06\uC77C\uCC28.vcxproj|solutionrelative:06-03 \uB3D9\uC801 \uBA54\uBAA8\uB9AC.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{D74DBA51-DE5F-466F-B17F-F5F5CCFDEF41}|06\uC77C\uCC28.vcxproj|D:\\Project1\\06\uC77C\uCC28\\06-02 \uD3EC\uC778\uD130.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{D74DBA51-DE5F-466F-B17F-F5F5CCFDEF41}|06\uC77C\uCC28.vcxproj|solutionrelative:06-02 \uD3EC\uC778\uD130.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{D74DBA51-DE5F-466F-B17F-F5F5CCFDEF41}|06\uC77C\uCC28.vcxproj|C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\06\uC77C\uCC28\\06-01 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Beta 4_5.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{D74DBA51-DE5F-466F-B17F-F5F5CCFDEF41}|06\uC77C\uCC28.vcxproj|solutionrelative:06-01 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Beta 4_5.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -36,11 +36,11 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "06-06 Gray Scale \uC601\uC0C1\uCC98\uB9AC_RC 1.c",
-              "DocumentMoniker": "D:\\Project1\\06\uC77C\uCC28\\06-06 Gray Scale \uC601\uC0C1\uCC98\uB9AC_RC 1.c",
+              "DocumentMoniker": "C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\06\uC77C\uCC28\\06-06 Gray Scale \uC601\uC0C1\uCC98\uB9AC_RC 1.c",
               "RelativeDocumentMoniker": "06-06 Gray Scale \uC601\uC0C1\uCC98\uB9AC_RC 1.c",
-              "ToolTip": "D:\\Project1\\06\uC77C\uCC28\\06-06 Gray Scale \uC601\uC0C1\uCC98\uB9AC_RC 1.c",
+              "ToolTip": "C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\06\uC77C\uCC28\\06-06 Gray Scale \uC601\uC0C1\uCC98\uB9AC_RC 1.c",
               "RelativeToolTip": "06-06 Gray Scale \uC601\uC0C1\uCC98\uB9AC_RC 1.c",
-              "ViewState": "AQIAAIMBAAAAAAAAAAAgwJgBAAAAAAAA",
+              "ViewState": "AQIAAHwBAAAAAAAAAAAswIYBAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
               "WhenOpened": "2024-03-13T07:04:13.733Z",
               "EditorCaption": ""
@@ -49,49 +49,53 @@
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "06-04 2\uCC28\uC6D0 \uB3D9\uC801\uBC30\uC5F4.c",
-              "DocumentMoniker": "D:\\Project1\\06\uC77C\uCC28\\06-04 2\uCC28\uC6D0 \uB3D9\uC801\uBC30\uC5F4.c",
+              "DocumentMoniker": "C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\06\uC77C\uCC28\\06-04 2\uCC28\uC6D0 \uB3D9\uC801\uBC30\uC5F4.c",
               "RelativeDocumentMoniker": "06-04 2\uCC28\uC6D0 \uB3D9\uC801\uBC30\uC5F4.c",
-              "ToolTip": "D:\\Project1\\06\uC77C\uCC28\\06-04 2\uCC28\uC6D0 \uB3D9\uC801\uBC30\uC5F4.c",
+              "ToolTip": "C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\06\uC77C\uCC28\\06-04 2\uCC28\uC6D0 \uB3D9\uC801\uBC30\uC5F4.c",
               "RelativeToolTip": "06-04 2\uCC28\uC6D0 \uB3D9\uC801\uBC30\uC5F4.c",
-              "ViewState": "AQIAABQAAAAAAAAAAAAgwCkAAAADAAAA",
+              "ViewState": "AQIAABAAAAAAAAAAAAAswCkAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2024-03-13T06:01:42.947Z"
+              "WhenOpened": "2024-03-13T06:01:42.947Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
               "Title": "06-03 \uB3D9\uC801 \uBA54\uBAA8\uB9AC.c",
-              "DocumentMoniker": "D:\\Project1\\06\uC77C\uCC28\\06-03 \uB3D9\uC801 \uBA54\uBAA8\uB9AC.c",
+              "DocumentMoniker": "C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\06\uC77C\uCC28\\06-03 \uB3D9\uC801 \uBA54\uBAA8\uB9AC.c",
               "RelativeDocumentMoniker": "06-03 \uB3D9\uC801 \uBA54\uBAA8\uB9AC.c",
-              "ToolTip": "D:\\Project1\\06\uC77C\uCC28\\06-03 \uB3D9\uC801 \uBA54\uBAA8\uB9AC.c",
+              "ToolTip": "C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\06\uC77C\uCC28\\06-03 \uB3D9\uC801 \uBA54\uBAA8\uB9AC.c",
               "RelativeToolTip": "06-03 \uB3D9\uC801 \uBA54\uBAA8\uB9AC.c",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "ViewState": "AQIAAB4AAAAAAAAAAAAswDcAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2024-03-13T05:05:16.955Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "06-02 \uD3EC\uC778\uD130.c",
-              "DocumentMoniker": "D:\\Project1\\06\uC77C\uCC28\\06-02 \uD3EC\uC778\uD130.c",
-              "RelativeDocumentMoniker": "06-02 \uD3EC\uC778\uD130.c",
-              "ToolTip": "D:\\Project1\\06\uC77C\uCC28\\06-02 \uD3EC\uC778\uD130.c",
-              "RelativeToolTip": "06-02 \uD3EC\uC778\uD130.c",
-              "ViewState": "AQIAACcAAAAAAAAAAAAgwDYAAAADAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2024-03-13T02:51:30.314Z"
+              "WhenOpened": "2024-03-13T05:05:16.955Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "06-01 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Beta 4_5.c",
-              "DocumentMoniker": "D:\\Project1\\06\uC77C\uCC28\\06-01 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Beta 4_5.c",
-              "RelativeDocumentMoniker": "06-01 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Beta 4_5.c",
-              "ToolTip": "D:\\Project1\\06\uC77C\uCC28\\06-01 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Beta 4_5.c",
-              "RelativeToolTip": "06-01 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Beta 4_5.c",
-              "ViewState": "AQIAACIBAAAAAAAAAAAgwDcBAAAAAAAA",
+              "Title": "06-02 \uD3EC\uC778\uD130.c",
+              "DocumentMoniker": "C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\06\uC77C\uCC28\\06-02 \uD3EC\uC778\uD130.c",
+              "RelativeDocumentMoniker": "06-02 \uD3EC\uC778\uD130.c",
+              "ToolTip": "C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\06\uC77C\uCC28\\06-02 \uD3EC\uC778\uD130.c",
+              "RelativeToolTip": "06-02 \uD3EC\uC778\uD130.c",
+              "ViewState": "AQIAABcAAAAAAAAAAAAswDYAAAABAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
-              "WhenOpened": "2024-03-13T00:26:55.994Z"
+              "WhenOpened": "2024-03-13T02:51:30.314Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "06-01 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Beta 4_5.c",
+              "DocumentMoniker": "C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\06\uC77C\uCC28\\06-01 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Beta 4_5.c",
+              "RelativeDocumentMoniker": "06-01 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Beta 4_5.c",
+              "ToolTip": "C:\\Users\\IOT\\Desktop\\Project1\\Intel-Edge-AI-SW-Academy\\06\uC77C\uCC28\\06-01 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Beta 4_5.c",
+              "RelativeToolTip": "06-01 Gray Scale \uC601\uC0C1\uCC98\uB9AC_Beta 4_5.c",
+              "ViewState": "AQIAAB4BAAAAAAAAAAAswDcBAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2024-03-13T00:26:55.994Z",
+              "EditorCaption": ""
             }
           ]
         }
