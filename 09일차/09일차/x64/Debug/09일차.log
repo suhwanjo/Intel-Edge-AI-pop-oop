@@ -3,12 +3,12 @@ C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale
 C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(430,80): warning C4244: '=': 'double'에서 'unsigned char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(455,44): warning C4244: '=': 'double'에서 'unsigned char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(463,44): warning C4244: '=': 'double'에서 'unsigned char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1029,47): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1029,79): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1037,47): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1037,79): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1045,43): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1045,71): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1053,47): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1053,75): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1058,47): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1058,79): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1066,47): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1066,79): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1074,43): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1074,71): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1082,47): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1082,75): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   09일차.vcxproj -> C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\x64\Debug\09일차.exe

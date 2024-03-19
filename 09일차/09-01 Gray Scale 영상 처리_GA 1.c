@@ -101,18 +101,18 @@ void main() {
 
 // 공통 함수
 void printMenu() {
-    puts(" --------------------------------------------------------------");
-    puts("|  ## Gray Scale Image Processing (GA 1) ##                    |");
-    puts("|--------------------------------------------------------------|");
-    puts("|  0. 열기     1. 저장      9. 종료                            |");
-    puts("|--------------------------------------------------------------|");
-    puts("|  A. 원본             B. 밝기조절  C. 반전                    |");
-    puts("|  D. 이진화           E. 감마보정  F. 파라볼릭변환            |");
-    puts("|  G. 포스터라이징     H. 범위강조  I. 확대/축소               |");
-    puts("|  J. 회전             K. 이동      L. 미러링(대칭)            |");
-    puts("|  M. 명암대비스트레칭 N. 평활화    O. 엠보싱/블러링/샤프닝    |");
-    puts("|  P. 에지검출(LOG)    Q. 에지검출(DOG)                        |");
-    puts(" --------------------------------------------------------------");
+    puts(" ------------------------------------------------------------------");
+    puts("|  ## Gray Scale Image Processing (GA 1) ##                        |");
+    puts("|------------------------------------------------------------------|");
+    puts("|  0. 열기     1. 저장      9. 종료                                |");
+    puts("|------------------------------------------------------------------|");
+    puts("|  A. 원본             B. 밝기조절  C. 반전                        |");
+    puts("|  D. 이진화           E. 감마보정  F. 파라볼릭변환                |");
+    puts("|  G. 포스터라이징     H. 범위강조  I. 확대/축소                   |");
+    puts("|  J. 회전             K. 이동      L. 미러링(대칭)                |");
+    puts("|  M. 명암대비스트레칭 N. 평활화    O. 엠보싱/블러링/스무딩/샤프닝 |");
+    puts("|  P. 에지검출(LOG)    Q. 에지검출(DOG)                            |");
+    puts(" ------------------------------------------------------------------");
 }
 void printImage() {
     for (int i = 0; i < outH; i++) {
@@ -550,15 +550,20 @@ void histoStretch() { // 히스토그램(대비) 스트레칭
                 high = inImage[i][j];
         }
     }
-    // End-In 탐색 : 최대 최소값 사이를 좁혀 스트레칭 효과를 극대화
     // high -= 50;
     // low += 50;  
     //
     int old, new;
     for (int i = 0; i < inH; i++) {
         for (int j = 0; j < inW; j++) {
+            // End-In 탐색 : 최대 최소값 사이를 좁혀 스트레칭 효과를 극대화
+            // new = (old - low) / (high - low) * 255
             old = inImage[i][j];
             new = (int)((old - low) / (double)(high - low) * 255.0);
+            if (new > 255)
+                new = 255;
+            if (new < 0)
+                new = 0;
             outImage[i][j] = new;
         }
     }
@@ -572,24 +577,28 @@ void histoEqual() { // 히스토그램 평활화
     outW = inW;
     mallocOutputMemory();
 
-    // 1단계 : 빈도수 세기(=히스토그램) histo[256]
+    
     int histo[256] = { 0, };
     for (int i = 0; i < inH; i++)
         for (int j = 0; j < inW; j++)
+            // 1단계 : 빈도수 세기(=히스토그램) histo[256]
             histo[inImage[i][j]]++;
     // 2단계 : 누적히스토그램 생성
     int sumHisto[256] = { 0, };
     sumHisto[0] = histo[0];
     for (int i = 1; i < 256; i++)
+        // 2단계 : 누적히스토그램 생성
         sumHisto[i] = sumHisto[i - 1] + histo[i];
     // 3단계 : 정규화된 히스토그램 생성  normalHisto = sumHisto * (1.0 / (inH*inW) ) * 255.0;
     double normalHisto[256] = { 1.0, };
     for (int i = 0; i < 256; i++) {
+        // 3단계 : 정규화된 히스토그램 생성
         normalHisto[i] = sumHisto[i] * (1.0 / (inH * inW)) * 255.0;
     }
     // 4단계 : inImage를 정규화된 값으로 치환
     for (int i = 0; i < inH; i++) {
         for (int j = 0; j < inW; j++) {
+            // 4단계 : inImage를 정규화된 값으로 치환
             outImage[i][j] = (unsigned char)normalHisto[inImage[i][j]];
         }
     }
@@ -639,12 +648,14 @@ void scaleImage() { // 확대/축소
                 int histo[256] = { 0, };
                 for (int k = i * scale; k < ((i + 1) * scale); k++) {
                     for (int q = j * scale; q < ((j + 1) * scale); q++) {
+                        // 히스토그램 계산
                         histo[inImage[k][q]] += 1;
                     }
                 }
                 count = 0;
                 for (int a = 0; a < 256; a++) {
                     count += histo[a];
+                    // 중간 값 계산
                     if (count >= (scale * scale) / 2) {
                         median = a;
                         break;
@@ -701,15 +712,15 @@ void scaleImage() { // 확대/축소
 void rotatImage() { // 회전
     if (inImage == NULL)
         return;
+
     int degree = getInValue();
-    double radian = -degree * PI / 180.0;
+    double tmp_radian = degree % 90 * PI / 180.0;
+    double tmp_radian90 = (90 - degree % 90) * PI / 180.0;
     freeOutputMemory();
-    //outH = (int)(fabs(inH * cos(radian)) + fabs(inW * sin(radian)));
-    //outW = (int)(fabs(inW * cos(radian)) + fabs(inH * sin(radian)));
-    double cosTheta = fabs(cos(radian));
-    double sinTheta = fabs(sin(radian));
-    outH = (int)(inH * cosTheta + inW * sinTheta);
-    outW = (int)(inW * cosTheta + inH * sinTheta);
+    // 회전 각도에 따라 출력 영상을 확대
+    outH = (int)(inH * cos(tmp_radian90) + inW * cos(tmp_radian));
+    outW = (int)(inW * cos(tmp_radian) + inH * cos(tmp_radian90));
+    double angle = degree * PI / 180.0;
     mallocOutputMemory();
     //xd = cos(xs) - sin(ys)
     //yd = sin(xs) + cos(ys)
@@ -722,22 +733,38 @@ void rotatImage() { // 회전
     //   }
     //}
     // 여전히 잘리는 문제
-    int cx = inW / 2 + degree;
-    int cy = inH / 2 + degree;
+    int dx = (outW - inW) / 2;
+    int dy = (outH - inH) / 2;
+    unsigned char** tmpImage = (unsigned char**)malloc(sizeof(unsigned char*)*outH);
+    for (int i = 0; i < outH; i++) {
+        tmpImage[i] = (unsigned char*)malloc(sizeof(unsigned char) * outW);
+    }
+    for (int i = 0; i < inH; i++)
+        for (int j = 0; j < inW; j++)
+            // 출력 크기의 임시 영상, 중앙에 (0,0) 오도록 이동
+            tmpImage[i + dx][j + dy] = inImage[i][j];
 
+    int cx = outH / 2;
+    int cy = outW / 2;
     int xs, ys;
-    for (int i = 0; i < outH; i++) { // 백워딩 + 중앙으로 이동
+    for (int i = 0; i < outH; i++) { 
         for (int j = 0; j < outW; j++) {
             int xd = i;
             int yd = j;
-            xs = (int)(cos(radian) * (xd - cx) + sin(radian) * (yd - cy));
-            ys = (int)(-sin(radian) * (xd - cx) + cos(radian) * (yd - cy));
-            xs += cx - degree;
-            ys += cy - degree;
-            if ((0 <= xs && xs < inH) && (0 <= ys && ys < inW))
-                outImage[xd][yd] = inImage[xs][ys];
+            // 백워딩 + 중앙으로 이동
+            xs = (int)(cos(angle) * (xd - cx) + sin(angle) * (yd - cy)) + cx;
+            ys = (int)(-sin(angle) * (xd - cx) + cos(angle) * (yd - cy)) + cy;
+            if ((0 <= xs && xs < outH) && (0 <= ys && ys < outW))
+                outImage[xd][yd] = tmpImage[xs][ys];
         }
     }
+
+    // 임시 영상 메모리 해제
+    //for (int i = 0; i < outH; i++) {
+    //    free(tmpImage[i]);
+    //}
+    //free(tmpImage);
+
     printImage();
 }
 void moveImage() { // 이동
@@ -752,6 +779,7 @@ void moveImage() { // 이동
     if (move >= 0) { // 우측 하단으로 이동
         for (int i = 0; i < outH - move; i++) {
             for (int j = 0; j < outW - move; j++) {
+                // 우측 하단
                 if ((0 <= i && i < outH) && (0 <= j && j < outW))
                     outImage[i + move][j + move] = inImage[i][j];
             }
@@ -760,6 +788,7 @@ void moveImage() { // 이동
     else // 좌측 상단으로 이동
         for (int i = 0; i < outH; i++) {
             for (int j = 0; j < outW; j++) {
+                // 좌측 상단
                 if ((0 - move <= i && i < outH) && (0 - move <= j && j < outW))
                     outImage[i + move][j + move] = inImage[i][j];
             }
@@ -781,6 +810,7 @@ void mirrorImage() { // 미러링(대칭)
         if (mirror == 1) {
             for (int i = 0; i < outH; i++) {
                 for (int j = 0; j < outW; j++) {
+                    // 좌-우
                     outImage[i][-(j - outW + 1)] = inImage[i][j];
                 }
             }
@@ -789,6 +819,7 @@ void mirrorImage() { // 미러링(대칭)
         else if (mirror == 0) {
             for (int i = 0; i < outH; i++) {
                 for (int j = 0; j < outW; j++) {
+                    // 상-하
                     outImage[-(i - outH + 1)][j] = inImage[i][j];
                 }
             }
@@ -826,6 +857,7 @@ void emboss() { // 엠보싱/블러링/샤프닝
         if (type == 0) { // 엠보싱 : 처음에 -1,  끝에 1
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
+                    // 엠보싱 마스크 생성
                     if (i == 0 && j == 0)
                         mask[i][j] = -1.0;
                     else if (i == size - 1 && j == size - 1)
@@ -839,6 +871,7 @@ void emboss() { // 엠보싱/블러링/샤프닝
         else if (type == 1) { // 블러링 : size * size 로 나눔
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
+                    // 블러링 마스크 생성
                     mask[i][j] = 1 / (double)(size * size);
                 }
             }
@@ -857,6 +890,7 @@ void emboss() { // 엠보싱/블러링/샤프닝
             double gaussian;
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
+                    // 가우시안 마스크 생성
                     double x = sqrt((pow((i - center), 2)+ pow((j - center), 2)));
                     gaussian = exp(-(x * x) / (2.0 * sigma * sigma)) / (sigma * sqrt(2.0 * PI));
                     mask[i][j] = gaussian;
@@ -867,6 +901,7 @@ void emboss() { // 엠보싱/블러링/샤프닝
         else if (type == 3) { // 샤프닝 : 주변은 -1, 중앙은 배열 크기
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
+                    // 샤프닝 마스크 생성
                     if (i == center && j == center)
                         mask[i][j] = (double)size * size;
                     else
@@ -914,9 +949,9 @@ void emboss() { // 엠보싱/블러링/샤프닝
             }
         }
     }
-    //임시 출력 영상 -> 출력 영상
     for (int i = 0; i < outH; i++) {
         for (int j = 0; j < outW; j++) {
+            //임시 출력 영상 -> 출력 영상
             if (tmpOutImage[i][j] < 0.0)
                 outImage[i][j] = 0;
             else if (tmpOutImage[i][j] > 255.0)
