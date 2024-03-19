@@ -1,14 +1,14 @@
 ﻿  09-01 Gray Scale 영상 처리_GA 1.c
-C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(150,27): warning C4244: '함수': '__int64'에서 'double'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(430,80): warning C4244: '=': 'double'에서 'unsigned char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(455,44): warning C4244: '=': 'double'에서 'unsigned char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(463,44): warning C4244: '=': 'double'에서 'unsigned char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1058,47): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1058,79): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1066,47): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1066,79): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1074,43): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1074,71): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1082,47): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1082,75): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  09일차.vcxproj -> C:\Users\IOT\Desktop\Project1\Intel-Edge-AI-SW-Academy\09일차\x64\Debug\09일차.exe
+C:\Users\shjo\Desktop\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(152,27): warning C4244: '함수': '__int64'에서 'double'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\shjo\Desktop\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(432,80): warning C4244: '=': 'double'에서 'unsigned char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\shjo\Desktop\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(457,44): warning C4244: '=': 'double'에서 'unsigned char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\shjo\Desktop\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(465,44): warning C4244: '=': 'double'에서 'unsigned char'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\shjo\Desktop\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1067,47): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\shjo\Desktop\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1067,79): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\shjo\Desktop\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1075,47): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\shjo\Desktop\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1075,79): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\shjo\Desktop\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1083,43): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\shjo\Desktop\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1083,71): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\shjo\Desktop\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1091,47): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\shjo\Desktop\Intel-Edge-AI-SW-Academy\09일차\09-01 Gray Scale 영상 처리_GA 1.c(1091,75): warning C4244: '함수': 'double'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  09일차.vcxproj -> C:\Users\shjo\Desktop\Intel-Edge-AI-SW-Academy\09일차\x64\Debug\09일차.exe

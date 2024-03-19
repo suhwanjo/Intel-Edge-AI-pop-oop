@@ -39,7 +39,7 @@ void gammaImage(); void paraImage(); void postImage(); void emphImage();
 void scaleImage(); void rotatImage(); void moveImage(); void mirrorImage();
 void histoStretch(); void histoEqual();
 void emboss();
-void edgeLOG(); void edgeDOG();
+void edgeLOG(); void edgeBetterLOG(); void edgeDOG();
 
 void main() {
     hwnd = GetForegroundWindow();
@@ -88,7 +88,9 @@ void main() {
         case 'p':
         case 'P': edgeLOG(); break; // 에지 검출(LOG)
         case 'q': 
-        case 'Q': edgeDOG(); break; // 에지 검출(DOG)
+        case 'Q': edgeBetterLOG(); break; // 에지 검출(LOG계산량개선)
+        case 'r':
+        case 'R': edgeDOG(); break;
         }
     }
     freeInputMemory();
@@ -101,18 +103,18 @@ void main() {
 
 // 공통 함수
 void printMenu() {
-    puts(" ------------------------------------------------------------------");
-    puts("|  ## Gray Scale Image Processing (GA 1) ##                        |");
-    puts("|------------------------------------------------------------------|");
-    puts("|  0. 열기     1. 저장      9. 종료                                |");
-    puts("|------------------------------------------------------------------|");
-    puts("|  A. 원본             B. 밝기조절  C. 반전                        |");
-    puts("|  D. 이진화           E. 감마보정  F. 파라볼릭변환                |");
-    puts("|  G. 포스터라이징     H. 범위강조  I. 확대/축소                   |");
-    puts("|  J. 회전             K. 이동      L. 미러링(대칭)                |");
-    puts("|  M. 명암대비스트레칭 N. 평활화    O. 엠보싱/블러링/스무딩/샤프닝 |");
-    puts("|  P. 에지검출(LOG)    Q. 에지검출(DOG)                            |");
-    puts(" ------------------------------------------------------------------");
+    puts(" ----------------------------------------------------------------------");
+    puts("|  ## Gray Scale Image Processing (GA 1) ##                            |");
+    puts("|----------------------------------------------------------------------|");
+    puts("|  0. 열기     1. 저장      9. 종료                                    |");
+    puts("|----------------------------------------------------------------------|");
+    puts("|  A. 원본             B. 밝기조절      C. 반전                        |");
+    puts("|  D. 이진화           E. 감마보정      F. 파라볼릭변환                |");
+    puts("|  G. 포스터라이징     H. 범위강조      I. 확대/축소                   |");
+    puts("|  J. 회전             K. 이동          L. 미러링(대칭)                |");
+    puts("|  M. 명암대비스트레칭 N. 평활화        O. 엠보싱/블러링/스무딩/샤프닝 |");
+    puts("|  P. 에지검출(LOG)    Q. LOG계산량개선 R. 에지검출(DOG)               |");
+    puts(" ----------------------------------------------------------------------");
 }
 void printImage() {
     for (int i = 0; i < outH; i++) {
@@ -126,8 +128,8 @@ void printImage() {
 void loadImage() { // 하나 열고 또 열면 오류 남
     fileName[0] = '\0'; // 여러번의 파일 열기를 위한 전역 변수 초기화
 
-    char fullName[200] = "C:/Users/IOT/Desktop/Project1/Intel-Edge-AI-SW-Academy/RAW/";
-    //char fullName[200] = "C:/Users/shjo/Desktop/Intel-Edge-AI-SW-Academy/RAW/";
+    //char fullName[200] = "C:/Users/IOT/Desktop/Project1/Intel-Edge-AI-SW-Academy/RAW/";
+    char fullName[200] = "C:/Users/shjo/Desktop/Intel-Edge-AI-SW-Academy/RAW/";
     char tmpName[50];
     printf("파일명 : "); // flower512, LENA256
     scanf("%s", &tmpName);
@@ -995,6 +997,7 @@ void edgeLOG() { // 가우시안 블러링 -> 라플라시안 적용 -> zero-crossing
     // 3x3 크기의 시그마 0.5인 가우시안 마스크 생성
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
+            // 3x3 가우시안 마스크
             double x = sqrt((pow((i - 1), 2) + pow((j - 1), 2)));
             gaussian = exp(-(x * x) / (2.0 * 0.5 * 0.5)) / (0.5 * sqrt(2.0 * PI));
             gaussMask[i][j] = gaussian;
@@ -1022,6 +1025,7 @@ void edgeLOG() { // 가우시안 블러링 -> 라플라시안 적용 -> zero-crossing
             sum = 0;
             for (int k = 0; k < 3; k++) {
                 for (int q = 0; q < 3; q++) {
+                    // 가우시안 마스크를 통한 블러 처리
                     sum += tmpInImage[i + k][j + q] * gaussMask[k][q];
                 }
             }
@@ -1111,7 +1115,7 @@ void edgeLOG() { // 가우시안 블러링 -> 라플라시안 적용 -> zero-crossing
     freeDoubleMemory(tmpOutImage, outH);
     printImage();
 }
-void edgeDOG() { // 가우시안 x,y 미분 -> 입력 영상에 적용 -> 에지 강도 계산 -> 이진화
+void edgeBetterLOG() { // 가우시안 x,y 미분 -> 입력 영상에 적용 -> 에지 강도 계산 -> 이진화
     if (inImage == NULL)
         return;
     freeOutputMemory();
@@ -1235,3 +1239,148 @@ void edgeDOG() { // 가우시안 x,y 미분 -> 입력 영상에 적용 -> 에지 강도 계산 -> �
     freeDoubleMemory(tmpOutImage, outH);
     printImage();
 }
+void edgeDOG() {
+    if (inImage == NULL)  // 입력 이미지가 없으면 함수 종료
+        return;
+    freeOutputMemory();  // 출력 메모리 해제
+    outH = inH;  // 출력 이미지의 높이를 입력 이미지의 높이로 설정
+    outW = inW;  // 출력 이미지의 너비를 입력 이미지의 너비로 설정
+    mallocOutputMemory();  // 출력 메모리 할당
+
+    double mask[9][9]
+        = { {0,0,0,-1,-1,-1,0,0,0},
+            {0,-2,-3,-3,-3,-3,-3,-2,0},
+            {0,-3,-2,-1,-1,-1,-2,-3,0},
+            {0,-3,-1,9,9,9,-1,-3,0},
+            {-1,-3,-1,9,19,9,-1,-3,-1},
+            {0,-3,-1,9,9,9,-1,-3,0},
+            {0,-3,-2,-1,-1,-1,-2,-3,0},
+            {0,-2,-3,-3,-3,-3,-3,-2,0},
+            {0,0,0,-1,-1,-1,0,0,0}
+    };
+    // 임시 입력/출력 메모리 준비
+    double** tmpInput = mallocDoubleMemory(inH + 8, inW + 8); //엣지구간 마스킹을 간단하게 하기위해.(넓어진 영역들은 삭제될 예정)
+    double** tmpOutput = mallocDoubleMemory(outH, outW);
+    for (int i = 0; i < inH; i++) {
+        for (int k = 0; k < inW; k++) {
+            tmpInput[i + 4][k + 4] = inImage[i][k];
+        }
+    }
+
+    // 진짜 영상 처리 알고리즘 ==> 회선연산
+    double S = 0.0; // 마스크9개 X 입력영상 9개의 합...
+    for (int i = 0; i < inH; i++) {
+        for (int k = 0; k < inW; k++) {
+            S = 0.0; // 누적 값은 초기화하는 것 권장
+            for (int m = 0; m < 9; m++) {
+                for (int n = 0; n < 9; n++) {
+                    S += tmpInput[i + m][k + n] * mask[m][n];
+                }
+            }
+            tmpOutput[i][k] = S;
+        }
+    }
+
+    for (int i = 0; i < outH; i++) {
+        for (int k = 0; k < outW; k++) {
+            double v = tmpOutput[i][k];
+            if (v > 255.0) v = 255.0;
+            if (v < 0.0) v = 0.0;
+            outImage[i][k] = (unsigned char)v;
+        }
+    }
+    freeDoubleMemory(tmpInput, inH + 8);
+    freeDoubleMemory(tmpOutput, outH);
+    printImage();
+    //int t;
+    //while (1) {
+    //    printf("에지를 얼마나 찾을까요?(0~255)\n");
+    //    t = getInValue();
+    //    if ((t < 0) || (t > 255))
+    //        printf("잘못된 입력입니다. 다시 시도하세요.(0~255)\n");
+    //    else
+    //        break;
+    //}
+    //// Gaussian mask generation
+    //double gaussMask1[3][3];
+    //double gaussMask2[3][3];
+    //double gaussian1, gaussian2;
+    //// 서로 다른 표준편차를 갖는 가우시안 마스크 생성
+    //for (int i = 0; i < 3; i++) {
+    //    for (int j = 0; j < 3; j++) {
+    //        double x = sqrt((pow((i - 1), 2) + pow((j - 1), 2)));
+    //        gaussian1 = exp(-(x * x) / (2.0 * 2.0 * 2.0)) / (2.0 * sqrt(2.0 * PI));
+    //        gaussian2 = exp(-(x * x) / (2.0 * 3.2 * 3.2)) / (3.2 * sqrt(2.0 * PI));
+    //        gaussMask1[i][j] = gaussian1;
+    //        gaussMask2[i][j] = gaussian2;
+    //    }
+    //}
+
+    //// Temporary memory allocation
+    //double** tmpInImage = mallocDoubleMemory(inH + 2, inW + 2);
+    //double** tmpOutImage1 = mallocDoubleMemory(outH, outW);
+    //double** tmpOutImage2 = mallocDoubleMemory(outH, outW);
+    //double** tmpOutImage3 = mallocDoubleMemory(outH, outW);
+
+    //// 임시 메모리 초기화
+    //for (int i = 0; i < inH + 2; i++) {
+    //    for (int j = 0; j < inW + 2; j++) {
+    //        tmpInImage[i][j] = 0.0;
+    //    }
+    //}
+
+    //// Padding 1
+    //// 입력 이미지를 패딩을 포함한 임시 이미지로 복사
+    //for (int i = 0; i < inH; i++) {
+    //    for (int j = 0; j < inW; j++) {
+    //        tmpInImage[i + 1][j + 1] = inImage[i][j];
+    //    }
+    //}
+
+    //// Applying Gaussian masks to the input image
+    //// 가우시안 마스크를 입력 이미지에 적용
+    //double sum1, sum2;
+    //for (int i = 0; i < inH; i++) {
+    //    for (int j = 0; j < inW; j++) {
+    //        sum1 = 0.0;
+    //        sum2 = 0.0;
+    //        for (int k = 0; k < 3; k++) {
+    //            for (int q = 0; q < 3; q++) {
+    //                sum1 += tmpInImage[i + k][j + q] * gaussMask1[k][q];
+    //                sum2 += tmpInImage[i + k][j + q] * gaussMask2[k][q];
+    //            }
+    //        }
+    //        tmpOutImage1[i][j] = sum1;
+    //        tmpOutImage2[i][j] = sum2;
+    //    }
+    //}
+
+    //// Calculating difference between the two filtered images
+    //// 두 필터링된 이미지의 차이 계산
+    //for (int i = 0; i < outH; i++) {
+    //    for (int j = 0; j < outW; j++) {
+    //        tmpOutImage3[i][j] = tmpOutImage1[i][j] - tmpOutImage2[i][j];
+    //    }
+    //}
+
+    //// Copying result from temporary output image to output image
+    //// 임시 출력 이미지의 결과를 출력 이미지로 복사
+    //for (int i = 0; i < outH; i++) {
+    //    for (int j = 0; j < outW; j++) {
+    //        if (tmpOutImage3[i][j] < t)
+    //            outImage[i][j] = 255;  
+    //        else
+    //            outImage[i][j] = 0;  
+    //    }
+    //}
+
+    //// Freeing allocated memory
+    //// 할당된 메모리 해제
+    //freeDoubleMemory(tmpInImage, inH + 2);
+    //freeDoubleMemory(tmpOutImage1, outH);
+    //freeDoubleMemory(tmpOutImage2, outH);
+    //freeDoubleMemory(tmpOutImage3, outH);
+
+    //printImage();  // 이미지 출력
+}
+
