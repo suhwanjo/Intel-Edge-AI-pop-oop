@@ -1123,6 +1123,7 @@ void edgeLOG() { // 가우시안 블러링 -> 라플라시안 적용 -> zero-crossing
     freeDoubleMemory(tmpOutImage, outH);
     printImage();
 }
+// 케니와 유사
 void edgeBetterLOG() { // 가우시안 x,y 미분 -> 입력 영상에 적용 -> 에지 강도 계산 -> 이진화
     if (inImage == NULL)
         return;
