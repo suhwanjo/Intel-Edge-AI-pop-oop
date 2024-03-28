@@ -937,17 +937,10 @@ void CGrayscale영상처리MFCDoc::OnEmbossImage()
 	if (btn.DoModal() != IDOK)
 		return;
 
-	// TODO: 여기에 구현 코드 추가.
-	// 메모리 해제
+	// 메모리 해제 및 할당
 	Onfree2D(m_outImage, m_outH);
-	m_outImage = NULL;
-	m_outH = m_outW = 0;
-	// (중요!) 이미지의 폭과 높이를 결정
-	m_outH = m_inH;
-	m_outW = m_inW;
-	// 메모리 할당
-	m_outImage = OnMalloc2D(m_outH, m_outW, 0);
-	// 마스크 크기 설정
+	m_outImage = OnMalloc2D(m_inH, m_inW, 0);
+
 	int size;
 	if (btn.m_conv_index3 == 0)
 		size = 3;
@@ -958,7 +951,7 @@ void CGrayscale영상처리MFCDoc::OnEmbossImage()
 	else if (btn.m_conv_index3 == 3)
 		size = 9;
 
-	double** mask = OnmallocDouble2D(m_inH, m_inW, 0);
+	double** mask = OnmallocDouble2D(size, size, 0);
 	// 엠보싱 마스크 생성
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < size; j++) {
@@ -970,30 +963,8 @@ void CGrayscale영상처리MFCDoc::OnEmbossImage()
 				mask[i][j] = 0.0;
 		}
 	}
-	// 임시 이미지 할당(실수) : 패딩을 위한
-	double** tmpInImage = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1), 0); // 필터 크기에 따라 패딩 변화
-	double** tmpOutImage = OnmallocDouble2D(m_outH, m_outW, 0);
 
-	// 입력 이미지 -> 임시 이미지에 넣기(패딩 완료)
-	for (int i = 0; i < m_inH; i++) {
-		for (int j = 0; j < m_inW; j++) {
-			tmpInImage[i + 1][j + 1] = m_inImage[i][j];
-		}
-	}
-
-	// 컨볼루션 연산
-	double sum;
-	for (int i = 0; i < m_inH; i++) {
-		for (int j = 0; j < m_inW; j++) {
-			sum = 0;
-			for (int k = 0; k < size; k++) {
-				for (int q = 0; q < size; q++) {
-					sum += tmpInImage[i + k][j + q] * mask[k][q];
-				}
-			}
-			tmpOutImage[i][j] = sum;
-		}
-	}
+	double** tmpOutImage = OnConvolution(m_inImage, m_inH, m_inW, mask, size);
 
 	// 마스크 값의 합에 따라 후처리 (엠보싱만)
 	for (int i = 0; i < m_outH; i++) {
@@ -1002,7 +973,7 @@ void CGrayscale영상처리MFCDoc::OnEmbossImage()
 		}
 	}
 
-	//임시 출력 영상 -> 출력 영상
+	// 임시 출력 영상 -> 출력 영상
 	for (int i = 0; i < m_outH; i++) {
 		for (int j = 0; j < m_outW; j++) {
 			if (tmpOutImage[i][j] < 0.0)
@@ -1014,11 +985,9 @@ void CGrayscale영상처리MFCDoc::OnEmbossImage()
 		}
 	}
 
-	OnfreeDouble2D(tmpInImage, m_inH + (size - 1));
-	OnfreeDouble2D(tmpOutImage, m_outH);
 	OnfreeDouble2D(mask, size);
+	OnfreeDouble2D(tmpOutImage, m_outH);
 }
-
 
 void CGrayscale영상처리MFCDoc::OnBlurrImage()
 {
@@ -1026,17 +995,10 @@ void CGrayscale영상처리MFCDoc::OnBlurrImage()
 	if (btn.DoModal() != IDOK)
 		return;
 
-	// TODO: 여기에 구현 코드 추가.
-	// 메모리 해제
+	// 메모리 해제 및 할당
 	Onfree2D(m_outImage, m_outH);
-	m_outImage = NULL;
-	m_outH = m_outW = 0;
-	// (중요!) 이미지의 폭과 높이를 결정
-	m_outH = m_inH;
-	m_outW = m_inW;
-	// 메모리 할당
-	m_outImage = OnMalloc2D(m_outH, m_outW, 0);
-	// 마스크 크기 설정
+	m_outImage = OnMalloc2D(m_inH, m_inW, 0);
+
 	int size;
 	if (btn.m_conv_index3 == 0)
 		size = 3;
@@ -1047,39 +1009,17 @@ void CGrayscale영상처리MFCDoc::OnBlurrImage()
 	else if (btn.m_conv_index3 == 3)
 		size = 9;
 
-	double** mask = OnmallocDouble2D(m_inH, m_inW, 0);
+	double** mask = OnmallocDouble2D(size, size, 0);
 	// 평균 마스크 생성
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < size; j++) {
 			mask[i][j] = 1 / (double)(size * size);
 		}
 	}
-	// 임시 이미지 할당(실수) : 패딩을 위한
-	double** tmpInImage = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1), 0); // 필터 크기에 따라 패딩 변화
-	double** tmpOutImage = OnmallocDouble2D(m_outH, m_outW, 0);
 
-	// 입력 이미지 -> 임시 이미지에 넣기(패딩 완료)
-	for (int i = 0; i < m_inH; i++) {
-		for (int j = 0; j < m_inW; j++) {
-			tmpInImage[i + 1][j + 1] = m_inImage[i][j];
-		}
-	}
+	double** tmpOutImage = OnConvolution(m_inImage, m_inH, m_inW, mask, size);
 
-	// 컨볼루션 연산
-	double sum;
-	for (int i = 0; i < m_inH; i++) {
-		for (int j = 0; j < m_inW; j++) {
-			sum = 0;
-			for (int k = 0; k < size; k++) {
-				for (int q = 0; q < size; q++) {
-					sum += tmpInImage[i + k][j + q] * mask[k][q];
-				}
-			}
-			tmpOutImage[i][j] = sum;
-		}
-	}
-
-	//임시 출력 영상 -> 출력 영상
+	// 임시 출력 영상 -> 출력 영상
 	for (int i = 0; i < m_outH; i++) {
 		for (int j = 0; j < m_outW; j++) {
 			if (tmpOutImage[i][j] < 0.0)
@@ -1091,110 +1031,24 @@ void CGrayscale영상처리MFCDoc::OnBlurrImage()
 		}
 	}
 
-	OnfreeDouble2D(tmpInImage, m_inH + (size - 1));
-	OnfreeDouble2D(tmpOutImage, m_outH);
 	OnfreeDouble2D(mask, size);
+	OnfreeDouble2D(tmpOutImage, m_outH);
 }
 
-// 대화 상자 추가(sigma) + 프레윗(수평/수직) + 소벨(수평/수직) + 라플라시안 + LOG + DOG
 void CGrayscale영상처리MFCDoc::OnSmothImage()
-{
-	//CConstantConv btn;
-	//if (btn.DoModal() != IDOK)
-	//	return;
-
-	//// TODO: 여기에 구현 코드 추가.
-	//// 메모리 해제
-	//Onfree2D(m_outImage, m_outH);
-	//m_outImage = NULL;
-	//m_outH = m_outW = 0;
-	//// (중요!) 이미지의 폭과 높이를 결정
-	//m_outH = m_inH;
-	//m_outW = m_inW;
-	//// 메모리 할당
-	//m_outImage = OnMalloc2D(m_outH, m_outW, 0);
-	//// 마스크 크기 설정
-	//int size;
-	//if (btn.m_conv_index3 == 0)
-	//	size = 3;
-	//else if (btn.m_conv_index3 == 1)
-	//	size = 5;
-	//else if (btn.m_conv_index3 == 2)
-	//	size = 7;
-	//else if (btn.m_conv_index3 == 3)
-	//	size = 9;
-
-	//double** mask = OnmallocDouble2D(m_inH, m_inW, 0);
-	//double gaussian;
-	//int center = size / 2;
-	//for (int i = 0; i < size; i++) {
-	//	for (int j = 0; j < size; j++) {
-	//		// 가우시안 마스크 생성
-	//		double x = sqrt((pow((i - center), 2) + pow((j - center), 2)));
-	//		gaussian = exp(-(x * x) / (2.0 * sigma * sigma)) / (sigma * sqrt(2.0 * PI));
-	//		mask[i][j] = gaussian;
-	//	}
-	//}
-	//// 임시 이미지 할당(실수) : 패딩을 위한
-	//double** tmpInImage = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1), 0); // 필터 크기에 따라 패딩 변화
-	//double** tmpOutImage = OnmallocDouble2D(m_outH, m_outW, 0);
-
-	//// 입력 이미지 -> 임시 이미지에 넣기(패딩 완료)
-	//for (int i = 0; i < m_inH; i++) {
-	//	for (int j = 0; j < m_inW; j++) {
-	//		tmpInImage[i + 1][j + 1] = m_inImage[i][j];
-	//	}
-	//}
-
-	//// 컨볼루션 연산
-	//double sum;
-	//for (int i = 0; i < m_inH; i++) {
-	//	for (int j = 0; j < m_inW; j++) {
-	//		sum = 0;
-	//		for (int k = 0; k < size; k++) {
-	//			for (int q = 0; q < size; q++) {
-	//				sum += tmpInImage[i + k][j + q] * mask[k][q];
-	//			}
-	//		}
-	//		tmpOutImage[i][j] = sum;
-	//	}
-	//}
-
-	////임시 출력 영상 -> 출력 영상
-	//for (int i = 0; i < m_outH; i++) {
-	//	for (int j = 0; j < m_outW; j++) {
-	//		if (tmpOutImage[i][j] < 0.0)
-	//			m_outImage[i][j] = 0;
-	//		else if (tmpOutImage[i][j] > 255.0)
-	//			m_outImage[i][j] = 255;
-	//		else
-	//			m_outImage[i][j] = (unsigned char)tmpOutImage[i][j];
-	//	}
-	//}
-
-	//OnfreeDouble2D(tmpInImage, m_inH + (size - 1));
-	//OnfreeDouble2D(tmpOutImage, m_outH);
-	//OnfreeDouble2D(mask, size);
-}
-
-
-void CGrayscale영상처리MFCDoc::OnSharpImage()
 {
 	CConstantConv btn;
 	if (btn.DoModal() != IDOK)
 		return;
+	CConstantDigF dlg;
+	if (dlg.DoModal() != IDOK)
+		return;
+	double sigma = (double)dlg.m_constant_f;
 
-	// TODO: 여기에 구현 코드 추가.
-	// 메모리 해제
+	// 메모리 해제 및 할당
 	Onfree2D(m_outImage, m_outH);
-	m_outImage = NULL;
-	m_outH = m_outW = 0;
-	// (중요!) 이미지의 폭과 높이를 결정
-	m_outH = m_inH;
-	m_outW = m_inW;
-	// 메모리 할당
-	m_outImage = OnMalloc2D(m_outH, m_outW, 0);
-	// 마스크 크기 설정
+	m_outImage = OnMalloc2D(m_inH, m_inW, 0);
+
 	int size;
 	if (btn.m_conv_index3 == 0)
 		size = 3;
@@ -1205,7 +1059,57 @@ void CGrayscale영상처리MFCDoc::OnSharpImage()
 	else if (btn.m_conv_index3 == 3)
 		size = 9;
 
-	double** mask = OnmallocDouble2D(m_inH, m_inW, 0);
+	double** mask = OnmallocDouble2D(size, size, 0);
+	double gaussian;
+	int center = size / 2;
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			// 가우시안 마스크 생성
+			double x = sqrt((pow((i - center), 2) + pow((j - center), 2)));
+			gaussian = exp(-(x * x) / (2.0 * sigma * sigma)) / (sigma * sqrt(2.0 * 3.141592));
+			mask[i][j] = gaussian;
+		}
+	}
+
+	double** tmpOutImage = OnConvolution(m_inImage, m_inH, m_inW, mask, size);
+
+	// 임시 출력 영상 -> 출력 영상
+	for (int i = 0; i < m_outH; i++) {
+		for (int j = 0; j < m_outW; j++) {
+			if (tmpOutImage[i][j] < 0.0)
+				m_outImage[i][j] = 0;
+			else if (tmpOutImage[i][j] > 255.0)
+				m_outImage[i][j] = 255;
+			else
+				m_outImage[i][j] = (unsigned char)tmpOutImage[i][j];
+		}
+	}
+
+	OnfreeDouble2D(mask, size);
+	OnfreeDouble2D(tmpOutImage, m_outH);
+}
+
+void CGrayscale영상처리MFCDoc::OnSharpImage()
+{
+	CConstantConv btn;
+	if (btn.DoModal() != IDOK)
+		return;
+
+	// 메모리 해제 및 할당
+	Onfree2D(m_outImage, m_outH);
+	m_outImage = OnMalloc2D(m_inH, m_inW, 0);
+
+	int size;
+	if (btn.m_conv_index3 == 0)
+		size = 3;
+	else if (btn.m_conv_index3 == 1)
+		size = 5;
+	else if (btn.m_conv_index3 == 2)
+		size = 7;
+	else if (btn.m_conv_index3 == 3)
+		size = 9;
+
+	double** mask = OnmallocDouble2D(size, size, 0);
 	int center = size / 2;
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < size; j++) {
@@ -1216,32 +1120,10 @@ void CGrayscale영상처리MFCDoc::OnSharpImage()
 				mask[i][j] = -1.0;
 		}
 	}
-	// 임시 이미지 할당(실수) : 패딩을 위한
-	double** tmpInImage = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1), 0); // 필터 크기에 따라 패딩 변화
-	double** tmpOutImage = OnmallocDouble2D(m_outH, m_outW, 0);
 
-	// 입력 이미지 -> 임시 이미지에 넣기(패딩 완료)
-	for (int i = 0; i < m_inH; i++) {
-		for (int j = 0; j < m_inW; j++) {
-			tmpInImage[i + 1][j + 1] = m_inImage[i][j];
-		}
-	}
+	double** tmpOutImage = OnConvolution(m_inImage, m_inH, m_inW, mask, size);
 
-	// 컨볼루션 연산
-	double sum;
-	for (int i = 0; i < m_inH; i++) {
-		for (int j = 0; j < m_inW; j++) {
-			sum = 0;
-			for (int k = 0; k < size; k++) {
-				for (int q = 0; q < size; q++) {
-					sum += tmpInImage[i + k][j + q] * mask[k][q];
-				}
-			}
-			tmpOutImage[i][j] = sum;
-		}
-	}
-
-	//임시 출력 영상 -> 출력 영상
+	// 임시 출력 영상 -> 출력 영상
 	for (int i = 0; i < m_outH; i++) {
 		for (int j = 0; j < m_outW; j++) {
 			if (tmpOutImage[i][j] < 0.0)
@@ -1253,9 +1135,8 @@ void CGrayscale영상처리MFCDoc::OnSharpImage()
 		}
 	}
 
-	OnfreeDouble2D(tmpInImage, m_inH + (size - 1));
-	OnfreeDouble2D(tmpOutImage, m_outH);
 	OnfreeDouble2D(mask, size);
+	OnfreeDouble2D(tmpOutImage, m_outH);
 }
 
 
@@ -1278,4 +1159,337 @@ void CGrayscale영상처리MFCDoc::OnfreeDouble2D(double** memory, int h)
 	for (int i = 0; i < h; i++)
 		delete memory[i];
 	delete[] memory;
+}
+
+// 잘못 만듦
+//double** CGrayscale영상처리MFCDoc::ConvOperation(double** inputImage, int h, int w, double** mask, int maskSize)
+//{
+	//// TODO: 여기에 구현 코드 추가.
+	//int paddedH = h + (maskSize - 1);
+	//int paddedW = w + (maskSize - 1);
+	//double** paddedImage = OnmallocDouble2D(paddedH, paddedW, 0);
+	//double** outputImage = OnmallocDouble2D(h, w, 0);
+
+	//// 입력 이미지를 패딩된 이미지에 복사
+	//for (int i = 0; i < h; i++) {
+	//	for (int j = 0; j < w; j++) {
+	//		paddedImage[i + 1][j + 1] = inputImage[i][j];
+	//	}
+	//}
+
+	//// 컨볼루션 연산
+	//double sum;
+	//for (int i = 0; i < h; i++) {
+	//	for (int j = 0; j < w; j++) {
+	//		sum = 0;
+	//		for (int k = 0; k < maskSize; k++) {
+	//			for (int q = 0; q < maskSize; q++) {
+	//				sum += paddedImage[i + k][j + q] * mask[k][q];
+	//			}
+	//		}
+	//		outputImage[i][j] = sum;
+	//	}
+	//}
+
+	//OnfreeDouble2D(paddedImage, paddedH);
+	//return outputImage;
+//}
+
+
+double** CGrayscale영상처리MFCDoc::OnConvolution(unsigned char** inputImage, int h, int w, double** mask, int maskSize)
+{
+	// TODO: 여기에 구현 코드 추가.
+	int paddedH = h + (maskSize - 1);
+	int paddedW = w + (maskSize - 1);
+	double** paddedImage = OnmallocDouble2D(paddedH, paddedW, 0);
+	double** outputImage = OnmallocDouble2D(m_outH, m_outW, 0);
+
+	// 입력 이미지를 패딩된 이미지에 복사
+	for (int i = 0; i < h; i++) {
+		for (int j = 0; j < w; j++) {
+			paddedImage[i + (maskSize - 1)][j + (maskSize - 1)] = inputImage[i][j];
+		}
+	}
+
+	// 컨볼루션 연산
+	double sum;
+	for (int i = 0; i < h; i++) {
+		for (int j = 0; j < w; j++) {
+			sum = 0;
+			for (int k = 0; k < maskSize; k++) {
+				for (int q = 0; q < maskSize; q++) {
+					sum += paddedImage[i + k][j + q] * mask[k][q];
+				}
+			}
+			outputImage[i][j] = sum;
+		}
+	}
+
+	OnfreeDouble2D(paddedImage, paddedH);
+	return outputImage;
+}
+
+
+void CGrayscale영상처리MFCDoc::OnPrewittVer()
+{
+	// TODO: 여기에 구현 코드 추가.
+	// 메모리 해제
+	Onfree2D(m_outImage, m_outH);
+	m_outImage = NULL;
+	m_outH = m_outW = 0;
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImage = OnMalloc2D(m_outH, m_outW, 0);
+	double** mask = OnmallocDouble2D(3, 3, 0);
+
+	// 마스크 초기화
+	mask[0][0] = -1.; mask[0][1] = 0.; mask[0][2] = 1.;
+	mask[1][0] = -1.; mask[1][1] = 0.; mask[1][2] = 1.;
+	mask[2][0] = -1.; mask[2][1] = 0.; mask[2][2] = 1.;
+	double** tmpOutImage = OnConvolution(m_inImage, m_inH, m_inW, mask, 3);
+
+	// 임시 출력 영상 -> 출력 영상
+	for (int i = 0; i < m_outH; i++) {
+		for (int j = 0; j < m_outW; j++) {
+			if (tmpOutImage[i][j] < 0.0)
+				m_outImage[i][j] = 0;
+			else if (tmpOutImage[i][j] > 255.0)
+				m_outImage[i][j] = 255;
+			else
+				m_outImage[i][j] = (unsigned char)tmpOutImage[i][j];
+		}
+	}
+
+	OnfreeDouble2D(mask, 3);
+	OnfreeDouble2D(tmpOutImage, m_outH);
+}
+
+
+void CGrayscale영상처리MFCDoc::OnPrewittHo()
+{
+	// TODO: 여기에 구현 코드 추가.
+	// 메모리 해제
+	Onfree2D(m_outImage, m_outH);
+	m_outImage = NULL;
+	m_outH = m_outW = 0;
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImage = OnMalloc2D(m_outH, m_outW, 0);
+	double** mask = OnmallocDouble2D(3, 3, 0);
+
+	// 마스크 초기화
+	mask[0][0] = -1.; mask[0][1] = -1.; mask[0][2] = -1.;
+	mask[1][0] = 0.; mask[1][1] = 0.; mask[1][2] = 0.;
+	mask[2][0] = 1.; mask[2][1] = 1.; mask[2][2] = 1.;
+	double** tmpOutImage = OnConvolution(m_inImage, m_inH, m_inW, mask, 3);
+
+	// 임시 출력 영상 -> 출력 영상
+	for (int i = 0; i < m_outH; i++) {
+		for (int j = 0; j < m_outW; j++) {
+			if (tmpOutImage[i][j] < 0.0)
+				m_outImage[i][j] = 0;
+			else if (tmpOutImage[i][j] > 255.0)
+				m_outImage[i][j] = 255;
+			else
+				m_outImage[i][j] = (unsigned char)tmpOutImage[i][j];
+		}
+	}
+
+	OnfreeDouble2D(mask, 3);
+	OnfreeDouble2D(tmpOutImage, m_outH);
+}
+
+
+void CGrayscale영상처리MFCDoc::OnSobelVer()
+{
+	// TODO: 여기에 구현 코드 추가.
+	// 메모리 해제
+	Onfree2D(m_outImage, m_outH);
+	m_outImage = NULL;
+	m_outH = m_outW = 0;
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImage = OnMalloc2D(m_outH, m_outW, 0);
+	double** mask = OnmallocDouble2D(3, 3, 0);
+
+	// 마스크 초기화
+	mask[0][0] = -1.; mask[0][1] = 0.; mask[0][2] = 1.;
+	mask[1][0] = -2.; mask[1][1] = 0.; mask[1][2] = 2.;
+	mask[2][0] = -1.; mask[2][1] = 0.; mask[2][2] = 1.;
+	double** tmpOutImage = OnConvolution(m_inImage, m_inH, m_inW, mask, 3);
+
+	// 임시 출력 영상 -> 출력 영상
+	for (int i = 0; i < m_outH; i++) {
+		for (int j = 0; j < m_outW; j++) {
+			if (tmpOutImage[i][j] < 0.0)
+				m_outImage[i][j] = 0;
+			else if (tmpOutImage[i][j] > 255.0)
+				m_outImage[i][j] = 255;
+			else
+				m_outImage[i][j] = (unsigned char)tmpOutImage[i][j];
+		}
+	}
+
+	OnfreeDouble2D(mask, 3);
+	OnfreeDouble2D(tmpOutImage, m_outH);
+}
+
+
+void CGrayscale영상처리MFCDoc::OnSobelHo()
+{
+	// TODO: 여기에 구현 코드 추가.
+	// 메모리 해제
+	Onfree2D(m_outImage, m_outH);
+	m_outImage = NULL;
+	m_outH = m_outW = 0;
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImage = OnMalloc2D(m_outH, m_outW, 0);
+	double** mask = OnmallocDouble2D(3, 3, 0);
+
+	// 마스크 초기화
+	mask[0][0] = -1.; mask[0][1] = -2.; mask[0][2] = -1.;
+	mask[1][0] = 0.; mask[1][1] = 0.; mask[1][2] = 0.;
+	mask[2][0] = 1.; mask[2][1] = 2.; mask[2][2] = 1.;
+	double** tmpOutImage = OnConvolution(m_inImage, m_inH, m_inW, mask, 3);
+
+	// 임시 출력 영상 -> 출력 영상
+	for (int i = 0; i < m_outH; i++) {
+		for (int j = 0; j < m_outW; j++) {
+			if (tmpOutImage[i][j] < 0.0)
+				m_outImage[i][j] = 0;
+			else if (tmpOutImage[i][j] > 255.0)
+				m_outImage[i][j] = 255;
+			else
+				m_outImage[i][j] = (unsigned char)tmpOutImage[i][j];
+		}
+	}
+
+	OnfreeDouble2D(mask, 3);
+	OnfreeDouble2D(tmpOutImage, m_outH);
+}
+
+
+void CGrayscale영상처리MFCDoc::OnLaplace()
+{
+	// TODO: 여기에 구현 코드 추가.
+	// 메모리 해제
+	Onfree2D(m_outImage, m_outH);
+	m_outImage = NULL;
+	m_outH = m_outW = 0;
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImage = OnMalloc2D(m_outH, m_outW, 0);
+	double** mask = OnmallocDouble2D(3, 3, 0);
+
+	// 마스크 초기화
+	mask[0][0] = 0.; mask[0][1] = 1.; mask[0][2] = 0.;
+	mask[1][0] = 1.; mask[1][1] = -4.; mask[1][2] = 1.;
+	mask[2][0] = 0.; mask[2][1] = 1.; mask[2][2] = 0.;
+	double** tmpOutImage = OnConvolution(m_inImage, m_inH, m_inW, mask, 3);
+
+	// 임시 출력 영상 -> 출력 영상
+	for (int i = 0; i < m_outH; i++) {
+		for (int j = 0; j < m_outW; j++) {
+			if (tmpOutImage[i][j] < 0.0)
+				m_outImage[i][j] = 0;
+			else if (tmpOutImage[i][j] > 255.0)
+				m_outImage[i][j] = 255;
+			else
+				m_outImage[i][j] = (unsigned char)tmpOutImage[i][j];
+		}
+	}
+
+	OnfreeDouble2D(mask, 3);
+	OnfreeDouble2D(tmpOutImage, m_outH);
+}
+
+
+void CGrayscale영상처리MFCDoc::OnLog()
+{
+	// TODO: 여기에 구현 코드 추가.
+	// 메모리 해제
+	Onfree2D(m_outImage, m_outH);
+	m_outImage = NULL;
+	m_outH = m_outW = 0;
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImage = OnMalloc2D(m_outH, m_outW, 0);
+	double** mask = OnmallocDouble2D(5, 5, 0);
+
+	// 마스크 초기화
+	mask[0][0] = 0; mask[0][1] = 0; mask[0][2] = -1; mask[0][3] = 0; mask[0][4] = 0;
+	mask[1][0] = 0; mask[1][1] = -1; mask[1][2] = -2; mask[1][3] = -1; mask[1][4] = 0;
+	mask[2][0] = -1; mask[2][1] = -2; mask[2][2] = 16; mask[2][3] = -2; mask[2][4] = -1;
+	mask[3][0] = 0; mask[3][1] = -1; mask[3][2] = -2; mask[3][3] = -1; mask[3][4] = 0;
+	mask[4][0] = 0; mask[4][1] = 0; mask[4][2] = -1; mask[4][3] = 0; mask[4][4] = 0;
+	double** tmpOutImage = OnConvolution(m_inImage, m_inH, m_inW, mask, 5);
+
+	// 임시 출력 영상 -> 출력 영상
+	for (int i = 0; i < m_outH; i++) {
+		for (int j = 0; j < m_outW; j++) {
+			if (tmpOutImage[i][j] < 0.0)
+				m_outImage[i][j] = 0;
+			else if (tmpOutImage[i][j] > 255.0)
+				m_outImage[i][j] = 255;
+			else
+				m_outImage[i][j] = (unsigned char)tmpOutImage[i][j];
+		}
+	}
+
+	OnfreeDouble2D(mask, 5);
+	OnfreeDouble2D(tmpOutImage, m_outH);
+}
+
+
+void CGrayscale영상처리MFCDoc::OnDog()
+{
+	// TODO: 여기에 구현 코드 추가.
+	// 메모리 해제
+	Onfree2D(m_outImage, m_outH);
+	m_outImage = NULL;
+	m_outH = m_outW = 0;
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImage = OnMalloc2D(m_outH, m_outW, 0);
+	double** mask = OnmallocDouble2D(7, 7, 0);
+
+	// 마스크 초기화
+	mask[0][0] = 0; mask[0][1] = 0; mask[0][2] = -1; mask[0][3] = -1; mask[0][4] = -1; mask[0][5] = 0; mask[0][6] = 0;
+	mask[1][0] = 0; mask[1][1] = -2; mask[1][2] = -3; mask[1][3] = -3; mask[1][4] = -3; mask[1][5] = -2; mask[1][6] = 0;
+	mask[2][0] = -1; mask[2][1] = -3; mask[2][2] = 5; mask[2][3] = 5; mask[2][4] = 5; mask[2][5] = -3; mask[2][6] = -1;
+	mask[3][0] = -1; mask[3][1] = -3; mask[3][2] = 5; mask[3][3] = 16; mask[3][4] = 5; mask[3][5] = -3; mask[3][6] = -1;
+	mask[4][0] = -1; mask[4][1] = -3; mask[4][2] = 5; mask[4][3] = 5; mask[4][4] = 5; mask[4][5] = -3; mask[4][6] = -1;
+	mask[5][0] = 0; mask[5][1] = -2; mask[5][2] = -3; mask[5][3] = -3; mask[5][4] = -3; mask[5][5] = -2; mask[5][6] = 0;
+	mask[6][0] = 0; mask[6][1] = 0; mask[6][2] = -1; mask[6][3] = -1; mask[6][4] = -1; mask[6][5] = 0; mask[6][6] = 0;
+	double** tmpOutImage = OnConvolution(m_inImage, m_inH, m_inW, mask, 7);
+
+	// 임시 출력 영상 -> 출력 영상
+	for (int i = 0; i < m_outH; i++) {
+		for (int j = 0; j < m_outW; j++) {
+			if (tmpOutImage[i][j] < 0.0)
+				m_outImage[i][j] = 0;
+			else if (tmpOutImage[i][j] > 255.0)
+				m_outImage[i][j] = 255;
+			else
+				m_outImage[i][j] = (unsigned char)tmpOutImage[i][j];
+		}
+	}
+
+	OnfreeDouble2D(mask, 7);
+	OnfreeDouble2D(tmpOutImage, m_outH);
 }

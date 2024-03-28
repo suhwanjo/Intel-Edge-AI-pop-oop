@@ -52,6 +52,13 @@ BEGIN_MESSAGE_MAP(CGrayscale영상처리MFCView, CView)
 	ON_COMMAND(IDM_BLURR_IMAGE, &CGrayscale영상처리MFCView::OnBlurrImage)
 	ON_COMMAND(IDM_SMOTH_IMAGE, &CGrayscale영상처리MFCView::OnSmothImage)
 	ON_COMMAND(IDM_SHARP_IMAGE, &CGrayscale영상처리MFCView::OnSharpImage)
+	ON_COMMAND(IDM_PREWITT_HO, &CGrayscale영상처리MFCView::OnPrewittHo)
+	ON_COMMAND(IDM_PREWITT_VER, &CGrayscale영상처리MFCView::OnPrewittVer)
+	ON_COMMAND(IDM_SOBEL_HO, &CGrayscale영상처리MFCView::OnSobelHo)
+	ON_COMMAND(IDM_SOBEL_VER, &CGrayscale영상처리MFCView::OnSobelVer)
+	ON_COMMAND(IDM_LAPLACE, &CGrayscale영상처리MFCView::OnLaplace)
+	ON_COMMAND(IDM_LOG, &CGrayscale영상처리MFCView::OnLog)
+	ON_COMMAND(IDM_DOG, &CGrayscale영상처리MFCView::OnDog)
 END_MESSAGE_MAP()
 
 // CGrayscale영상처리MFCView 생성/소멸
@@ -420,5 +427,82 @@ void CGrayscale영상처리MFCView::OnSharpImage()
 
 	ASSERT_VALID(pDoc);
 	pDoc->OnSharpImage();
+	Invalidate(TRUE);
+}
+
+
+void CGrayscale영상처리MFCView::OnPrewittHo()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CGrayscale영상처리MFCDoc* pDoc = GetDocument();
+
+	ASSERT_VALID(pDoc);
+	pDoc->OnPrewittHo();
+	Invalidate(TRUE);
+}
+
+
+void CGrayscale영상처리MFCView::OnPrewittVer()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CGrayscale영상처리MFCDoc* pDoc = GetDocument();
+
+	ASSERT_VALID(pDoc);
+	pDoc->OnPrewittVer();
+	Invalidate(TRUE);
+}
+
+
+void CGrayscale영상처리MFCView::OnSobelHo()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CGrayscale영상처리MFCDoc* pDoc = GetDocument();
+
+	ASSERT_VALID(pDoc);
+	pDoc->OnSobelHo();
+	Invalidate(TRUE);
+}
+
+
+void CGrayscale영상처리MFCView::OnSobelVer()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CGrayscale영상처리MFCDoc* pDoc = GetDocument();
+
+	ASSERT_VALID(pDoc);
+	pDoc->OnSobelVer();
+	Invalidate(TRUE);
+}
+
+
+void CGrayscale영상처리MFCView::OnLaplace()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CGrayscale영상처리MFCDoc* pDoc = GetDocument();
+
+	ASSERT_VALID(pDoc);
+	pDoc->OnLaplace();
+	Invalidate(TRUE);
+}
+
+
+void CGrayscale영상처리MFCView::OnLog()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CGrayscale영상처리MFCDoc* pDoc = GetDocument();
+
+	ASSERT_VALID(pDoc);
+	pDoc->OnLog();
+	Invalidate(TRUE);
+}
+
+
+void CGrayscale영상처리MFCView::OnDog()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CGrayscale영상처리MFCDoc* pDoc = GetDocument();
+
+	ASSERT_VALID(pDoc);
+	pDoc->OnDog();
 	Invalidate(TRUE);
 }

@@ -66,6 +66,13 @@ public:
 	afx_msg void OnBlurrImage();
 	afx_msg void OnSmothImage();
 	afx_msg void OnSharpImage();
+	afx_msg void OnPrewittHo();
+	afx_msg void OnPrewittVer();
+	afx_msg void OnSobelHo();
+	afx_msg void OnSobelVer();
+	afx_msg void OnLaplace();
+	afx_msg void OnLog();
+	afx_msg void OnDog();
 };
 
 #ifndef _DEBUG  // Gray scale 영상처리 MFCView.cpp의 디버그 버전

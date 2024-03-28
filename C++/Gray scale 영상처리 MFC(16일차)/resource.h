@@ -127,13 +127,21 @@
 #define IDM_SMOTH_IMAGE                 32862
 #define ID_32863                        32863
 #define IDM_SHARP_IMAGE                 32864
+#define IDM_PREWITT_HO                  32865
+#define IDM_PREWITT                     32866
+#define IDM_PREWITT_VER                 32867
+#define IDM_SOBEL_HO                    32868
+#define IDM_SOBEL_VER                   32869
+#define IDM_LAPLACE                     32870
+#define IDM_LOG                         32871
+#define IDM_DOG                         32872
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        330
-#define _APS_NEXT_COMMAND_VALUE         32865
+#define _APS_NEXT_COMMAND_VALUE         32873
 #define _APS_NEXT_CONTROL_VALUE         1023
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

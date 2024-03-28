@@ -86,4 +86,13 @@ public:
 	void OnSharpImage();
 	double** OnmallocDouble2D(int h, int w, int initVal);
 	void OnfreeDouble2D(double** memory, int h);
+	//double** ConvOperation(double** inputImage, int h, int w, double** mask, int maskSize);
+	double** OnConvolution(unsigned char** inputImage, int h, int w, double** mask, int maskSize);
+	void OnPrewittVer();
+	void OnPrewittHo();
+	void OnSobelVer();
+	void OnSobelHo();
+	void OnLaplace();
+	void OnLog();
+	void OnDog();
 };

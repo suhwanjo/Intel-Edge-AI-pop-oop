@@ -149,7 +149,7 @@ def reverseImage():  # 반전
     outW = inW
     outImage = malloc2D(outH, outW)
 
-    arrayImage = np.array(inImage)  # 스칼라 값과의 연산을 위해 변환
+    arrayImage = np.array(inImage)  # 스칼라 연산을 위해 변환
     outImage = 255 - arrayImage
 
     displayImage()
@@ -165,7 +165,7 @@ def binaryImage(option):  # 이진화
     outImage = malloc2D(outH, outW)
 
     if option == 0:
-        val = askinteger("정수 입력", '-255~255 입력', maxvalue=255, minvalue=-255)
+        val = askinteger("정수 입력", '0~255 입력', maxvalue=255, minvalue=-255)
     elif option == 1:
         val = int(np.mean(inImage))
         messagebox.showinfo('평균 값으로 이진화', '영상의 평균 값은 ' + str(int(val)) + ' 입니다.')
@@ -337,7 +337,7 @@ def morphImages():  # 모핑
     outH = inH
     outW = inW
 
-    # Open the second image
+    # 두 번째 영상 열기
     fullName = askopenfilename(parent=window, filetypes=(('RAW 파일', '*.raw'), ('모든 파일', '*.*')))
     fsize = os.path.getsize(fullName)  # 파일 크기
     inH = inW = int(math.sqrt(fsize))
@@ -375,7 +375,7 @@ def morphImages():  # 모핑
     # Prompt the user to enter the blend factor
     blend_factor = askfloat("혼합 정도 입력", "0.0(두 번째 영상 많이)~1.0(첫 번째 영상 많이) 입력:", minvalue=0.0, maxvalue=1.0)
 
-    # Blend the images
+    # 영상 블렌딩
     outImage = blend_factor * inImage + (1 - blend_factor) * inImage2
     outImage = outImage.astype(np.uint8)
 
@@ -398,7 +398,7 @@ def scaleImage():  # 크기 조절(축소:중간값으로, 확대:양선형 보�
 
         for i in range(outH):
             for j in range(outW):
-                subMat = inImage[i * scale:i * scale + scale][j * scale:j * scale + scale]  # 이미지를 축소할 영역 추출
+                subMat = inImage[i * scale:i * scale + scale, j * scale:j * scale + scale]  # 축소 영역
                 histo, _ = np.histogram(subMat, bins=256, range=(0, 256))  # 히스토그램 계산
                 cumsum = np.cumsum(histo)  # 누적 히스토그램 계산
                 median = np.argmax(cumsum >= (scale * scale) // 2)  # 중간값 계산
@@ -448,6 +448,7 @@ def rotatImage():  # 회전(안 잘리게)
     angle = askinteger("회전 각도 입력", '정수 입력')
     tmp_angle = angle % 90 * 3.141592 / 180.0
     tmp_angle90 = (90 - angle % 90) * 3.141592 / 180.0
+    # 회전 각도에 따라 변화하는 출력 영상 크기 계산
     outH = int(inH * np.cos(tmp_angle90) + inW * np.cos(tmp_angle))
     outW = int(inW * np.cos(tmp_angle) + inH * np.cos(tmp_angle90))
     outImage = malloc2D(outH, outW)
@@ -455,7 +456,7 @@ def rotatImage():  # 회전(안 잘리게)
 
     dx = (outW - inW) // 2
     dy = (outH - inH) // 2
-
+    # 회전의 시작은 입력 영상 위치에서
     tmp_image = np.zeros((outH, outW), dtype=np.uint32)
     tmp_image[dx:dx+inH, dy:dy+inW] = inImage
 
@@ -727,7 +728,7 @@ inH, inW, outH, outW = [0] * 4
 
 window = Tk()
 window.resizable(width=False, height=False)
-window.title("영상처리(Beta 1)")
+window.title("영상처리(GA 1)")
 # 메뉴 만들기
 mainMenu = Menu(window)
 window.config(menu=mainMenu)
