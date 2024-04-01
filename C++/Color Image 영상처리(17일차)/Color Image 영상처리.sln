@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34622.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Color Image 영상처리", "Color Image 영상처리.vcxproj", "{1834FC35-E7A1-4E29-A093-540D2B9CA26A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1834FC35-E7A1-4E29-A093-540D2B9CA26A}.Debug|x64.ActiveCfg = Debug|x64
+		{1834FC35-E7A1-4E29-A093-540D2B9CA26A}.Debug|x64.Build.0 = Debug|x64
+		{1834FC35-E7A1-4E29-A093-540D2B9CA26A}.Debug|x86.ActiveCfg = Debug|Win32
+		{1834FC35-E7A1-4E29-A093-540D2B9CA26A}.Debug|x86.Build.0 = Debug|Win32
+		{1834FC35-E7A1-4E29-A093-540D2B9CA26A}.Release|x64.ActiveCfg = Release|x64
+		{1834FC35-E7A1-4E29-A093-540D2B9CA26A}.Release|x64.Build.0 = Release|x64
+		{1834FC35-E7A1-4E29-A093-540D2B9CA26A}.Release|x86.ActiveCfg = Release|Win32
+		{1834FC35-E7A1-4E29-A093-540D2B9CA26A}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D8F4AD43-4D6B-4F5C-BA9D-33A0F7B84D0E}
+	EndGlobalSection
+EndGlobal

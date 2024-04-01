@@ -937,9 +937,15 @@ void CGrayscale영상처리MFCDoc::OnEmbossImage()
 	if (btn.DoModal() != IDOK)
 		return;
 
-	// 메모리 해제 및 할당
+	// 메모리 해제
 	Onfree2D(m_outImage, m_outH);
-	m_outImage = OnMalloc2D(m_inH, m_inW, 0);
+	m_outImage = NULL;
+	m_outH = m_outW = 0;
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImage = OnMalloc2D(m_outH, m_outW, 0);
 
 	int size;
 	if (btn.m_conv_index3 == 0)
@@ -995,9 +1001,15 @@ void CGrayscale영상처리MFCDoc::OnBlurrImage()
 	if (btn.DoModal() != IDOK)
 		return;
 
-	// 메모리 해제 및 할당
+	// 메모리 해제
 	Onfree2D(m_outImage, m_outH);
-	m_outImage = OnMalloc2D(m_inH, m_inW, 0);
+	m_outImage = NULL;
+	m_outH = m_outW = 0;
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImage = OnMalloc2D(m_outH, m_outW, 0);
 
 	int size;
 	if (btn.m_conv_index3 == 0)
@@ -1045,9 +1057,15 @@ void CGrayscale영상처리MFCDoc::OnSmothImage()
 		return;
 	double sigma = (double)dlg.m_constant_f;
 
-	// 메모리 해제 및 할당
+	// 메모리 해제
 	Onfree2D(m_outImage, m_outH);
-	m_outImage = OnMalloc2D(m_inH, m_inW, 0);
+	m_outImage = NULL;
+	m_outH = m_outW = 0;
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImage = OnMalloc2D(m_outH, m_outW, 0);
 
 	int size;
 	if (btn.m_conv_index3 == 0)
@@ -1095,9 +1113,15 @@ void CGrayscale영상처리MFCDoc::OnSharpImage()
 	if (btn.DoModal() != IDOK)
 		return;
 
-	// 메모리 해제 및 할당
+	// 메모리 해제
 	Onfree2D(m_outImage, m_outH);
-	m_outImage = OnMalloc2D(m_inH, m_inW, 0);
+	m_outImage = NULL;
+	m_outH = m_outW = 0;
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImage = OnMalloc2D(m_outH, m_outW, 0);
 
 	int size;
 	if (btn.m_conv_index3 == 0)
@@ -1201,13 +1225,13 @@ double** CGrayscale영상처리MFCDoc::OnConvolution(unsigned char** inputImage,
 	// TODO: 여기에 구현 코드 추가.
 	int paddedH = h + (maskSize - 1);
 	int paddedW = w + (maskSize - 1);
-	double** paddedImage = OnmallocDouble2D(paddedH, paddedW, 0);
-	double** outputImage = OnmallocDouble2D(m_outH, m_outW, 0);
+	double** paddedImage = OnmallocDouble2D(paddedH, paddedW, 127);
+	double** outputImage = OnmallocDouble2D(m_inH, m_inW, 0);
 
 	// 입력 이미지를 패딩된 이미지에 복사
 	for (int i = 0; i < h; i++) {
 		for (int j = 0; j < w; j++) {
-			paddedImage[i + (maskSize - 1)][j + (maskSize - 1)] = inputImage[i][j];
+			paddedImage[i + (int)(maskSize / 2)][j + (int)(maskSize / 2)] = inputImage[i][j];
 		}
 	}
 
