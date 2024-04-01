@@ -65,6 +65,15 @@ public:
 	afx_msg void OnRotateImage();
 	afx_msg void OnMoveImage();
 	afx_msg void OnMirrorImage();
+	afx_msg void OnEmbossImage();
+	afx_msg void OnBlurrImage();
+	afx_msg void OnSmoothImage();
+	afx_msg void OnSharpImage();
+	afx_msg void OnPrewittImage();
+	afx_msg void OnSobelImage();
+	afx_msg void OnLaplaceImage();
+	afx_msg void OnLogImage();
+	afx_msg void OnDogImage();
 };
 
 #ifndef _DEBUG  // Color Image 영상처리View.cpp의 디버그 버전

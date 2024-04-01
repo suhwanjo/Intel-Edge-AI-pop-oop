@@ -19,7 +19,9 @@
 #include "ConstantMorph.h"
 #include "CConstantScale2.h"
 #include "ConstantScale.h"
-
+#include "ConstantMirror.h"
+#include "ConstantConv.h"
+#include "ConstantEdge.h"
 #include <propkey.h>
 
 #ifdef _DEBUG
@@ -1188,16 +1190,833 @@ void CColorImage영상처리Doc::OnScaleDown()
 void CColorImage영상처리Doc::OnRotateImage()
 {
 	// TODO: 여기에 구현 코드 추가.
+	CConstantScale dlg;
+	if (dlg.DoModal() != IDOK)
+		return;
+	// TODO: 여기에 구현 코드 추가.
+	OnFreeOutimage();
+	// (중요!) 이미지의 폭과 높이를 결정
+	int degree = (int)dlg.m_constant_scale;
+	double tmp_angle = fmod((double)degree, 90.0) * 3.141592 / 180.0;
+	double tmp_angle90 = (90.0 - fmod((double)degree, 90.0)) * 3.141592 / 180.0;
+	m_outH = (int)(m_inH * cos(tmp_angle90) + m_inW * cos(tmp_angle));
+	m_outW = (int)(m_inW * cos(tmp_angle) + m_inH * cos(tmp_angle90));
+	CString message;
+	message.Format(_T("m_outH : %d m_outW : %d"), m_outH,m_outW);
+	MessageBox(AfxGetMainWnd()->GetSafeHwnd(), message, _T("알림"), MB_OK);
+	m_outImageR = OnMalloc2D(m_outH, m_outW);
+	m_outImageG = OnMalloc2D(m_outH, m_outW);
+	m_outImageB = OnMalloc2D(m_outH, m_outW);
+
+	double angle = degree * 3.141592 / 180.0;
+	int dx = (m_outW - m_inW) / 2;
+	int dy = (m_outH - m_inH) / 2;
+	unsigned char** tmp_imageR = OnMalloc2D(m_outH, m_outW);
+	unsigned char** tmp_imageG = OnMalloc2D(m_outH, m_outW);
+	unsigned char** tmp_imageB = OnMalloc2D(m_outH, m_outW);
+
+	/*for (int i = 0; i < m_outH; i++) {
+		for (int j = 0; j < m_outW; j++) {
+			tmp_imageR[i][j] = tmp_imageG[i][j] = tmp_imageB[i][j] = 0;
+		}
+	}*/
+
+	for (int i = 0; i < m_inH; i++) {
+		for (int j = 0; j < m_inW; j++) {
+			tmp_imageR[i + dy][j + dx] = m_inImageR[i][j];  // 거꾸로 되어 있었음 -> dx가 열(column)
+			tmp_imageG[i + dy][j + dx] = m_inImageG[i][j];
+			tmp_imageB[i + dy][j + dx] = m_inImageB[i][j];
+		}
+	}
+	int cx = m_outW / 2;
+	int cy = m_outH / 2;
+
+	for (int i = 0; i < m_outH; i++) {
+		for (int j = 0; j < m_outW; j++) {
+			int xd = i;
+			int yd = j;
+			int xs = (int)(cos(angle) * (xd - cx) + sin(angle) * (yd - cy)) + cx;
+			int ys = (int)(-sin(angle) * (xd - cx) + cos(angle) * (yd - cy)) + cy;
+			if (0 <= xs && xs < m_outH && 0 <= ys && ys < m_outW) {
+				m_outImageR[xd][yd] = tmp_imageR[xs][ys];
+				m_outImageG[xd][yd] = tmp_imageG[xs][ys];
+				m_outImageB[xd][yd] = tmp_imageB[xs][ys];
+			}
+		}
+	}
+	OnFree2D(tmp_imageR, m_outH);
+	OnFree2D(tmp_imageG, m_outH);
+	OnFree2D(tmp_imageB, m_outH);
 }
 
 
 void CColorImage영상처리Doc::OnMoveImage()
 {
 	// TODO: 여기에 구현 코드 추가.
+	CConstantScale dlg;
+	if (dlg.DoModal() != IDOK)
+		return;
+	OnFreeOutimage();
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImageR = OnMalloc2D(m_outH, m_outW);
+	m_outImageG = OnMalloc2D(m_outH, m_outW);
+	m_outImageB = OnMalloc2D(m_outH, m_outW);
+
+	int move = (int)dlg.m_constant_scale;
+	if (move >= 0) { // 우측 하단으로 이동
+		for (int i = move; i < m_outH; i++) {
+			for (int j = move; j < m_outW; j++) {  // 클리핑 필요 없음
+				m_outImageR[i][j] = m_inImageR[i - move][j - move];
+				m_outImageG[i][j] = m_inImageG[i - move][j - move];
+				m_outImageB[i][j] = m_inImageB[i - move][j - move];
+			}
+		}
+	}
+	else { // 좌측 상단으로 이동
+		for (int i = 0; i < m_outH + move; i++) {
+			for (int j = 0; j < m_outW + move; j++) {
+				m_outImageR[i][j] = m_inImageR[i - move][j - move];
+				m_outImageG[i][j] = m_inImageG[i - move][j - move];
+				m_outImageB[i][j] = m_inImageB[i - move][j - move];
+			}
+		}
+	}
+
 }
 
 
 void CColorImage영상처리Doc::OnMirrorImage()
 {
 	// TODO: 여기에 구현 코드 추가.
+	CConstantMirror btn;
+	if (btn.DoModal() != IDOK)
+		return;
+	OnFreeOutimage();
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImageR = OnMalloc2D(m_outH, m_outW);
+	m_outImageG = OnMalloc2D(m_outH, m_outW);
+	m_outImageB = OnMalloc2D(m_outH, m_outW);
+
+	if (btn.m_radio_mirror == 0) { // 상-하 뒤집기
+		for (int i = 0; i < m_outH; i++) {
+			for (int j = 0; j < m_outW; j++) {
+				m_outImageR[m_outH - 1 - i][j] = m_inImageR[i][j];
+				m_outImageG[m_outH - 1 - i][j] = m_inImageG[i][j];
+				m_outImageB[m_outH - 1 - i][j] = m_inImageB[i][j];
+			}
+		}
+	}
+	else { // 좌-우 뒤집기
+		for (int i = 0; i < m_outH; i++) {
+			for (int j = 0; j < m_outW; j++) {
+				m_outImageR[i][m_outW - 1 - j] = m_inImageR[i][j];
+				m_outImageG[i][m_outW - 1 - j] = m_inImageG[i][j];
+				m_outImageB[i][m_outW - 1 - j] = m_inImageB[i][j];
+			}
+		}
+	}
+}
+
+
+double** CColorImage영상처리Doc::OnmallocDouble2D(int h, int w)
+{
+	double** retMemory;
+	retMemory = new double* [h];
+	for (int i = 0; i < h; i++)
+		retMemory[i] = new double[w];
+
+	return retMemory;
+}
+
+
+void CColorImage영상처리Doc::OnfreeDouble2D(double** memory, int h)
+{
+	if (memory == NULL)
+		return;
+	for (int i = 0; i < h; i++)
+		delete memory[i];
+	delete[] memory;
+}
+
+
+double** CColorImage영상처리Doc::OnConvolution(unsigned char** inputImage, int h, int w, double** mask, int maskSize)
+{
+	// TODO: 여기에 구현 코드 추가.
+	int paddedH = h + (maskSize - 1);
+	int paddedW = w + (maskSize - 1);
+	double** paddedImage = OnmallocDouble2D(paddedH, paddedW);
+	double** outputImage = OnmallocDouble2D(m_inH, m_inW);
+
+	// 입력 이미지를 패딩된 이미지에 복사
+	for (int i = 0; i < h; i++) {
+		for (int j = 0; j < w; j++) {
+			paddedImage[i + (int)(maskSize / 2)][j + (int)(maskSize / 2)] = inputImage[i][j];
+		}
+	}
+
+	// 컨볼루션 연산
+	double sum;
+	for (int i = 0; i < h; i++) {
+		for (int j = 0; j < w; j++) {
+			sum = 0;
+			for (int k = 0; k < maskSize; k++) {
+				for (int q = 0; q < maskSize; q++) {
+					sum += paddedImage[i + k][j + q] * mask[k][q];
+				}
+			}
+			outputImage[i][j] = sum;
+		}
+	}
+
+	OnfreeDouble2D(paddedImage, paddedH);
+	return outputImage;
+}
+
+
+void CColorImage영상처리Doc::OnEmbossImage()
+{
+	// TODO: 여기에 구현 코드 추가.
+	CConstantConv btn;
+	if (btn.DoModal() != IDOK)
+		return;
+
+	// 메모리 해제
+	OnFreeOutimage();
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImageR = OnMalloc2D(m_outH, m_outW);
+	m_outImageG = OnMalloc2D(m_outH, m_outW);
+	m_outImageB = OnMalloc2D(m_outH, m_outW);
+
+	int size;
+	if (btn.m_radio_index == 0)
+		size = 3;
+	else if (btn.m_radio_index == 1)
+		size = 5;
+	else if (btn.m_radio_index == 2)
+		size = 7;
+	else if (btn.m_radio_index == 3)
+		size = 9;
+
+	double** mask = OnmallocDouble2D(size, size);
+	// 엠보싱 마스크 생성
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			if (i == 0 && j == 0)
+				mask[i][j] = -1.0;
+			else if (i == size - 1 && j == size - 1)
+				mask[i][j] = 1.0;
+			else
+				mask[i][j] = 0.0;
+		}
+	}
+
+	double** tmpOutImageR = OnConvolution(m_inImageR, m_inH, m_inW, mask, size);
+	double** tmpOutImageG = OnConvolution(m_inImageG, m_inH, m_inW, mask, size);
+	double** tmpOutImageB = OnConvolution(m_inImageB, m_inH, m_inW, mask, size);
+
+	// 마스크 값의 합에 따라 후처리 (엠보싱만)
+	for (int i = 0; i < m_outH; i++) {
+		for (int j = 0; j < m_outW; j++) {
+			tmpOutImageR[i][j] += 127.0;
+			tmpOutImageG[i][j] += 127.0;
+			tmpOutImageB[i][j] += 127.0;
+		}
+	}
+
+	// 임시 출력 영상 -> 출력 영상
+	for (int i = 0; i < m_outH; i++) {
+		for (int j = 0; j < m_outW; j++) {
+			// R 채널 클리핑
+			if (tmpOutImageR[i][j] < 0.0)
+				m_outImageR[i][j] = 0;
+			else if (tmpOutImageR[i][j] > 255.0)
+				m_outImageR[i][j] = 255;
+			else
+				m_outImageR[i][j] = (unsigned char)tmpOutImageR[i][j];
+
+			// G 채널 클리핑
+			if (tmpOutImageG[i][j] < 0.0)
+				m_outImageG[i][j] = 0;
+			else if (tmpOutImageG[i][j] > 255.0)
+				m_outImageG[i][j] = 255;
+			else
+				m_outImageG[i][j] = (unsigned char)tmpOutImageG[i][j];
+
+			// B 채널 클리핑
+			if (tmpOutImageB[i][j] < 0.0)
+				m_outImageB[i][j] = 0;
+			else if (tmpOutImageB[i][j] > 255.0)
+				m_outImageB[i][j] = 255;
+			else
+				m_outImageB[i][j] = (unsigned char)tmpOutImageB[i][j];
+		}
+	}
+
+	OnfreeDouble2D(mask, size);
+	OnfreeDouble2D(tmpOutImageR, m_outH);
+	OnfreeDouble2D(tmpOutImageG, m_outH);
+	OnfreeDouble2D(tmpOutImageB, m_outH);
+}
+
+
+void CColorImage영상처리Doc::OnBlurrImage()
+{
+	// TODO: 여기에 구현 코드 추가.
+	CConstantConv btn;
+	if (btn.DoModal() != IDOK)
+		return;
+	// 메모리 해제
+	OnFreeOutimage();
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImageR = OnMalloc2D(m_outH, m_outW);
+	m_outImageG = OnMalloc2D(m_outH, m_outW);
+	m_outImageB = OnMalloc2D(m_outH, m_outW);
+
+	int size;
+	if (btn.m_radio_index == 0)
+		size = 3;
+	else if (btn.m_radio_index == 1)
+		size = 5;
+	else if (btn.m_radio_index == 2)
+		size = 7;
+	else if (btn.m_radio_index == 3)
+		size = 9;
+	double** mask = OnmallocDouble2D(size, size);
+
+	// 평균 마스크 생성
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			mask[i][j] = 1 / (double)(size * size);
+		}
+	}
+	double** tmpOutImageR = OnConvolution(m_inImageR, m_inH, m_inW, mask, size);
+	double** tmpOutImageG = OnConvolution(m_inImageG, m_inH, m_inW, mask, size);
+	double** tmpOutImageB = OnConvolution(m_inImageB, m_inH, m_inW, mask, size);
+
+	// 임시 출력 영상 -> 출력 영상
+	for (int i = 0; i < m_outH; i++) {
+		for (int j = 0; j < m_outW; j++) {
+			// R 채널 클리핑
+			if (tmpOutImageR[i][j] < 0.0)
+				m_outImageR[i][j] = 0;
+			else if (tmpOutImageR[i][j] > 255.0)
+				m_outImageR[i][j] = 255;
+			else
+				m_outImageR[i][j] = (unsigned char)tmpOutImageR[i][j];
+
+			// G 채널 클리핑
+			if (tmpOutImageG[i][j] < 0.0)
+				m_outImageG[i][j] = 0;
+			else if (tmpOutImageG[i][j] > 255.0)
+				m_outImageG[i][j] = 255;
+			else
+				m_outImageG[i][j] = (unsigned char)tmpOutImageG[i][j];
+
+			// B 채널 클리핑
+			if (tmpOutImageB[i][j] < 0.0)
+				m_outImageB[i][j] = 0;
+			else if (tmpOutImageB[i][j] > 255.0)
+				m_outImageB[i][j] = 255;
+			else
+				m_outImageB[i][j] = (unsigned char)tmpOutImageB[i][j];
+		}
+	}
+
+	OnfreeDouble2D(mask, size);
+	OnfreeDouble2D(tmpOutImageR, m_outH);
+	OnfreeDouble2D(tmpOutImageG, m_outH);
+	OnfreeDouble2D(tmpOutImageB, m_outH);
+}
+
+
+void CColorImage영상처리Doc::OnSmoothImage()
+{
+	// TODO: 여기에 구현 코드 추가.
+	CConstantConv btn;
+	if (btn.DoModal() != IDOK)
+		return;
+	CConstantF dlg;
+	if (dlg.DoModal() != IDOK)
+		return;
+	double sigma = (double)dlg.m_constant_f;
+
+	// 메모리 해제
+	OnFreeOutimage();
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImageR = OnMalloc2D(m_outH, m_outW);
+	m_outImageG = OnMalloc2D(m_outH, m_outW);
+	m_outImageB = OnMalloc2D(m_outH, m_outW);
+
+	int size;
+	if (btn.m_radio_index == 0)
+		size = 3;
+	else if (btn.m_radio_index == 1)
+		size = 5;
+	else if (btn.m_radio_index == 2)
+		size = 7;
+	else if (btn.m_radio_index == 3)
+		size = 9;
+	double** mask = OnmallocDouble2D(size, size);
+	double gaussian;
+	int center = size / 2;
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			// 가우시안 마스크 생성
+			double x = sqrt((pow((i - center), 2) + pow((j - center), 2)));
+			gaussian = exp(-(x * x) / (2.0 * sigma * sigma)) / (sigma * sqrt(2.0 * 3.141592));
+			mask[i][j] = gaussian;
+		}
+	}
+
+	double** tmpOutImageR = OnConvolution(m_inImageR, m_inH, m_inW, mask, size);
+	double** tmpOutImageG = OnConvolution(m_inImageG, m_inH, m_inW, mask, size);
+	double** tmpOutImageB = OnConvolution(m_inImageB, m_inH, m_inW, mask, size);
+
+	// 임시 출력 영상 -> 출력 영상
+	for (int i = 0; i < m_outH; i++) {
+		for (int j = 0; j < m_outW; j++) {
+			// R 채널 클리핑
+			if (tmpOutImageR[i][j] < 0.0)
+				m_outImageR[i][j] = 0;
+			else if (tmpOutImageR[i][j] > 255.0)
+				m_outImageR[i][j] = 255;
+			else
+				m_outImageR[i][j] = (unsigned char)tmpOutImageR[i][j];
+
+			// G 채널 클리핑
+			if (tmpOutImageG[i][j] < 0.0)
+				m_outImageG[i][j] = 0;
+			else if (tmpOutImageG[i][j] > 255.0)
+				m_outImageG[i][j] = 255;
+			else
+				m_outImageG[i][j] = (unsigned char)tmpOutImageG[i][j];
+
+			// B 채널 클리핑
+			if (tmpOutImageB[i][j] < 0.0)
+				m_outImageB[i][j] = 0;
+			else if (tmpOutImageB[i][j] > 255.0)
+				m_outImageB[i][j] = 255;
+			else
+				m_outImageB[i][j] = (unsigned char)tmpOutImageB[i][j];
+		}
+	}
+
+	OnfreeDouble2D(mask, size);
+	OnfreeDouble2D(tmpOutImageR, m_outH);
+	OnfreeDouble2D(tmpOutImageG, m_outH);
+	OnfreeDouble2D(tmpOutImageB, m_outH);
+}
+
+
+void CColorImage영상처리Doc::OnSharpImage()
+{
+	// TODO: 여기에 구현 코드 추가.
+	CConstantConv btn;
+	if (btn.DoModal() != IDOK)
+		return;
+	// 메모리 해제
+	OnFreeOutimage();
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImageR = OnMalloc2D(m_outH, m_outW);
+	m_outImageG = OnMalloc2D(m_outH, m_outW);
+	m_outImageB = OnMalloc2D(m_outH, m_outW);
+
+	int size;
+	if (btn.m_radio_index == 0)
+		size = 3;
+	else if (btn.m_radio_index == 1)
+		size = 5;
+	else if (btn.m_radio_index == 2)
+		size = 7;
+	else if (btn.m_radio_index == 3)
+		size = 9;
+	double** mask = OnmallocDouble2D(size, size);
+	int center = size / 2;
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			// 샤프닝 마스크 생성
+			if (i == center && j == center)
+				mask[i][j] = (double)size * size;
+			else
+				mask[i][j] = -1.0;
+		}
+	}
+
+	double** tmpOutImageR = OnConvolution(m_inImageR, m_inH, m_inW, mask, size);
+	double** tmpOutImageG = OnConvolution(m_inImageG, m_inH, m_inW, mask, size);
+	double** tmpOutImageB = OnConvolution(m_inImageB, m_inH, m_inW, mask, size);
+
+	// 임시 출력 영상 -> 출력 영상
+	for (int i = 0; i < m_outH; i++) {
+		for (int j = 0; j < m_outW; j++) {
+			// R 채널 클리핑
+			if (tmpOutImageR[i][j] < 0.0)
+				m_outImageR[i][j] = 0;
+			else if (tmpOutImageR[i][j] > 255.0)
+				m_outImageR[i][j] = 255;
+			else
+				m_outImageR[i][j] = (unsigned char)tmpOutImageR[i][j];
+
+			// G 채널 클리핑
+			if (tmpOutImageG[i][j] < 0.0)
+				m_outImageG[i][j] = 0;
+			else if (tmpOutImageG[i][j] > 255.0)
+				m_outImageG[i][j] = 255;
+			else
+				m_outImageG[i][j] = (unsigned char)tmpOutImageG[i][j];
+
+			// B 채널 클리핑
+			if (tmpOutImageB[i][j] < 0.0)
+				m_outImageB[i][j] = 0;
+			else if (tmpOutImageB[i][j] > 255.0)
+				m_outImageB[i][j] = 255;
+			else
+				m_outImageB[i][j] = (unsigned char)tmpOutImageB[i][j];
+		}
+	}
+
+	OnfreeDouble2D(mask, size);
+	OnfreeDouble2D(tmpOutImageR, m_outH);
+	OnfreeDouble2D(tmpOutImageG, m_outH);
+	OnfreeDouble2D(tmpOutImageB, m_outH);
+}
+
+
+void CColorImage영상처리Doc::OnPrewittImage()
+{
+	// TODO: 여기에 구현 코드 추가.
+	CConstantEdge btn;
+	if (btn.DoModal() != IDOK)
+		return;
+	// 메모리 해제
+	OnFreeOutimage();
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImageR = OnMalloc2D(m_outH, m_outW);
+	m_outImageG = OnMalloc2D(m_outH, m_outW);
+	m_outImageB = OnMalloc2D(m_outH, m_outW);
+	int size = 3;
+	double** mask = OnmallocDouble2D(size, size);
+	if (btn.m_radio_edge == 0) {
+		mask[0][0] = -1.; mask[0][1] = 0.; mask[0][2] = 1.;
+		mask[1][0] = -1.; mask[1][1] = 0.; mask[1][2] = 1.;
+		mask[2][0] = -1.; mask[2][1] = 0.; mask[2][2] = 1.;
+	}
+	else {
+		mask[0][0] = -1.; mask[0][1] = -1.; mask[0][2] = -1.;
+		mask[1][0] = 0.; mask[1][1] = 0.; mask[1][2] = 0.;
+		mask[2][0] = 1.; mask[2][1] = 1.; mask[2][2] = 1.;
+	}
+
+	double** tmpOutImageR = OnConvolution(m_inImageR, m_inH, m_inW, mask, size);
+	double** tmpOutImageG = OnConvolution(m_inImageG, m_inH, m_inW, mask, size);
+	double** tmpOutImageB = OnConvolution(m_inImageB, m_inH, m_inW, mask, size);
+
+	// 임시 출력 영상 -> 출력 영상
+	for (int i = 0; i < m_outH; i++) {
+		for (int j = 0; j < m_outW; j++) {
+			// R 채널 클리핑
+			if (tmpOutImageR[i][j] < 0.0)
+				m_outImageR[i][j] = 0;
+			else if (tmpOutImageR[i][j] > 255.0)
+				m_outImageR[i][j] = 255;
+			else
+				m_outImageR[i][j] = (unsigned char)tmpOutImageR[i][j];
+
+			// G 채널 클리핑
+			if (tmpOutImageG[i][j] < 0.0)
+				m_outImageG[i][j] = 0;
+			else if (tmpOutImageG[i][j] > 255.0)
+				m_outImageG[i][j] = 255;
+			else
+				m_outImageG[i][j] = (unsigned char)tmpOutImageG[i][j];
+
+			// B 채널 클리핑
+			if (tmpOutImageB[i][j] < 0.0)
+				m_outImageB[i][j] = 0;
+			else if (tmpOutImageB[i][j] > 255.0)
+				m_outImageB[i][j] = 255;
+			else
+				m_outImageB[i][j] = (unsigned char)tmpOutImageB[i][j];
+		}
+	}
+
+	OnfreeDouble2D(mask, size);
+	OnfreeDouble2D(tmpOutImageR, m_outH);
+	OnfreeDouble2D(tmpOutImageG, m_outH);
+	OnfreeDouble2D(tmpOutImageB, m_outH);
+}
+
+
+void CColorImage영상처리Doc::OnSobelImage()
+{
+	// TODO: 여기에 구현 코드 추가.
+	CConstantEdge btn;
+	if (btn.DoModal() != IDOK)
+		return;
+	// 메모리 해제
+	OnFreeOutimage();
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImageR = OnMalloc2D(m_outH, m_outW);
+	m_outImageG = OnMalloc2D(m_outH, m_outW);
+	m_outImageB = OnMalloc2D(m_outH, m_outW);
+	int size = 3;
+	double** mask = OnmallocDouble2D(size, size);
+	if (btn.m_radio_edge == 0) {
+		mask[0][0] = -1.; mask[0][1] = 0.; mask[0][2] = 1.;
+		mask[1][0] = -2.; mask[1][1] = 0.; mask[1][2] = 2.;
+		mask[2][0] = -1.; mask[2][1] = 0.; mask[2][2] = 1.;
+	}
+	else {
+		mask[0][0] = -1.; mask[0][1] = -2.; mask[0][2] = -1.;
+		mask[1][0] = 0.; mask[1][1] = 0.; mask[1][2] = 0.;
+		mask[2][0] = 1.; mask[2][1] = 2.; mask[2][2] = 1.;
+	}
+
+	double** tmpOutImageR = OnConvolution(m_inImageR, m_inH, m_inW, mask, size);
+	double** tmpOutImageG = OnConvolution(m_inImageG, m_inH, m_inW, mask, size);
+	double** tmpOutImageB = OnConvolution(m_inImageB, m_inH, m_inW, mask, size);
+
+	// 임시 출력 영상 -> 출력 영상
+	for (int i = 0; i < m_outH; i++) {
+		for (int j = 0; j < m_outW; j++) {
+			// R 채널 클리핑
+			if (tmpOutImageR[i][j] < 0.0)
+				m_outImageR[i][j] = 0;
+			else if (tmpOutImageR[i][j] > 255.0)
+				m_outImageR[i][j] = 255;
+			else
+				m_outImageR[i][j] = (unsigned char)tmpOutImageR[i][j];
+
+			// G 채널 클리핑
+			if (tmpOutImageG[i][j] < 0.0)
+				m_outImageG[i][j] = 0;
+			else if (tmpOutImageG[i][j] > 255.0)
+				m_outImageG[i][j] = 255;
+			else
+				m_outImageG[i][j] = (unsigned char)tmpOutImageG[i][j];
+
+			// B 채널 클리핑
+			if (tmpOutImageB[i][j] < 0.0)
+				m_outImageB[i][j] = 0;
+			else if (tmpOutImageB[i][j] > 255.0)
+				m_outImageB[i][j] = 255;
+			else
+				m_outImageB[i][j] = (unsigned char)tmpOutImageB[i][j];
+		}
+	}
+
+	OnfreeDouble2D(mask, size);
+	OnfreeDouble2D(tmpOutImageR, m_outH);
+	OnfreeDouble2D(tmpOutImageG, m_outH);
+	OnfreeDouble2D(tmpOutImageB, m_outH);
+}
+
+
+void CColorImage영상처리Doc::OnLaplaceImage()
+{
+	// TODO: 여기에 구현 코드 추가.
+	// 메모리 해제
+	OnFreeOutimage();
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImageR = OnMalloc2D(m_outH, m_outW);
+	m_outImageG = OnMalloc2D(m_outH, m_outW);
+	m_outImageB = OnMalloc2D(m_outH, m_outW);
+	int size = 3;
+	double** mask = OnmallocDouble2D(size, size);
+
+	// 마스크 초기화
+	mask[0][0] = 0.; mask[0][1] = 1.; mask[0][2] = 0.;
+	mask[1][0] = 1.; mask[1][1] = -4.; mask[1][2] = 1.;
+	mask[2][0] = 0.; mask[2][1] = 1.; mask[2][2] = 0.;
+
+	double** tmpOutImageR = OnConvolution(m_inImageR, m_inH, m_inW, mask, size);
+	double** tmpOutImageG = OnConvolution(m_inImageG, m_inH, m_inW, mask, size);
+	double** tmpOutImageB = OnConvolution(m_inImageB, m_inH, m_inW, mask, size);
+
+	// 임시 출력 영상 -> 출력 영상
+	for (int i = 0; i < m_outH; i++) {
+		for (int j = 0; j < m_outW; j++) {
+			// R 채널 클리핑
+			if (tmpOutImageR[i][j] < 0.0)
+				m_outImageR[i][j] = 0;
+			else if (tmpOutImageR[i][j] > 255.0)
+				m_outImageR[i][j] = 255;
+			else
+				m_outImageR[i][j] = (unsigned char)tmpOutImageR[i][j];
+
+			// G 채널 클리핑
+			if (tmpOutImageG[i][j] < 0.0)
+				m_outImageG[i][j] = 0;
+			else if (tmpOutImageG[i][j] > 255.0)
+				m_outImageG[i][j] = 255;
+			else
+				m_outImageG[i][j] = (unsigned char)tmpOutImageG[i][j];
+
+			// B 채널 클리핑
+			if (tmpOutImageB[i][j] < 0.0)
+				m_outImageB[i][j] = 0;
+			else if (tmpOutImageB[i][j] > 255.0)
+				m_outImageB[i][j] = 255;
+			else
+				m_outImageB[i][j] = (unsigned char)tmpOutImageB[i][j];
+		}
+	}
+
+	OnfreeDouble2D(mask, size);
+	OnfreeDouble2D(tmpOutImageR, m_outH);
+	OnfreeDouble2D(tmpOutImageG, m_outH);
+	OnfreeDouble2D(tmpOutImageB, m_outH);
+}
+
+
+void CColorImage영상처리Doc::OnLogImage()
+{
+	// TODO: 여기에 구현 코드 추가.
+		// 메모리 해제
+	OnFreeOutimage();
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImageR = OnMalloc2D(m_outH, m_outW);
+	m_outImageG = OnMalloc2D(m_outH, m_outW);
+	m_outImageB = OnMalloc2D(m_outH, m_outW);
+	int size = 5;
+	double** mask = OnmallocDouble2D(size, size);
+
+	// 마스크 초기화
+	mask[0][0] = 0; mask[0][1] = 0; mask[0][2] = -1; mask[0][3] = 0; mask[0][4] = 0;
+	mask[1][0] = 0; mask[1][1] = -1; mask[1][2] = -2; mask[1][3] = -1; mask[1][4] = 0;
+	mask[2][0] = -1; mask[2][1] = -2; mask[2][2] = 16; mask[2][3] = -2; mask[2][4] = -1;
+	mask[3][0] = 0; mask[3][1] = -1; mask[3][2] = -2; mask[3][3] = -1; mask[3][4] = 0;
+	mask[4][0] = 0; mask[4][1] = 0; mask[4][2] = -1; mask[4][3] = 0; mask[4][4] = 0;
+
+	double** tmpOutImageR = OnConvolution(m_inImageR, m_inH, m_inW, mask, size);
+	double** tmpOutImageG = OnConvolution(m_inImageG, m_inH, m_inW, mask, size);
+	double** tmpOutImageB = OnConvolution(m_inImageB, m_inH, m_inW, mask, size);
+
+	// 임시 출력 영상 -> 출력 영상
+	for (int i = 0; i < m_outH; i++) {
+		for (int j = 0; j < m_outW; j++) {
+			// R 채널 클리핑
+			if (tmpOutImageR[i][j] < 0.0)
+				m_outImageR[i][j] = 0;
+			else if (tmpOutImageR[i][j] > 255.0)
+				m_outImageR[i][j] = 255;
+			else
+				m_outImageR[i][j] = (unsigned char)tmpOutImageR[i][j];
+
+			// G 채널 클리핑
+			if (tmpOutImageG[i][j] < 0.0)
+				m_outImageG[i][j] = 0;
+			else if (tmpOutImageG[i][j] > 255.0)
+				m_outImageG[i][j] = 255;
+			else
+				m_outImageG[i][j] = (unsigned char)tmpOutImageG[i][j];
+
+			// B 채널 클리핑
+			if (tmpOutImageB[i][j] < 0.0)
+				m_outImageB[i][j] = 0;
+			else if (tmpOutImageB[i][j] > 255.0)
+				m_outImageB[i][j] = 255;
+			else
+				m_outImageB[i][j] = (unsigned char)tmpOutImageB[i][j];
+		}
+	}
+
+	OnfreeDouble2D(mask, size);
+	OnfreeDouble2D(tmpOutImageR, m_outH);
+	OnfreeDouble2D(tmpOutImageG, m_outH);
+	OnfreeDouble2D(tmpOutImageB, m_outH);
+}
+
+
+void CColorImage영상처리Doc::OnDogImage()
+{
+	// TODO: 여기에 구현 코드 추가.
+		// 메모리 해제
+	OnFreeOutimage();
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImageR = OnMalloc2D(m_outH, m_outW);
+	m_outImageG = OnMalloc2D(m_outH, m_outW);
+	m_outImageB = OnMalloc2D(m_outH, m_outW);
+	int size = 7;
+	double** mask = OnmallocDouble2D(size, size);
+
+	// 마스크 초기화
+	mask[0][0] = 0; mask[0][1] = 0; mask[0][2] = -1; mask[0][3] = -1; mask[0][4] = -1; mask[0][5] = 0; mask[0][6] = 0;
+	mask[1][0] = 0; mask[1][1] = -2; mask[1][2] = -3; mask[1][3] = -3; mask[1][4] = -3; mask[1][5] = -2; mask[1][6] = 0;
+	mask[2][0] = -1; mask[2][1] = -3; mask[2][2] = 5; mask[2][3] = 5; mask[2][4] = 5; mask[2][5] = -3; mask[2][6] = -1;
+	mask[3][0] = -1; mask[3][1] = -3; mask[3][2] = 5; mask[3][3] = 16; mask[3][4] = 5; mask[3][5] = -3; mask[3][6] = -1;
+	mask[4][0] = -1; mask[4][1] = -3; mask[4][2] = 5; mask[4][3] = 5; mask[4][4] = 5; mask[4][5] = -3; mask[4][6] = -1;
+	mask[5][0] = 0; mask[5][1] = -2; mask[5][2] = -3; mask[5][3] = -3; mask[5][4] = -3; mask[5][5] = -2; mask[5][6] = 0;
+	mask[6][0] = 0; mask[6][1] = 0; mask[6][2] = -1; mask[6][3] = -1; mask[6][4] = -1; mask[6][5] = 0; mask[6][6] = 0;
+
+	double** tmpOutImageR = OnConvolution(m_inImageR, m_inH, m_inW, mask, size);
+	double** tmpOutImageG = OnConvolution(m_inImageG, m_inH, m_inW, mask, size);
+	double** tmpOutImageB = OnConvolution(m_inImageB, m_inH, m_inW, mask, size);
+
+	// 임시 출력 영상 -> 출력 영상
+	for (int i = 0; i < m_outH; i++) {
+		for (int j = 0; j < m_outW; j++) {
+			// R 채널 클리핑
+			if (tmpOutImageR[i][j] < 0.0)
+				m_outImageR[i][j] = 0;
+			else if (tmpOutImageR[i][j] > 255.0)
+				m_outImageR[i][j] = 255;
+			else
+				m_outImageR[i][j] = (unsigned char)tmpOutImageR[i][j];
+
+			// G 채널 클리핑
+			if (tmpOutImageG[i][j] < 0.0)
+				m_outImageG[i][j] = 0;
+			else if (tmpOutImageG[i][j] > 255.0)
+				m_outImageG[i][j] = 255;
+			else
+				m_outImageG[i][j] = (unsigned char)tmpOutImageG[i][j];
+
+			// B 채널 클리핑
+			if (tmpOutImageB[i][j] < 0.0)
+				m_outImageB[i][j] = 0;
+			else if (tmpOutImageB[i][j] > 255.0)
+				m_outImageB[i][j] = 255;
+			else
+				m_outImageB[i][j] = (unsigned char)tmpOutImageB[i][j];
+		}
+	}
+
+	OnfreeDouble2D(mask, size);
+	OnfreeDouble2D(tmpOutImageR, m_outH);
+	OnfreeDouble2D(tmpOutImageG, m_outH);
+	OnfreeDouble2D(tmpOutImageB, m_outH);
 }

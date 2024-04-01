@@ -81,6 +81,15 @@
     <ClInclude Include="CConstantScale2.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="ConstantMirror.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantConv.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantEdge.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Color Image 영상처리.cpp">
@@ -138,6 +147,15 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="CConstantScale2.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantMirror.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantConv.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantEdge.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

@@ -87,4 +87,16 @@ public:
 	void OnRotateImage();
 	void OnMoveImage();
 	void OnMirrorImage();
+	double** OnmallocDouble2D(int h, int w);
+	void OnfreeDouble2D(double** memory, int h);
+	double** OnConvolution(unsigned char** inputImage, int h, int w, double** mask, int maskSize);
+	void OnEmbossImage();
+	void OnBlurrImage();
+	void OnSmoothImage();
+	void OnSharpImage();
+	void OnPrewittImage();
+	void OnSobelImage();
+	void OnLaplaceImage();
+	void OnLogImage();
+	void OnDogImage();
 };

@@ -92,6 +92,10 @@
 #define IDD_CONSTANT_PARA               318
 #define IDD_CONSTANT_MORPH              320
 #define IDD_CONSTANT_SCALE              322
+#define IDD_CONSTANT_MIRROR             324
+#define IDD_CONSTANT_CONV               326
+#define IDD_DIALOG3                     328
+#define IDD_CONSTANT_EDGE               328
 #define IDC_EDIT_CONSTANT_F             1000
 #define IDC_EDIT1                       1001
 #define IDC_EDIT2                       1002
@@ -103,6 +107,7 @@
 #define IDC_CAP                         1009
 #define IDC_CUP                         1010
 #define IDC_MORPH                       1011
+#define IDC_RADIO4                      1013
 #define ID_32771                        32771
 #define IDM_EQUAL_IMAGE                 32772
 #define ID_32773                        32773
@@ -162,14 +167,25 @@
 #define IDM_ROTATE_IMAGE                32827
 #define IDM_MOVE_IMAGE                  32828
 #define IDM_MIRROR_IMAGE                32829
+#define IDM_EMBOSS_IMAGE                32830
+#define IDM_BLURR_IMAGE                 32831
+#define IDM_SMOOTH_IMAGE                32832
+#define IDM_SHARP_IMAGE                 32833
+#define IDM_PREWITT                     32834
+#define ID_                             32835
+#define IDM_PREWITT_IMAGE               32836
+#define IDM_SOBEL_IMAGE                 32837
+#define IDM_LAPLACE_IMAGE               32838
+#define IDM_LOG_IMAGE                   32839
+#define IDM_DOG_IMAGE                   32840
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        324
-#define _APS_NEXT_COMMAND_VALUE         32830
-#define _APS_NEXT_CONTROL_VALUE         1012
+#define _APS_NEXT_RESOURCE_VALUE        330
+#define _APS_NEXT_COMMAND_VALUE         32841
+#define _APS_NEXT_CONTROL_VALUE         1014
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

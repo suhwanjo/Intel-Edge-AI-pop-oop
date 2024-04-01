@@ -190,9 +190,12 @@
     <ClInclude Include="Color Image 영상처리Doc.h" />
     <ClInclude Include="Color Image 영상처리View.h" />
     <ClInclude Include="Constant2.h" />
+    <ClInclude Include="ConstantConv.h" />
     <ClInclude Include="ConstantDig.h" />
+    <ClInclude Include="ConstantEdge.h" />
     <ClInclude Include="ConstantEmphChannel.h" />
     <ClInclude Include="ConstantF.h" />
+    <ClInclude Include="ConstantMirror.h" />
     <ClInclude Include="ConstantMorph.h" />
     <ClInclude Include="ConstantPara.h" />
     <ClInclude Include="ConstantScale.h" />
@@ -214,9 +217,12 @@
     <ClCompile Include="Color Image 영상처리Doc.cpp" />
     <ClCompile Include="Color Image 영상처리View.cpp" />
     <ClCompile Include="Constant2.cpp" />
+    <ClCompile Include="ConstantConv.cpp" />
     <ClCompile Include="ConstantDig.cpp" />
+    <ClCompile Include="ConstantEdge.cpp" />
     <ClCompile Include="ConstantEmphChannel.cpp" />
     <ClCompile Include="ConstantF.cpp" />
+    <ClCompile Include="ConstantMirror.cpp" />
     <ClCompile Include="ConstantMorph.cpp" />
     <ClCompile Include="ConstantPara.cpp" />
     <ClCompile Include="ConstantScale.cpp" />

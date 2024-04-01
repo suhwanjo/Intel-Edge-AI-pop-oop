@@ -50,6 +50,15 @@ BEGIN_MESSAGE_MAP(CColorImage영상처리View, CView)
 	ON_COMMAND(IDM_ROTATE_IMAGE, &CColorImage영상처리View::OnRotateImage)
 	ON_COMMAND(IDM_MOVE_IMAGE, &CColorImage영상처리View::OnMoveImage)
 	ON_COMMAND(IDM_MIRROR_IMAGE, &CColorImage영상처리View::OnMirrorImage)
+	ON_COMMAND(IDM_EMBOSS_IMAGE, &CColorImage영상처리View::OnEmbossImage)
+	ON_COMMAND(IDM_BLURR_IMAGE, &CColorImage영상처리View::OnBlurrImage)
+	ON_COMMAND(IDM_SMOOTH_IMAGE, &CColorImage영상처리View::OnSmoothImage)
+	ON_COMMAND(IDM_SHARP_IMAGE, &CColorImage영상처리View::OnSharpImage)
+	ON_COMMAND(IDM_PREWITT_IMAGE, &CColorImage영상처리View::OnPrewittImage)
+	ON_COMMAND(IDM_SOBEL_IMAGE, &CColorImage영상처리View::OnSobelImage)
+	ON_COMMAND(IDM_LAPLACE_IMAGE, &CColorImage영상처리View::OnLaplaceImage)
+	ON_COMMAND(IDM_LOG_IMAGE, &CColorImage영상처리View::OnLogImage)
+	ON_COMMAND(IDM_DOG_IMAGE, &CColorImage영상처리View::OnDogImage)
 END_MESSAGE_MAP()
 
 // CColorImage영상처리View 생성/소멸
@@ -400,5 +409,104 @@ void CColorImage영상처리View::OnMirrorImage()
 	ASSERT_VALID(pDoc);
 
 	pDoc->OnMirrorImage();
+	Invalidate(TRUE);
+}
+
+
+void CColorImage영상처리View::OnEmbossImage()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CColorImage영상처리Doc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnEmbossImage();
+	Invalidate(TRUE);
+}
+
+
+void CColorImage영상처리View::OnBlurrImage()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CColorImage영상처리Doc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnBlurrImage();
+	Invalidate(TRUE);
+}
+
+
+void CColorImage영상처리View::OnSmoothImage()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CColorImage영상처리Doc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnSmoothImage();
+	Invalidate(TRUE);
+}
+
+
+void CColorImage영상처리View::OnSharpImage()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CColorImage영상처리Doc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnSharpImage();
+	Invalidate(TRUE);
+}
+
+
+void CColorImage영상처리View::OnPrewittImage()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CColorImage영상처리Doc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnPrewittImage();
+	Invalidate(TRUE);
+}
+
+
+void CColorImage영상처리View::OnSobelImage()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CColorImage영상처리Doc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnSobelImage();
+	Invalidate(TRUE);
+}
+
+
+void CColorImage영상처리View::OnLaplaceImage()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CColorImage영상처리Doc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnLaplaceImage();
+	Invalidate(TRUE);
+}
+
+
+void CColorImage영상처리View::OnLogImage()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CColorImage영상처리Doc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnLogImage();
+	Invalidate(TRUE);
+}
+
+
+void CColorImage영상처리View::OnDogImage()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CColorImage영상처리Doc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnDogImage();
 	Invalidate(TRUE);
 }
