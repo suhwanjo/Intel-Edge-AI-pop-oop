@@ -59,6 +59,12 @@ BEGIN_MESSAGE_MAP(CColorImage영상처리View, CView)
 	ON_COMMAND(IDM_LAPLACE_IMAGE, &CColorImage영상처리View::OnLaplaceImage)
 	ON_COMMAND(IDM_LOG_IMAGE, &CColorImage영상처리View::OnLogImage)
 	ON_COMMAND(IDM_DOG_IMAGE, &CColorImage영상처리View::OnDogImage)
+	ON_COMMAND(IDM_EMBOSS_HSI, &CColorImage영상처리View::OnEmbossHsi)
+	ON_COMMAND(IDM_PREWITT_HSI, &CColorImage영상처리View::OnPrewittHsi)
+	ON_COMMAND(IDM_SOBEL_HSI, &CColorImage영상처리View::OnSobelHsi)
+	ON_COMMAND(ID_LAPLACE_HSI, &CColorImage영상처리View::OnLaplaceHsi)
+	ON_COMMAND(ID_LOG_HSI, &CColorImage영상처리View::OnLogHsi)
+	ON_COMMAND(ID_DOG_HSI, &CColorImage영상처리View::OnDogHsi)
 END_MESSAGE_MAP()
 
 // CColorImage영상처리View 생성/소멸
@@ -90,31 +96,107 @@ void CColorImage영상처리View::OnDraw(CDC* pDC)
 	if (!pDoc)
 		return;
 
-	// TODO: 여기에 원시 데이터에 대한 그리기 코드를 추가합니다.
-	int R, G, B;
-	// 입력
-	for (int i = 0; i < pDoc->m_inH; i++) {
-		for (int k = 0; k < pDoc->m_inW; k++) {
-			R = pDoc->m_inImageR[i][k];
-			G = pDoc->m_inImageG[i][k];
-			B = pDoc->m_inImageB[i][k];
-			pDC->SetPixel(k + 5, i + 5, RGB(R, G, B));
+	/////////////////////
+	/// 성능 개선을 위한 더블 버퍼링 
+	////////////////////
+	int i, k;
+	unsigned char R, G, B;
+	// 메모리 DC 선언
+	CDC memDC;
+	CBitmap* pOldBitmap, bitmap;
+
+	// 화면 DC와 호환되는 메모리 DC 객체를 생성
+	memDC.CreateCompatibleDC(pDC);
+
+	// 마찬가지로 화면 DC와 호환되는 Bitmap 생성
+	bitmap.CreateCompatibleBitmap(pDC, pDoc->m_inW, pDoc->m_inH);
+
+	pOldBitmap = memDC.SelectObject(&bitmap);
+	memDC.PatBlt(0, 0, pDoc->m_inW, pDoc->m_inH, WHITENESS); // 흰색으로 초기화
+
+
+	// 출력 영상의 크기를 자동 조절
+	double MAXSIZE = 800;  // 필요시 실 모니터 또는 화면의 해상도에 따라서 변경 가능!
+	int inH = pDoc->m_inH;
+	int inW = pDoc->m_inW;
+	double hop = 1.0; // 기본
+
+	if (inH > MAXSIZE || inW > MAXSIZE) {
+		// hop을 새로 계산.
+		if (inW > inH)
+			hop = (inW / MAXSIZE);
+		else
+			hop = (inH / MAXSIZE);
+
+		inW = (int)(inW / hop);
+		inH = (int)(inH / hop);
+	}
+
+	// 메모리 DC에 그리기
+	for (i = 0; i < inH; i++) {
+		for (k = 0; k < inW; k++) {
+			R = pDoc->m_inImageR[(int)(i * hop)][(int)(k * hop)];
+			G = pDoc->m_inImageG[(int)(i * hop)][(int)(k * hop)];
+			B = pDoc->m_inImageB[(int)(i * hop)][(int)(k * hop)];
+			memDC.SetPixel(k, i, RGB(R, G, B));
 		}
 	}
-	// 출력
-	for (int i = 0; i < pDoc->m_outH; i++) {
-		for (int k = 0; k < pDoc->m_outW; k++) {
-			R = pDoc->m_outImageR[i][k];
-			G = pDoc->m_outImageG[i][k];
-			B = pDoc->m_outImageB[i][k];
-			pDC->SetPixel(k + 10 + pDoc->m_inW, i + 5, RGB(R, G, B));
+
+	// 메모리 DC를 화면 DC에 고속 복사
+	pDC->BitBlt(5, 5, pDoc->m_inW, pDoc->m_inH, &memDC, 0, 0, SRCCOPY);
+
+	memDC.SelectObject(pOldBitmap);
+	memDC.DeleteDC();
+	bitmap.DeleteObject();
+
+	///////////////////
+
+	// 화면 DC와 호환되는 메모리 DC 객체를 생성
+	memDC.CreateCompatibleDC(pDC);
+
+	// 마찬가지로 화면 DC와 호환되는 Bitmap 생성
+	bitmap.CreateCompatibleBitmap(pDC, pDoc->m_outW, pDoc->m_outH);
+
+	pOldBitmap = memDC.SelectObject(&bitmap);
+	memDC.PatBlt(0, 0, pDoc->m_outW, pDoc->m_outH, WHITENESS); // 흰색으로 초기화
+
+	int outH = pDoc->m_outH;
+	int outW = pDoc->m_outW;
+	hop = 1.0; // 기본
+
+	if (outH > MAXSIZE || outW > MAXSIZE) {
+		// hop을 새로 계산.
+		if (outW > outH)
+			hop = (outW / MAXSIZE);
+		else
+			hop = (outH / MAXSIZE);
+
+		outW = (int)(outW / hop);
+		outH = (int)(outH / hop);
+	}
+
+	// 메모리 DC에 그리기
+	for (i = 0; i < outH; i++) {
+		for (k = 0; k < outW; k++) {
+			R = pDoc->m_outImageR[(int)(i * hop)][(int)(k * hop)];
+			G = pDoc->m_outImageG[(int)(i * hop)][(int)(k * hop)];
+			B = pDoc->m_outImageB[(int)(i * hop)][(int)(k * hop)];
+			memDC.SetPixel(k, i, RGB(R, G, B));
 		}
 	}
+	// 메모리 DC를 화면 DC에 고속 복사
+	pDC->BitBlt(inW + 10, 5, pDoc->m_outW, pDoc->m_outH, &memDC, 0, 0, SRCCOPY);
+
+	memDC.SelectObject(pOldBitmap);
+	memDC.DeleteDC();
+	bitmap.DeleteObject();
 
 	if (pDoc->m_emphImageExecuted)
 	{
 		pDC->FillSolidRect((pDoc->m_inW * 2) + 30, 5, 100, 100, pDoc->m_selectedColor);
 	}
+	pDoc->m_emphImageExecuted = false;
+	
 }
 
 
@@ -508,5 +590,71 @@ void CColorImage영상처리View::OnDogImage()
 	ASSERT_VALID(pDoc);
 
 	pDoc->OnDogImage();
+	Invalidate(TRUE);
+}
+
+
+void CColorImage영상처리View::OnEmbossHsi()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CColorImage영상처리Doc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnEmbossHsi();
+	Invalidate(TRUE);
+}
+
+
+void CColorImage영상처리View::OnPrewittHsi()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CColorImage영상처리Doc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnPrewittHsi();
+	Invalidate(TRUE);
+}
+
+
+void CColorImage영상처리View::OnSobelHsi()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CColorImage영상처리Doc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnSobelHsi();
+	Invalidate(TRUE);
+}
+
+
+void CColorImage영상처리View::OnLaplaceHsi()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CColorImage영상처리Doc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnLaplaceHsi();
+	Invalidate(TRUE);
+}
+
+
+void CColorImage영상처리View::OnLogHsi()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CColorImage영상처리Doc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnLogHsi();
+	Invalidate(TRUE);
+}
+
+
+void CColorImage영상처리View::OnDogHsi()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CColorImage영상처리Doc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnDogHsi();
 	Invalidate(TRUE);
 }

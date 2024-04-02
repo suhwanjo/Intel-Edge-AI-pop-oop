@@ -178,13 +178,26 @@
 #define IDM_LAPLACE_IMAGE               32838
 #define IDM_LOG_IMAGE                   32839
 #define IDM_DOG_IMAGE                   32840
+#define ID_32841                        32841
+#define IDM_EMBOSS_HSI                  32842
+#define ID_32843                        32843
+#define IDM_PREWITT_HSI                 32844
+#define ID_32845                        32845
+#define IDM_SOBEL_HSI                   32846
+#define ID_32847                        32847
+#define ID_32848                        32848
+#define ID_32849                        32849
+#define ID_LAPLACE_HSI                  32850
+#define ID_LOG_HSI                      32851
+#define ID_DOG_HSI                      32852
+#define ID_32853                        32853
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        330
-#define _APS_NEXT_COMMAND_VALUE         32841
+#define _APS_NEXT_RESOURCE_VALUE        334
+#define _APS_NEXT_COMMAND_VALUE         32854
 #define _APS_NEXT_CONTROL_VALUE         1014
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

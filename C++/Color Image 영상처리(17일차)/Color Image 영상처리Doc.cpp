@@ -205,8 +205,8 @@ BOOL CColorImage영상처리Doc::OnOpenDocument(LPCTSTR lpszPathName)
 	return TRUE;
 }
 
-
-void CColorImage영상처리Doc::OnFree2D(unsigned char** memory, int h)
+template <typename T>
+void CColorImage영상처리Doc::OnFree2D(T** memory, int h)
 {
 	// TODO: 여기에 구현 코드 추가.
 	if (memory == NULL)
@@ -284,8 +284,11 @@ void CColorImage영상처리Doc::OnGaryImage()
 	double avg;
 	for (int i = 0; i < m_inH; i++) {
 		for (int k = 0; k < m_inW; k++) {
+			// G = (R + G + B) / 3
 			avg = (m_inImageR[i][k]+ m_inImageG[i][k] + m_inImageB[i][k]) / 3.0;
-			m_outImageG[i][k] = m_outImageB[i][k] = m_outImageR[i][k] = (unsigned char)avg;
+			m_outImageG[i][k] = (unsigned char)avg; 
+			m_outImageB[i][k] = (unsigned char)avg; 
+			m_outImageR[i][k] = (unsigned char)avg;
 		}
 	}
 }
@@ -412,19 +415,20 @@ void CColorImage영상처리Doc::OnEmphImage()
 	int tolerance = (int)dlg.m_constant4;
 	// 기준 색상
 	m_selectedColor = RGB(targetR, targetG, targetB);
+	// 범위 강조 함수 시에만 기준 색상 출력
 	m_emphImageExecuted = true;
 
 	int grayscale, distance = 0;
 	for (int i = 0; i < m_inH; i++) {
 		for (int j = 0; j < m_inW; j++) {
 			distance = sqrt(pow(m_inImageR[i][j] - targetR, 2) + pow(m_inImageG[i][j] - targetG, 2) + pow(m_inImageB[i][j] - targetB, 2));
-
+			// 기준 색상으로부터 범위 내에 있다면 색상 출력
 			if (distance <= tolerance) {
 				m_outImageR[i][j] = m_inImageR[i][j];
 				m_outImageG[i][j] = m_inImageG[i][j];
 				m_outImageB[i][j] = m_inImageB[i][j];
 			}
-			else {
+			else { // 범위 밖에 있다면 회색으로 출력
 				grayscale = (m_inImageR[i][j] + m_inImageG[i][j] + m_inImageB[i][j]) / 3; 
 				m_outImageR[i][j] = grayscale;
 				m_outImageG[i][j] = grayscale;
@@ -438,6 +442,10 @@ void CColorImage영상처리Doc::OnEmphImage()
 
 void CColorImage영상처리Doc::OnStaurChange()
 {
+	CConstantMorph dlg;
+	if (dlg.DoModal() != IDOK)
+		return;
+	double val = (double)dlg.m_constant_morph;
 	// TODO: 여기에 구현 코드 추가.	
 	// // 기존 메모리 해제
 	OnFreeOutimage();
@@ -467,7 +475,7 @@ void CColorImage영상처리Doc::OnStaurChange()
 			I = hsi[2];
 
 			// 채도(S) 흐리게
-			S = S - 0.2;
+			S = S - val;
 			if (S < 0)
 				S = 0;
 
@@ -741,7 +749,7 @@ void CColorImage영상처리Doc::OnBinaryMid()
 			unsigned char B = m_inImageB[i][j];
 
 			double* hsi = RGB2HSI(R, G, B);
-			int I = static_cast<int>(hsi[2]);
+			int I = (int)(hsi[2]);
 			intensities[I]++;
 		}
 	}
@@ -802,6 +810,7 @@ void CColorImage영상처리Doc::OnBinaryAvg()
 	m_outImageB = OnMalloc2D(m_outH, m_outW);
 
 	double sum = 0.0;
+	// I값의 합 계산
 	for (int i = 0; i < m_inH; i++) {
 		for (int j = 0; j < m_inW; j++) {
 			unsigned char R = m_inImageR[i][j];
@@ -813,6 +822,7 @@ void CColorImage영상처리Doc::OnBinaryAvg()
 			sum += I;
 		}
 	}
+	// I값의 평균 계산
 	double mean = sum / (m_inH * m_inW);
 
 	CString message;
@@ -864,21 +874,21 @@ void CColorImage영상처리Doc::OnParaImage()
 	m_outImageG = OnMalloc2D(m_outH, m_outW);
 	m_outImageB = OnMalloc2D(m_outH, m_outW);
 
-	if (btn.m_radio_para == 0) {
+	if (btn.m_radio_para == 0) { // 첫 번째 라디오 버튼이 클릭될 경우
 		for (int i = 0; i < m_inH; i++) {
 			for (int j = 0; j < m_inW; j++) {
-				m_outImageR[i][j] = 255.0 * pow(((double)m_inImageR[i][j] / 127.0 - 1.0), 2.0); // CAP 파라볼라 : 밝은 곳이 입체적으로 보임
-				m_outImageG[i][j] = 255.0 * pow(((double)m_inImageG[i][j] / 127.0 - 1.0), 2.0); // CAP 파라볼라 : 밝은 곳이 입체적으로 보임
-				m_outImageB[i][j] = 255.0 * pow(((double)m_inImageB[i][j] / 127.0 - 1.0), 2.0); // CAP 파라볼라 : 밝은 곳이 입체적으로 보임
+				m_outImageR[i][j] = 255.0 * pow(((double)m_inImageR[i][j] / 127.0 - 1.0), 2.0); 
+				m_outImageG[i][j] = 255.0 * pow(((double)m_inImageG[i][j] / 127.0 - 1.0), 2.0); 
+				m_outImageB[i][j] = 255.0 * pow(((double)m_inImageB[i][j] / 127.0 - 1.0), 2.0); 
 			}
 		}
 	}
 	else if (btn.m_radio_para == 1) {
 		for (int i = 0; i < m_inH; i++) {
 			for (int j = 0; j < m_inW; j++) {
-				m_outImageR[i][j] = 255.0 - 255.0 * pow(((double)m_inImageR[i][j] / 127.0 - 1.0), 2.0); // CUP 파라볼라 : 어두운 곳이 입체적으로 보임
-				m_outImageG[i][j] = 255.0 - 255.0 * pow(((double)m_inImageG[i][j] / 127.0 - 1.0), 2.0); // CUP 파라볼라 : 어두운 곳이 입체적으로 보임
-				m_outImageB[i][j] = 255.0 - 255.0 * pow(((double)m_inImageB[i][j] / 127.0 - 1.0), 2.0); // CUP 파라볼라 : 어두운 곳이 입체적으로 보임
+				m_outImageR[i][j] = 255.0 - 255.0 * pow(((double)m_inImageR[i][j] / 127.0 - 1.0), 2.0); 
+				m_outImageG[i][j] = 255.0 - 255.0 * pow(((double)m_inImageG[i][j] / 127.0 - 1.0), 2.0); 
+				m_outImageB[i][j] = 255.0 - 255.0 * pow(((double)m_inImageB[i][j] / 127.0 - 1.0), 2.0); 
 			}
 		}
 	}
@@ -1324,7 +1334,7 @@ void CColorImage영상처리Doc::OnMirrorImage()
 }
 
 
-double** CColorImage영상처리Doc::OnmallocDouble2D(int h, int w)
+double** CColorImage영상처리Doc::OnmallocDouble2D(int h, int w) // 함수 오버로딩 가능하지만, 반환 값만 달라 헷갈릴 수 있음
 {
 	double** retMemory;
 	retMemory = new double* [h];
@@ -1374,7 +1384,7 @@ double** CColorImage영상처리Doc::OnConvolution(unsigned char** inputImage, i
 		}
 	}
 
-	OnfreeDouble2D(paddedImage, paddedH);
+	OnFree2D(paddedImage, paddedH);
 	return outputImage;
 }
 
@@ -1461,10 +1471,10 @@ void CColorImage영상처리Doc::OnEmbossImage()
 		}
 	}
 
-	OnfreeDouble2D(mask, size);
-	OnfreeDouble2D(tmpOutImageR, m_outH);
-	OnfreeDouble2D(tmpOutImageG, m_outH);
-	OnfreeDouble2D(tmpOutImageB, m_outH);
+	OnFree2D(mask, size);
+	OnFree2D(tmpOutImageR, m_outH);
+	OnFree2D(tmpOutImageG, m_outH);
+	OnFree2D(tmpOutImageB, m_outH);
 }
 
 
@@ -1534,10 +1544,10 @@ void CColorImage영상처리Doc::OnBlurrImage()
 		}
 	}
 
-	OnfreeDouble2D(mask, size);
-	OnfreeDouble2D(tmpOutImageR, m_outH);
-	OnfreeDouble2D(tmpOutImageG, m_outH);
-	OnfreeDouble2D(tmpOutImageB, m_outH);
+	OnFree2D(mask, size);
+	OnFree2D(tmpOutImageR, m_outH);
+	OnFree2D(tmpOutImageG, m_outH);
+	OnFree2D(tmpOutImageB, m_outH);
 }
 
 
@@ -1616,10 +1626,10 @@ void CColorImage영상처리Doc::OnSmoothImage()
 		}
 	}
 
-	OnfreeDouble2D(mask, size);
-	OnfreeDouble2D(tmpOutImageR, m_outH);
-	OnfreeDouble2D(tmpOutImageG, m_outH);
-	OnfreeDouble2D(tmpOutImageB, m_outH);
+	OnFree2D(mask, size);
+	OnFree2D(tmpOutImageR, m_outH);
+	OnFree2D(tmpOutImageG, m_outH);
+	OnFree2D(tmpOutImageB, m_outH);
 }
 
 
@@ -1693,10 +1703,10 @@ void CColorImage영상처리Doc::OnSharpImage()
 		}
 	}
 
-	OnfreeDouble2D(mask, size);
-	OnfreeDouble2D(tmpOutImageR, m_outH);
-	OnfreeDouble2D(tmpOutImageG, m_outH);
-	OnfreeDouble2D(tmpOutImageB, m_outH);
+	OnFree2D(mask, size);
+	OnFree2D(tmpOutImageR, m_outH);
+	OnFree2D(tmpOutImageG, m_outH);
+	OnFree2D(tmpOutImageB, m_outH);
 }
 
 
@@ -1715,7 +1725,7 @@ void CColorImage영상처리Doc::OnPrewittImage()
 	m_outImageR = OnMalloc2D(m_outH, m_outW);
 	m_outImageG = OnMalloc2D(m_outH, m_outW);
 	m_outImageB = OnMalloc2D(m_outH, m_outW);
-	int size = 3;
+	const int size = 3;
 	double** mask = OnmallocDouble2D(size, size);
 	if (btn.m_radio_edge == 0) {
 		mask[0][0] = -1.; mask[0][1] = 0.; mask[0][2] = 1.;
@@ -1761,10 +1771,10 @@ void CColorImage영상처리Doc::OnPrewittImage()
 		}
 	}
 
-	OnfreeDouble2D(mask, size);
-	OnfreeDouble2D(tmpOutImageR, m_outH);
-	OnfreeDouble2D(tmpOutImageG, m_outH);
-	OnfreeDouble2D(tmpOutImageB, m_outH);
+	OnFree2D(mask, size);
+	OnFree2D(tmpOutImageR, m_outH);
+	OnFree2D(tmpOutImageG, m_outH);
+	OnFree2D(tmpOutImageB, m_outH);
 }
 
 
@@ -1783,7 +1793,7 @@ void CColorImage영상처리Doc::OnSobelImage()
 	m_outImageR = OnMalloc2D(m_outH, m_outW);
 	m_outImageG = OnMalloc2D(m_outH, m_outW);
 	m_outImageB = OnMalloc2D(m_outH, m_outW);
-	int size = 3;
+	const int size = 3;
 	double** mask = OnmallocDouble2D(size, size);
 	if (btn.m_radio_edge == 0) {
 		mask[0][0] = -1.; mask[0][1] = 0.; mask[0][2] = 1.;
@@ -1829,10 +1839,10 @@ void CColorImage영상처리Doc::OnSobelImage()
 		}
 	}
 
-	OnfreeDouble2D(mask, size);
-	OnfreeDouble2D(tmpOutImageR, m_outH);
-	OnfreeDouble2D(tmpOutImageG, m_outH);
-	OnfreeDouble2D(tmpOutImageB, m_outH);
+	OnFree2D(mask, size);
+	OnFree2D(tmpOutImageR, m_outH);
+	OnFree2D(tmpOutImageG, m_outH);
+	OnFree2D(tmpOutImageB, m_outH);
 }
 
 
@@ -1848,7 +1858,7 @@ void CColorImage영상처리Doc::OnLaplaceImage()
 	m_outImageR = OnMalloc2D(m_outH, m_outW);
 	m_outImageG = OnMalloc2D(m_outH, m_outW);
 	m_outImageB = OnMalloc2D(m_outH, m_outW);
-	int size = 3;
+	const int size = 3;
 	double** mask = OnmallocDouble2D(size, size);
 
 	// 마스크 초기화
@@ -1889,10 +1899,10 @@ void CColorImage영상처리Doc::OnLaplaceImage()
 		}
 	}
 
-	OnfreeDouble2D(mask, size);
-	OnfreeDouble2D(tmpOutImageR, m_outH);
-	OnfreeDouble2D(tmpOutImageG, m_outH);
-	OnfreeDouble2D(tmpOutImageB, m_outH);
+	OnFree2D(mask, size);
+	OnFree2D(tmpOutImageR, m_outH);
+	OnFree2D(tmpOutImageG, m_outH);
+	OnFree2D(tmpOutImageB, m_outH);
 }
 
 
@@ -1908,15 +1918,15 @@ void CColorImage영상처리Doc::OnLogImage()
 	m_outImageR = OnMalloc2D(m_outH, m_outW);
 	m_outImageG = OnMalloc2D(m_outH, m_outW);
 	m_outImageB = OnMalloc2D(m_outH, m_outW);
-	int size = 5;
+	const int size = 5;
 	double** mask = OnmallocDouble2D(size, size);
 
 	// 마스크 초기화
-	mask[0][0] = 0; mask[0][1] = 0; mask[0][2] = -1; mask[0][3] = 0; mask[0][4] = 0;
-	mask[1][0] = 0; mask[1][1] = -1; mask[1][2] = -2; mask[1][3] = -1; mask[1][4] = 0;
-	mask[2][0] = -1; mask[2][1] = -2; mask[2][2] = 16; mask[2][3] = -2; mask[2][4] = -1;
-	mask[3][0] = 0; mask[3][1] = -1; mask[3][2] = -2; mask[3][3] = -1; mask[3][4] = 0;
-	mask[4][0] = 0; mask[4][1] = 0; mask[4][2] = -1; mask[4][3] = 0; mask[4][4] = 0;
+	mask[0][0] = 0.; mask[0][1] = 0.; mask[0][2] = -1.; mask[0][3] = 0.; mask[0][4] = 0.;
+	mask[1][0] = 0.; mask[1][1] = -1.; mask[1][2] = -2.; mask[1][3] = -1.; mask[1][4] = 0.;
+	mask[2][0] = -1.; mask[2][1] = -2.; mask[2][2] = 16.; mask[2][3] = -2.; mask[2][4] = -1.;
+	mask[3][0] = 0.; mask[3][1] = -1.; mask[3][2] = -2.; mask[3][3] = -1.; mask[3][4] = 0.;
+	mask[4][0] = 0.; mask[4][1] = 0.; mask[4][2] = -1.; mask[4][3] = 0.; mask[4][4] = 0.;
 
 	double** tmpOutImageR = OnConvolution(m_inImageR, m_inH, m_inW, mask, size);
 	double** tmpOutImageG = OnConvolution(m_inImageG, m_inH, m_inW, mask, size);
@@ -1951,10 +1961,10 @@ void CColorImage영상처리Doc::OnLogImage()
 		}
 	}
 
-	OnfreeDouble2D(mask, size);
-	OnfreeDouble2D(tmpOutImageR, m_outH);
-	OnfreeDouble2D(tmpOutImageG, m_outH);
-	OnfreeDouble2D(tmpOutImageB, m_outH);
+	OnFree2D(mask, size);
+	OnFree2D(tmpOutImageR, m_outH);
+	OnFree2D(tmpOutImageG, m_outH);
+	OnFree2D(tmpOutImageB, m_outH);
 }
 
 
@@ -1970,7 +1980,7 @@ void CColorImage영상처리Doc::OnDogImage()
 	m_outImageR = OnMalloc2D(m_outH, m_outW);
 	m_outImageG = OnMalloc2D(m_outH, m_outW);
 	m_outImageB = OnMalloc2D(m_outH, m_outW);
-	int size = 7;
+	const int size = 7;
 	double** mask = OnmallocDouble2D(size, size);
 
 	// 마스크 초기화
@@ -2015,8 +2025,831 @@ void CColorImage영상처리Doc::OnDogImage()
 		}
 	}
 
-	OnfreeDouble2D(mask, size);
-	OnfreeDouble2D(tmpOutImageR, m_outH);
-	OnfreeDouble2D(tmpOutImageG, m_outH);
-	OnfreeDouble2D(tmpOutImageB, m_outH);
+	OnFree2D(mask, size);
+	OnFree2D(tmpOutImageR, m_outH);
+	OnFree2D(tmpOutImageG, m_outH);
+	OnFree2D(tmpOutImageB, m_outH);
+}
+
+
+void CColorImage영상처리Doc::OnEmbossHsi()
+{
+	CConstantConv btn;
+	if (btn.DoModal() != IDOK)
+		return;
+
+	// 메모리 해제
+	OnFreeOutimage();
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImageR = OnMalloc2D(m_outH, m_outW);
+	m_outImageG = OnMalloc2D(m_outH, m_outW);
+	m_outImageB = OnMalloc2D(m_outH, m_outW);
+
+	int size;
+	if (btn.m_radio_index == 0)
+		size = 3;
+	else if (btn.m_radio_index == 1)
+		size = 5;
+	else if (btn.m_radio_index == 2)
+		size = 7;
+	else if (btn.m_radio_index == 3)
+		size = 9;
+
+	double** mask = OnmallocDouble2D(size, size);
+	// 엠보싱 마스크 생성
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
+			if (i == 0 && j == 0)
+				mask[i][j] = -1.0;
+			else if (i == size - 1 && j == size - 1)
+				mask[i][j] = 1.0;
+			else
+				mask[i][j] = 0.0;
+		}
+	}
+
+	// 임시 메모리 할당
+	double** tmpInImageR, ** tmpInImageG, ** tmpInImageB, ** tmpOutImageR, ** tmpOutImageG, ** tmpOutImageB;
+	double** tmpInImageH, ** tmpInImageS, ** tmpInImageI;
+	tmpInImageR = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+	tmpInImageG = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+	tmpInImageB = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+
+	tmpInImageH = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+	tmpInImageS = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+	tmpInImageI = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+
+	tmpOutImageR = OnmallocDouble2D(m_outH, m_outW);
+	tmpOutImageG = OnmallocDouble2D(m_outH, m_outW);
+	tmpOutImageB = OnmallocDouble2D(m_outH, m_outW);
+
+	// 임시 메모리 초기화 (127)
+	for (int i = 0; i < m_inH + (size - 1); i++)
+		for (int k = 0; k < m_inW + (size - 1); k++)
+			tmpInImageR[i][k] = tmpInImageG[i][k] = tmpInImageB[i][k] = 127.0;
+
+	// 입력메모리 --> 임시입력메모리
+	for (int i = 0; i < m_inH; i++)
+		for (int k = 0; k < m_inW; k++) {
+			tmpInImageR[i + (size / 2)][k + (size / 2)] = m_inImageR[i][k];
+			tmpInImageG[i + (size / 2)][k + (size / 2)] = m_inImageG[i][k];
+			tmpInImageB[i + (size / 2)][k + (size / 2)] = m_inImageB[i][k];
+		}
+
+	///////// RGB 모델 --> HSI 모델 ///////////////
+	for (int i = 0; i < m_inH; i++) {
+		for (int k = 0; k < m_inW; k++) {
+			double* hsi;
+			unsigned char R, G, B;
+			R = tmpInImageR[i][k]; G = tmpInImageG[i][k]; B = tmpInImageB[i][k];
+			hsi = RGB2HSI(R, G, B);
+
+			double H, S, I;
+			H = hsi[0]; S = hsi[1]; I = hsi[2];
+			tmpInImageH[i][k] = H; tmpInImageS[i][k] = S; tmpInImageI[i][k] = I;
+		}
+	}
+	// *** 회선 연산 : 마스크로 긁어가면서 계산하기.	
+	for (int i = 0; i < m_inH; i++) {
+		for (int k = 0; k < m_inW; k++) {
+			double S_VALUE = 0.0;
+			for (int m = 0; m < size; m++)
+				for (int n = 0; n < size; n++)
+					S_VALUE += tmpInImageI[i + m][k + n] * mask[m][n];
+			tmpInImageI[i][k] = S_VALUE;
+		}
+	}
+
+	// 후처리 (마스크의 합계에 따라서 127을 더할지 결정)
+	for (int i = 0; i < m_inH; i++)
+		for (int k = 0; k < m_inW; k++) {
+			tmpInImageI[i][k] += 127;
+		}
+
+	////// HSI --> RGB ////////
+	for (int i = 0; i < m_inH; i++)
+		for (int k = 0; k < m_inW; k++) {
+			unsigned char* rgb;
+			double H, S, I;
+
+			H = tmpInImageH[i][k]; S = tmpInImageS[i][k]; I = tmpInImageI[i][k];
+
+			rgb = HSI2RGB(H, S, I);
+			tmpOutImageR[i][k] = rgb[0]; tmpOutImageG[i][k] = rgb[1]; tmpOutImageB[i][k] = rgb[2];
+		}
+
+
+	// 임시 출력 이미지 ---> 출력 이미지
+	for (int i = 0; i < m_outH; i++)
+		for (int k = 0; k < m_outW; k++) {
+			if (tmpOutImageR[i][k] < 0.0)
+				m_outImageR[i][k] = 0;
+			else if (tmpOutImageR[i][k] > 255.0)
+				m_outImageR[i][k] = 255;
+			else
+				m_outImageR[i][k] = (unsigned char)tmpOutImageR[i][k];
+
+			if (tmpOutImageG[i][k] < 0.0)
+				m_outImageG[i][k] = 0;
+			else if (tmpOutImageG[i][k] > 255.0)
+				m_outImageB[i][k] = 255;
+			else
+				m_outImageG[i][k] = (unsigned char)tmpOutImageG[i][k];
+
+			if (tmpOutImageB[i][k] < 0.0)
+				m_outImageB[i][k] = 0;
+			else if (tmpOutImageB[i][k] > 255.0)
+				m_outImageB[i][k] = 255;
+			else
+				m_outImageB[i][k] = (unsigned char)tmpOutImageB[i][k];
+
+		}
+
+
+	// 임시 메모리 해제
+	OnFree2D(tmpInImageR, m_inH + (size - 1));
+	OnFree2D(tmpInImageG, m_inH + (size - 1));
+	OnFree2D(tmpInImageB, m_inH + (size - 1));
+	OnFree2D(tmpInImageH, m_inH + (size - 1));
+	OnFree2D(tmpInImageS, m_inH + (size - 1));
+	OnFree2D(tmpInImageI, m_inH + (size - 1));
+	OnFree2D(tmpOutImageR, m_outH);
+	OnFree2D(tmpOutImageG, m_outH);
+	OnFree2D(tmpOutImageB, m_outH);
+}
+
+
+void CColorImage영상처리Doc::OnPrewittHsi()
+{
+	CConstantEdge btn;
+	if (btn.DoModal() != IDOK)
+		return;
+	// 메모리 해제
+	OnFreeOutimage();
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImageR = OnMalloc2D(m_outH, m_outW);
+	m_outImageG = OnMalloc2D(m_outH, m_outW);
+	m_outImageB = OnMalloc2D(m_outH, m_outW);
+	const int size = 3;
+	double** mask = OnmallocDouble2D(size, size);
+	if (btn.m_radio_edge == 0) {
+		mask[0][0] = -1.; mask[0][1] = 0.; mask[0][2] = 1.;
+		mask[1][0] = -1.; mask[1][1] = 0.; mask[1][2] = 1.;
+		mask[2][0] = -1.; mask[2][1] = 0.; mask[2][2] = 1.;
+	}
+	else {
+		mask[0][0] = -1.; mask[0][1] = -1.; mask[0][2] = -1.;
+		mask[1][0] = 0.; mask[1][1] = 0.; mask[1][2] = 0.;
+		mask[2][0] = 1.; mask[2][1] = 1.; mask[2][2] = 1.;
+	}
+
+	// 임시 메모리 할당
+	double** tmpInImageR, ** tmpInImageG, ** tmpInImageB, ** tmpOutImageR, ** tmpOutImageG, ** tmpOutImageB;
+	double** tmpInImageH, ** tmpInImageS, ** tmpInImageI;
+	tmpInImageR = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+	tmpInImageG = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+	tmpInImageB = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+
+	tmpInImageH = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+	tmpInImageS = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+	tmpInImageI = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+
+	tmpOutImageR = OnmallocDouble2D(m_outH, m_outW);
+	tmpOutImageG = OnmallocDouble2D(m_outH, m_outW);
+	tmpOutImageB = OnmallocDouble2D(m_outH, m_outW);
+
+	// 임시 메모리 초기화 (127)
+	for (int i = 0; i < m_inH + (size - 1); i++)
+		for (int k = 0; k < m_inW + (size - 1); k++)
+			tmpInImageR[i][k] = tmpInImageG[i][k] = tmpInImageB[i][k] = 127.0;
+
+	// 입력메모리 --> 임시입력메모리
+	for (int i = 0; i < m_inH; i++)
+		for (int k = 0; k < m_inW; k++) {
+			tmpInImageR[i + (size / 2)][k + (size / 2)] = m_inImageR[i][k];
+			tmpInImageG[i + (size / 2)][k + (size / 2)] = m_inImageG[i][k];
+			tmpInImageB[i + (size / 2)][k + (size / 2)] = m_inImageB[i][k];
+		}
+
+	///////// RGB 모델 --> HSI 모델 ///////////////
+	for (int i = 0; i < m_inH; i++) {
+		for (int k = 0; k < m_inW; k++) {
+			double* hsi;
+			unsigned char R, G, B;
+			R = tmpInImageR[i][k]; G = tmpInImageG[i][k]; B = tmpInImageB[i][k];
+			hsi = RGB2HSI(R, G, B);
+
+			double H, S, I;
+			H = hsi[0]; S = hsi[1]; I = hsi[2];
+			tmpInImageH[i][k] = H; tmpInImageS[i][k] = S; tmpInImageI[i][k] = I;
+		}
+	}
+	// *** 회선 연산 : 마스크로 긁어가면서 계산하기.	
+	for (int i = 0; i < m_inH; i++) {
+		for (int k = 0; k < m_inW; k++) {
+			double S_VALUE = 0.0;
+			for (int m = 0; m < size; m++)
+				for (int n = 0; n < size; n++)
+					S_VALUE += tmpInImageI[i + m][k + n] * mask[m][n];
+			tmpInImageI[i][k] = S_VALUE;
+		}
+	}
+
+	// 후처리 (마스크의 합계에 따라서 127을 더할지 결정)
+	for (int i = 0; i < m_inH; i++)
+		for (int k = 0; k < m_inW; k++) {
+			tmpInImageI[i][k] += 127.0;
+		}
+
+	////// HSI --> RGB ////////
+	for (int i = 0; i < m_inH; i++)
+		for (int k = 0; k < m_inW; k++) {
+			unsigned char* rgb;
+			double H, S, I;
+
+			H = tmpInImageH[i][k]; S = tmpInImageS[i][k]; I = tmpInImageI[i][k];
+
+			rgb = HSI2RGB(H, S, I);
+			tmpOutImageR[i][k] = rgb[0]; tmpOutImageG[i][k] = rgb[1]; tmpOutImageB[i][k] = rgb[2];
+		}
+
+
+	// 임시 출력 이미지 ---> 출력 이미지
+	for (int i = 0; i < m_outH; i++)
+		for (int k = 0; k < m_outW; k++) {
+			if (tmpOutImageR[i][k] < 0.0)
+				m_outImageR[i][k] = 0;
+			else if (tmpOutImageR[i][k] > 255.0)
+				m_outImageR[i][k] = 255;
+			else
+				m_outImageR[i][k] = (unsigned char)tmpOutImageR[i][k];
+
+			if (tmpOutImageG[i][k] < 0.0)
+				m_outImageG[i][k] = 0;
+			else if (tmpOutImageG[i][k] > 255.0)
+				m_outImageB[i][k] = 255;
+			else
+				m_outImageG[i][k] = (unsigned char)tmpOutImageG[i][k];
+
+			if (tmpOutImageB[i][k] < 0.0)
+				m_outImageB[i][k] = 0;
+			else if (tmpOutImageB[i][k] > 255.0)
+				m_outImageB[i][k] = 255;
+			else
+				m_outImageB[i][k] = (unsigned char)tmpOutImageB[i][k];
+
+		}
+
+
+	// 임시 메모리 해제
+	OnFree2D(tmpInImageR, m_inH + (size - 1));
+	OnFree2D(tmpInImageG, m_inH + (size - 1));
+	OnFree2D(tmpInImageB, m_inH + (size - 1));
+	OnFree2D(tmpInImageH, m_inH + (size - 1));
+	OnFree2D(tmpInImageS, m_inH + (size - 1));
+	OnFree2D(tmpInImageI, m_inH + (size - 1));
+	OnFree2D(tmpOutImageR, m_outH);
+	OnFree2D(tmpOutImageG, m_outH);
+	OnFree2D(tmpOutImageB, m_outH);
+}
+
+
+void CColorImage영상처리Doc::OnSobelHsi()
+{
+	// TODO: 여기에 구현 코드 추가.
+	CConstantEdge btn;
+	if (btn.DoModal() != IDOK)
+		return;
+	// 메모리 해제
+	OnFreeOutimage();
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImageR = OnMalloc2D(m_outH, m_outW);
+	m_outImageG = OnMalloc2D(m_outH, m_outW);
+	m_outImageB = OnMalloc2D(m_outH, m_outW);
+	const int size = 3;
+	double** mask = OnmallocDouble2D(size, size);
+	if (btn.m_radio_edge == 0) {
+		mask[0][0] = -1.; mask[0][1] = 0.; mask[0][2] = 1.;
+		mask[1][0] = -2.; mask[1][1] = 0.; mask[1][2] = 2.;
+		mask[2][0] = -1.; mask[2][1] = 0.; mask[2][2] = 1.;
+	}
+	else {
+		mask[0][0] = -1.; mask[0][1] = -2.; mask[0][2] = -1.;
+		mask[1][0] = 0.; mask[1][1] = 0.; mask[1][2] = 0.;
+		mask[2][0] = 1.; mask[2][1] = 2.; mask[2][2] = 1.;
+	}
+
+	// 임시 메모리 할당
+	double** tmpInImageR, ** tmpInImageG, ** tmpInImageB, ** tmpOutImageR, ** tmpOutImageG, ** tmpOutImageB;
+	double** tmpInImageH, ** tmpInImageS, ** tmpInImageI;
+	tmpInImageR = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+	tmpInImageG = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+	tmpInImageB = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+
+	tmpInImageH = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+	tmpInImageS = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+	tmpInImageI = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+
+	tmpOutImageR = OnmallocDouble2D(m_outH, m_outW);
+	tmpOutImageG = OnmallocDouble2D(m_outH, m_outW);
+	tmpOutImageB = OnmallocDouble2D(m_outH, m_outW);
+
+	// 임시 메모리 초기화 (127)
+	for (int i = 0; i < m_inH + (size - 1); i++)
+		for (int k = 0; k < m_inW + (size - 1); k++)
+			tmpInImageR[i][k] = tmpInImageG[i][k] = tmpInImageB[i][k] = 127.0;
+
+	// 입력메모리 --> 임시입력메모리
+	for (int i = 0; i < m_inH; i++)
+		for (int k = 0; k < m_inW; k++) {
+			tmpInImageR[i + (size / 2)][k + (size / 2)] = m_inImageR[i][k];
+			tmpInImageG[i + (size / 2)][k + (size / 2)] = m_inImageG[i][k];
+			tmpInImageB[i + (size / 2)][k + (size / 2)] = m_inImageB[i][k];
+		}
+
+	///////// RGB 모델 --> HSI 모델 ///////////////
+	for (int i = 0; i < m_inH; i++) {
+		for (int k = 0; k < m_inW; k++) {
+			double* hsi;
+			unsigned char R, G, B;
+			R = tmpInImageR[i][k]; G = tmpInImageG[i][k]; B = tmpInImageB[i][k];
+			hsi = RGB2HSI(R, G, B);
+
+			double H, S, I;
+			H = hsi[0]; S = hsi[1]; I = hsi[2];
+			tmpInImageH[i][k] = H; tmpInImageS[i][k] = S; tmpInImageI[i][k] = I;
+		}
+	}
+	// *** 회선 연산 : 마스크로 긁어가면서 계산하기.	
+	for (int i = 0; i < m_inH; i++) {
+		for (int k = 0; k < m_inW; k++) {
+			double S_VALUE = 0.0;
+			for (int m = 0; m < size; m++)
+				for (int n = 0; n < size; n++)
+					S_VALUE += tmpInImageI[i + m][k + n] * mask[m][n];
+			tmpInImageI[i][k] = S_VALUE;
+		}
+	}
+
+	// 후처리 (마스크의 합계에 따라서 127을 더할지 결정)
+	for (int i = 0; i < m_inH; i++)
+		for (int k = 0; k < m_inW; k++) {
+			tmpInImageI[i][k] += 127.0;
+		}
+
+	////// HSI --> RGB ////////
+	for (int i = 0; i < m_inH; i++)
+		for (int k = 0; k < m_inW; k++) {
+			unsigned char* rgb;
+			double H, S, I;
+
+			H = tmpInImageH[i][k]; S = tmpInImageS[i][k]; I = tmpInImageI[i][k];
+
+			rgb = HSI2RGB(H, S, I);
+			tmpOutImageR[i][k] = rgb[0]; tmpOutImageG[i][k] = rgb[1]; tmpOutImageB[i][k] = rgb[2];
+		}
+
+
+	// 임시 출력 이미지 ---> 출력 이미지
+	for (int i = 0; i < m_outH; i++)
+		for (int k = 0; k < m_outW; k++) {
+			if (tmpOutImageR[i][k] < 0.0)
+				m_outImageR[i][k] = 0;
+			else if (tmpOutImageR[i][k] > 255.0)
+				m_outImageR[i][k] = 255;
+			else
+				m_outImageR[i][k] = (unsigned char)tmpOutImageR[i][k];
+
+			if (tmpOutImageG[i][k] < 0.0)
+				m_outImageG[i][k] = 0;
+			else if (tmpOutImageG[i][k] > 255.0)
+				m_outImageB[i][k] = 255;
+			else
+				m_outImageG[i][k] = (unsigned char)tmpOutImageG[i][k];
+
+			if (tmpOutImageB[i][k] < 0.0)
+				m_outImageB[i][k] = 0;
+			else if (tmpOutImageB[i][k] > 255.0)
+				m_outImageB[i][k] = 255;
+			else
+				m_outImageB[i][k] = (unsigned char)tmpOutImageB[i][k];
+
+		}
+
+
+	// 임시 메모리 해제
+	OnFree2D(tmpInImageR, m_inH + (size - 1));
+	OnFree2D(tmpInImageG, m_inH + (size - 1));
+	OnFree2D(tmpInImageB, m_inH + (size - 1));
+	OnFree2D(tmpInImageH, m_inH + (size - 1));
+	OnFree2D(tmpInImageS, m_inH + (size - 1));
+	OnFree2D(tmpInImageI, m_inH + (size - 1));
+	OnFree2D(tmpOutImageR, m_outH);
+	OnFree2D(tmpOutImageG, m_outH);
+	OnFree2D(tmpOutImageB, m_outH);
+}
+
+
+void CColorImage영상처리Doc::OnLaplaceHsi()
+{
+	// TODO: 여기에 구현 코드 추가.
+	OnFreeOutimage();
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImageR = OnMalloc2D(m_outH, m_outW);
+	m_outImageG = OnMalloc2D(m_outH, m_outW);
+	m_outImageB = OnMalloc2D(m_outH, m_outW);
+	const int size = 3;
+	double** mask = OnmallocDouble2D(size, size);
+
+	// 마스크 초기화
+	mask[0][0] = 0.; mask[0][1] = 1.; mask[0][2] = 0.;
+	mask[1][0] = 1.; mask[1][1] = -4.; mask[1][2] = 1.;
+	mask[2][0] = 0.; mask[2][1] = 1.; mask[2][2] = 0.;
+
+	// 임시 메모리 할당
+	double** tmpInImageR, ** tmpInImageG, ** tmpInImageB, ** tmpOutImageR, ** tmpOutImageG, ** tmpOutImageB;
+	double** tmpInImageH, ** tmpInImageS, ** tmpInImageI;
+	tmpInImageR = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+	tmpInImageG = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+	tmpInImageB = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+
+	tmpInImageH = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+	tmpInImageS = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+	tmpInImageI = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+
+	tmpOutImageR = OnmallocDouble2D(m_outH, m_outW);
+	tmpOutImageG = OnmallocDouble2D(m_outH, m_outW);
+	tmpOutImageB = OnmallocDouble2D(m_outH, m_outW);
+
+	// 임시 메모리 초기화 (127)
+	for (int i = 0; i < m_inH + (size - 1); i++)
+		for (int k = 0; k < m_inW + (size - 1); k++)
+			tmpInImageR[i][k] = tmpInImageG[i][k] = tmpInImageB[i][k] = 127.0;
+
+	// 입력메모리 --> 임시입력메모리
+	for (int i = 0; i < m_inH; i++)
+		for (int k = 0; k < m_inW; k++) {
+			tmpInImageR[i + (size / 2)][k + (size / 2)] = m_inImageR[i][k];
+			tmpInImageG[i + (size / 2)][k + (size / 2)] = m_inImageG[i][k];
+			tmpInImageB[i + (size / 2)][k + (size / 2)] = m_inImageB[i][k];
+		}
+
+	///////// RGB 모델 --> HSI 모델 ///////////////
+	for (int i = 0; i < m_inH; i++) {
+		for (int k = 0; k < m_inW; k++) {
+			double* hsi;
+			unsigned char R, G, B;
+			R = tmpInImageR[i][k]; G = tmpInImageG[i][k]; B = tmpInImageB[i][k];
+			hsi = RGB2HSI(R, G, B);
+
+			double H, S, I;
+			H = hsi[0]; S = hsi[1]; I = hsi[2];
+			tmpInImageH[i][k] = H; tmpInImageS[i][k] = S; tmpInImageI[i][k] = I;
+		}
+	}
+	// *** 회선 연산 : 마스크로 긁어가면서 계산하기.	
+	for (int i = 0; i < m_inH; i++) {
+		for (int k = 0; k < m_inW; k++) {
+			double S_VALUE = 0.0;
+			for (int m = 0; m < size; m++)
+				for (int n = 0; n < size; n++)
+					S_VALUE += tmpInImageI[i + m][k + n] * mask[m][n];
+			tmpInImageI[i][k] = S_VALUE;
+		}
+	}
+
+	// 후처리 (마스크의 합계에 따라서 127을 더할지 결정)
+	for (int i = 0; i < m_inH; i++)
+		for (int k = 0; k < m_inW; k++) {
+			tmpInImageI[i][k] += 127.0;
+		}
+
+	////// HSI --> RGB ////////
+	for (int i = 0; i < m_inH; i++)
+		for (int k = 0; k < m_inW; k++) {
+			unsigned char* rgb;
+			double H, S, I;
+
+			H = tmpInImageH[i][k]; S = tmpInImageS[i][k]; I = tmpInImageI[i][k];
+
+			rgb = HSI2RGB(H, S, I);
+			tmpOutImageR[i][k] = rgb[0]; tmpOutImageG[i][k] = rgb[1]; tmpOutImageB[i][k] = rgb[2];
+		}
+
+
+	// 임시 출력 이미지 ---> 출력 이미지
+	for (int i = 0; i < m_outH; i++)
+		for (int k = 0; k < m_outW; k++) {
+			if (tmpOutImageR[i][k] < 0.0)
+				m_outImageR[i][k] = 0;
+			else if (tmpOutImageR[i][k] > 255.0)
+				m_outImageR[i][k] = 255;
+			else
+				m_outImageR[i][k] = (unsigned char)tmpOutImageR[i][k];
+
+			if (tmpOutImageG[i][k] < 0.0)
+				m_outImageG[i][k] = 0;
+			else if (tmpOutImageG[i][k] > 255.0)
+				m_outImageB[i][k] = 255;
+			else
+				m_outImageG[i][k] = (unsigned char)tmpOutImageG[i][k];
+
+			if (tmpOutImageB[i][k] < 0.0)
+				m_outImageB[i][k] = 0;
+			else if (tmpOutImageB[i][k] > 255.0)
+				m_outImageB[i][k] = 255;
+			else
+				m_outImageB[i][k] = (unsigned char)tmpOutImageB[i][k];
+
+		}
+
+
+	// 임시 메모리 해제
+	OnFree2D(tmpInImageR, m_inH + (size - 1));
+	OnFree2D(tmpInImageG, m_inH + (size - 1));
+	OnFree2D(tmpInImageB, m_inH + (size - 1));
+	OnFree2D(tmpInImageH, m_inH + (size - 1));
+	OnFree2D(tmpInImageS, m_inH + (size - 1));
+	OnFree2D(tmpInImageI, m_inH + (size - 1));
+	OnFree2D(tmpOutImageR, m_outH);
+	OnFree2D(tmpOutImageG, m_outH);
+	OnFree2D(tmpOutImageB, m_outH);
+}
+
+
+void CColorImage영상처리Doc::OnLogHsi()
+{
+	// TODO: 여기에 구현 코드 추가.
+	OnFreeOutimage();
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImageR = OnMalloc2D(m_outH, m_outW);
+	m_outImageG = OnMalloc2D(m_outH, m_outW);
+	m_outImageB = OnMalloc2D(m_outH, m_outW);
+	const int size = 5;
+	double** mask = OnmallocDouble2D(size, size);
+
+	// 마스크 초기화
+	mask[0][0] = 0.; mask[0][1] = 0.; mask[0][2] = -1.; mask[0][3] = 0.; mask[0][4] = 0.;
+	mask[1][0] = 0.; mask[1][1] = -1.; mask[1][2] = -2.; mask[1][3] = -1.; mask[1][4] = 0.;
+	mask[2][0] = -1.; mask[2][1] = -2.; mask[2][2] = 16.; mask[2][3] = -2.; mask[2][4] = -1.;
+	mask[3][0] = 0.; mask[3][1] = -1.; mask[3][2] = -2.; mask[3][3] = -1.; mask[3][4] = 0.;
+	mask[4][0] = 0.; mask[4][1] = 0.; mask[4][2] = -1.; mask[4][3] = 0.; mask[4][4] = 0.;
+
+	// 임시 메모리 할당
+	double** tmpInImageR, ** tmpInImageG, ** tmpInImageB, ** tmpOutImageR, ** tmpOutImageG, ** tmpOutImageB;
+	double** tmpInImageH, ** tmpInImageS, ** tmpInImageI;
+	tmpInImageR = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+	tmpInImageG = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+	tmpInImageB = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+
+	tmpInImageH = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+	tmpInImageS = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+	tmpInImageI = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+
+	tmpOutImageR = OnmallocDouble2D(m_outH, m_outW);
+	tmpOutImageG = OnmallocDouble2D(m_outH, m_outW);
+	tmpOutImageB = OnmallocDouble2D(m_outH, m_outW);
+
+	// 임시 메모리 초기화 (127)
+	for (int i = 0; i < m_inH + (size - 1); i++)
+		for (int k = 0; k < m_inW + (size - 1); k++)
+			tmpInImageR[i][k] = tmpInImageG[i][k] = tmpInImageB[i][k] = 127.0;
+
+	// 입력메모리 --> 임시입력메모리
+	for (int i = 0; i < m_inH; i++)
+		for (int k = 0; k < m_inW; k++) {
+			tmpInImageR[i + (size / 2)][k + (size / 2)] = m_inImageR[i][k];
+			tmpInImageG[i + (size / 2)][k + (size / 2)] = m_inImageG[i][k];
+			tmpInImageB[i + (size / 2)][k + (size / 2)] = m_inImageB[i][k];
+		}
+
+	///////// RGB 모델 --> HSI 모델 ///////////////
+	for (int i = 0; i < m_inH; i++) {
+		for (int k = 0; k < m_inW; k++) {
+			double* hsi;
+			unsigned char R, G, B;
+			R = tmpInImageR[i][k]; G = tmpInImageG[i][k]; B = tmpInImageB[i][k];
+			hsi = RGB2HSI(R, G, B);
+
+			double H, S, I;
+			H = hsi[0]; S = hsi[1]; I = hsi[2];
+			tmpInImageH[i][k] = H; tmpInImageS[i][k] = S; tmpInImageI[i][k] = I;
+		}
+	}
+	// *** 회선 연산 : 마스크로 긁어가면서 계산하기.	
+	for (int i = 0; i < m_inH; i++) {
+		for (int k = 0; k < m_inW; k++) {
+			double S_VALUE = 0.0;
+			for (int m = 0; m < size; m++)
+				for (int n = 0; n < size; n++)
+					S_VALUE += tmpInImageI[i + m][k + n] * mask[m][n];
+			tmpInImageI[i][k] = S_VALUE;
+		}
+	}
+
+	// 후처리 (마스크의 합계에 따라서 127을 더할지 결정)
+	for (int i = 0; i < m_inH; i++)
+		for (int k = 0; k < m_inW; k++) {
+			tmpInImageI[i][k] += 127.0;
+		}
+
+	////// HSI --> RGB ////////
+	for (int i = 0; i < m_inH; i++)
+		for (int k = 0; k < m_inW; k++) {
+			unsigned char* rgb;
+			double H, S, I;
+
+			H = tmpInImageH[i][k]; S = tmpInImageS[i][k]; I = tmpInImageI[i][k];
+
+			rgb = HSI2RGB(H, S, I);
+			tmpOutImageR[i][k] = rgb[0]; tmpOutImageG[i][k] = rgb[1]; tmpOutImageB[i][k] = rgb[2];
+		}
+
+
+	// 임시 출력 이미지 ---> 출력 이미지
+	for (int i = 0; i < m_outH; i++)
+		for (int k = 0; k < m_outW; k++) {
+			if (tmpOutImageR[i][k] < 0.0)
+				m_outImageR[i][k] = 0;
+			else if (tmpOutImageR[i][k] > 255.0)
+				m_outImageR[i][k] = 255;
+			else
+				m_outImageR[i][k] = (unsigned char)tmpOutImageR[i][k];
+
+			if (tmpOutImageG[i][k] < 0.0)
+				m_outImageG[i][k] = 0;
+			else if (tmpOutImageG[i][k] > 255.0)
+				m_outImageB[i][k] = 255;
+			else
+				m_outImageG[i][k] = (unsigned char)tmpOutImageG[i][k];
+
+			if (tmpOutImageB[i][k] < 0.0)
+				m_outImageB[i][k] = 0;
+			else if (tmpOutImageB[i][k] > 255.0)
+				m_outImageB[i][k] = 255;
+			else
+				m_outImageB[i][k] = (unsigned char)tmpOutImageB[i][k];
+
+		}
+
+
+	// 임시 메모리 해제
+	OnFree2D(tmpInImageR, m_inH + (size - 1));
+	OnFree2D(tmpInImageG, m_inH + (size - 1));
+	OnFree2D(tmpInImageB, m_inH + (size - 1));
+	OnFree2D(tmpInImageH, m_inH + (size - 1));
+	OnFree2D(tmpInImageS, m_inH + (size - 1));
+	OnFree2D(tmpInImageI, m_inH + (size - 1));
+	OnFree2D(tmpOutImageR, m_outH);
+	OnFree2D(tmpOutImageG, m_outH);
+	OnFree2D(tmpOutImageB, m_outH);
+}
+
+
+void CColorImage영상처리Doc::OnDogHsi()
+{
+	// TODO: 여기에 구현 코드 추가.
+	OnFreeOutimage();
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImageR = OnMalloc2D(m_outH, m_outW);
+	m_outImageG = OnMalloc2D(m_outH, m_outW);
+	m_outImageB = OnMalloc2D(m_outH, m_outW);
+	const int size = 7;
+	double** mask = OnmallocDouble2D(size, size);
+
+	// 마스크 초기화
+	mask[0][0] = 0; mask[0][1] = 0; mask[0][2] = -1; mask[0][3] = -1; mask[0][4] = -1; mask[0][5] = 0; mask[0][6] = 0;
+	mask[1][0] = 0; mask[1][1] = -2; mask[1][2] = -3; mask[1][3] = -3; mask[1][4] = -3; mask[1][5] = -2; mask[1][6] = 0;
+	mask[2][0] = -1; mask[2][1] = -3; mask[2][2] = 5; mask[2][3] = 5; mask[2][4] = 5; mask[2][5] = -3; mask[2][6] = -1;
+	mask[3][0] = -1; mask[3][1] = -3; mask[3][2] = 5; mask[3][3] = 16; mask[3][4] = 5; mask[3][5] = -3; mask[3][6] = -1;
+	mask[4][0] = -1; mask[4][1] = -3; mask[4][2] = 5; mask[4][3] = 5; mask[4][4] = 5; mask[4][5] = -3; mask[4][6] = -1;
+	mask[5][0] = 0; mask[5][1] = -2; mask[5][2] = -3; mask[5][3] = -3; mask[5][4] = -3; mask[5][5] = -2; mask[5][6] = 0;
+	mask[6][0] = 0; mask[6][1] = 0; mask[6][2] = -1; mask[6][3] = -1; mask[6][4] = -1; mask[6][5] = 0; mask[6][6] = 0;
+
+	// 임시 메모리 할당
+	double** tmpInImageR, ** tmpInImageG, ** tmpInImageB, ** tmpOutImageR, ** tmpOutImageG, ** tmpOutImageB;
+	double** tmpInImageH, ** tmpInImageS, ** tmpInImageI;
+	tmpInImageR = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+	tmpInImageG = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+	tmpInImageB = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+
+	tmpInImageH = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+	tmpInImageS = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+	tmpInImageI = OnmallocDouble2D(m_inH + (size - 1), m_inW + (size - 1));
+
+	tmpOutImageR = OnmallocDouble2D(m_outH, m_outW);
+	tmpOutImageG = OnmallocDouble2D(m_outH, m_outW);
+	tmpOutImageB = OnmallocDouble2D(m_outH, m_outW);
+
+	// 임시 메모리 초기화 (127)
+	for (int i = 0; i < m_inH + (size - 1); i++)
+		for (int k = 0; k < m_inW + (size - 1); k++)
+			tmpInImageR[i][k] = tmpInImageG[i][k] = tmpInImageB[i][k] = 127.0;
+
+	// 입력메모리 --> 임시입력메모리
+	for (int i = 0; i < m_inH; i++)
+		for (int k = 0; k < m_inW; k++) {
+			tmpInImageR[i + (size / 2)][k + (size / 2)] = m_inImageR[i][k];
+			tmpInImageG[i + (size / 2)][k + (size / 2)] = m_inImageG[i][k];
+			tmpInImageB[i + (size / 2)][k + (size / 2)] = m_inImageB[i][k];
+		}
+
+	///////// RGB 모델 --> HSI 모델 ///////////////
+	for (int i = 0; i < m_inH; i++) {
+		for (int k = 0; k < m_inW; k++) {
+			double* hsi;
+			unsigned char R, G, B;
+			R = tmpInImageR[i][k]; G = tmpInImageG[i][k]; B = tmpInImageB[i][k];
+			hsi = RGB2HSI(R, G, B);
+
+			double H, S, I;
+			H = hsi[0]; S = hsi[1]; I = hsi[2];
+			tmpInImageH[i][k] = H; tmpInImageS[i][k] = S; tmpInImageI[i][k] = I;
+		}
+	}
+	// *** 회선 연산 : 마스크로 긁어가면서 계산하기.	
+	for (int i = 0; i < m_inH; i++) {
+		for (int k = 0; k < m_inW; k++) {
+			double S_VALUE = 0.0;
+			for (int m = 0; m < size; m++)
+				for (int n = 0; n < size; n++)
+					S_VALUE += tmpInImageI[i + m][k + n] * mask[m][n];
+			tmpInImageI[i][k] = S_VALUE;
+		}
+	}
+
+	// 후처리 (마스크의 합계에 따라서 127을 더할지 결정)
+	for (int i = 0; i < m_inH; i++)
+		for (int k = 0; k < m_inW; k++) {
+			tmpInImageI[i][k] += 127.0;
+		}
+
+	////// HSI --> RGB ////////
+	for (int i = 0; i < m_inH; i++)
+		for (int k = 0; k < m_inW; k++) {
+			unsigned char* rgb;
+			double H, S, I;
+
+			H = tmpInImageH[i][k]; S = tmpInImageS[i][k]; I = tmpInImageI[i][k];
+
+			rgb = HSI2RGB(H, S, I);
+			tmpOutImageR[i][k] = rgb[0]; tmpOutImageG[i][k] = rgb[1]; tmpOutImageB[i][k] = rgb[2];
+		}
+
+
+	// 임시 출력 이미지 ---> 출력 이미지
+	for (int i = 0; i < m_outH; i++)
+		for (int k = 0; k < m_outW; k++) {
+			if (tmpOutImageR[i][k] < 0.0)
+				m_outImageR[i][k] = 0;
+			else if (tmpOutImageR[i][k] > 255.0)
+				m_outImageR[i][k] = 255;
+			else
+				m_outImageR[i][k] = (unsigned char)tmpOutImageR[i][k];
+
+			if (tmpOutImageG[i][k] < 0.0)
+				m_outImageG[i][k] = 0;
+			else if (tmpOutImageG[i][k] > 255.0)
+				m_outImageB[i][k] = 255;
+			else
+				m_outImageG[i][k] = (unsigned char)tmpOutImageG[i][k];
+
+			if (tmpOutImageB[i][k] < 0.0)
+				m_outImageB[i][k] = 0;
+			else if (tmpOutImageB[i][k] > 255.0)
+				m_outImageB[i][k] = 255;
+			else
+				m_outImageB[i][k] = (unsigned char)tmpOutImageB[i][k];
+
+		}
+
+
+	// 임시 메모리 해제
+	OnFree2D(tmpInImageR, m_inH + (size - 1));
+	OnFree2D(tmpInImageG, m_inH + (size - 1));
+	OnFree2D(tmpInImageB, m_inH + (size - 1));
+	OnFree2D(tmpInImageH, m_inH + (size - 1));
+	OnFree2D(tmpInImageS, m_inH + (size - 1));
+	OnFree2D(tmpInImageI, m_inH + (size - 1));
+	OnFree2D(tmpOutImageR, m_outH);
+	OnFree2D(tmpOutImageG, m_outH);
+	OnFree2D(tmpOutImageB, m_outH);
 }

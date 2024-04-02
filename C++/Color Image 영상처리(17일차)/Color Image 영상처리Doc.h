@@ -4,7 +4,7 @@
 
 
 #pragma once
-
+#include <iostream> // 템플릿
 
 class CColorImage영상처리Doc : public CDocument
 {
@@ -58,7 +58,8 @@ public:
 	int m_outW = 0;
 	unsigned char** OnMalloc2D(int h, int w);
 	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
-	void OnFree2D(unsigned char** memory, int h);
+	template <typename T>
+	void OnFree2D(T** memory, int h); // 자료형 보고 알아서 결정
 	virtual void OnCloseDocument();
 	void OnEqualImage();
 	void OnFreeOutimage();
@@ -99,4 +100,10 @@ public:
 	void OnLaplaceImage();
 	void OnLogImage();
 	void OnDogImage();
+	void OnEmbossHsi();
+	void OnPrewittHsi();
+	void OnSobelHsi();
+	void OnLaplaceHsi();
+	void OnLogHsi();
+	void OnDogHsi();
 };

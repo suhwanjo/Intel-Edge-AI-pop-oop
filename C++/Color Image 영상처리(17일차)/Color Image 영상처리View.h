@@ -74,6 +74,12 @@ public:
 	afx_msg void OnLaplaceImage();
 	afx_msg void OnLogImage();
 	afx_msg void OnDogImage();
+	afx_msg void OnEmbossHsi();
+	afx_msg void OnPrewittHsi();
+	afx_msg void OnSobelHsi();
+	afx_msg void OnLaplaceHsi();
+	afx_msg void OnLogHsi();
+	afx_msg void OnDogHsi();
 };
 
 #ifndef _DEBUG  // Color Image 영상처리View.cpp의 디버그 버전
