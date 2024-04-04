@@ -195,6 +195,7 @@
     <ClInclude Include="ConstantEdge.h" />
     <ClInclude Include="ConstantEmphChannel.h" />
     <ClInclude Include="ConstantF.h" />
+    <ClInclude Include="ConstantLog.h" />
     <ClInclude Include="ConstantMirror.h" />
     <ClInclude Include="ConstantMorph.h" />
     <ClInclude Include="ConstantPara.h" />
@@ -222,6 +223,7 @@
     <ClCompile Include="ConstantEdge.cpp" />
     <ClCompile Include="ConstantEmphChannel.cpp" />
     <ClCompile Include="ConstantF.cpp" />
+    <ClCompile Include="ConstantLog.cpp" />
     <ClCompile Include="ConstantMirror.cpp" />
     <ClCompile Include="ConstantMorph.cpp" />
     <ClCompile Include="ConstantPara.cpp" />

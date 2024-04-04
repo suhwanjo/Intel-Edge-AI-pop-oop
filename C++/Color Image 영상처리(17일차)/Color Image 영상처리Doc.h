@@ -106,4 +106,6 @@ public:
 	void OnLaplaceHsi();
 	void OnLogHsi();
 	void OnDogHsi();
+	double** OnToGrayscale(unsigned char** inImageR, unsigned char** inImageG, unsigned char** inImageB, int h, int w);
+	unsigned char** OnToGrayScale(unsigned char** inImageR, unsigned char** inImageG, unsigned char** inImageB, int h, int w);
 };
