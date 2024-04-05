@@ -192,6 +192,7 @@
     <ClInclude Include="Constant2.h" />
     <ClInclude Include="ConstantConv.h" />
     <ClInclude Include="ConstantDig.h" />
+    <ClInclude Include="ConstantDog.h" />
     <ClInclude Include="ConstantEdge.h" />
     <ClInclude Include="ConstantEmphChannel.h" />
     <ClInclude Include="ConstantF.h" />
@@ -220,6 +221,7 @@
     <ClCompile Include="Constant2.cpp" />
     <ClCompile Include="ConstantConv.cpp" />
     <ClCompile Include="ConstantDig.cpp" />
+    <ClCompile Include="ConstantDog.cpp" />
     <ClCompile Include="ConstantEdge.cpp" />
     <ClCompile Include="ConstantEmphChannel.cpp" />
     <ClCompile Include="ConstantF.cpp" />

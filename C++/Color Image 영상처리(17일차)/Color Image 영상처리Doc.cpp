@@ -23,6 +23,7 @@
 #include "ConstantConv.h"
 #include "ConstantEdge.h"
 #include "ConstantLog.h"
+#include "ConstantDog.h"
 #include <propkey.h>
 
 #ifdef _DEBUG
@@ -1352,6 +1353,11 @@ double** CColorImage영상처리Doc::OnConvolution(unsigned char** inputImage, i
 	int paddedH = h + (maskSize - 1);
 	int paddedW = w + (maskSize - 1);
 	double** paddedImage = OnmallocDouble2D(paddedH, paddedW);
+	for (int i = 0; i < paddedH; i++) {
+		for (int j = 0; j < paddedW; j++) {
+			paddedImage[i][j] = 127.0;
+		}
+	}
 	double** outputImage = OnmallocDouble2D(m_inH, m_inW);
 	// 입력 이미지를 패딩된 이미지에 복사
 	for (int i = 0; i < h; i++) {
@@ -1646,7 +1652,6 @@ void CColorImage영상처리Doc::OnSharpImage()
 				mask[i][j] = -1.0;
 		}
 	}
-
 	double** tmpOutImageR = OnConvolution(m_inImageR, m_inH, m_inW, mask, size);
 	double** tmpOutImageG = OnConvolution(m_inImageG, m_inH, m_inW, mask, size);
 	double** tmpOutImageB = OnConvolution(m_inImageB, m_inH, m_inW, mask, size);
@@ -1762,10 +1767,10 @@ void CColorImage영상처리Doc::OnPrewittImage()
 		// 수직 에지와 수평 에지를 구한 후 더함
 		double** tmpOutImage_vert = OnConvolution(grayImage, m_inH, m_inW, mask1, size);
 		double** tmpOutImage_hori = OnConvolution(grayImage, m_inH, m_inW, mask2, size);
-
 		for (int i = 0; i < m_inH; i++) {
 			for (int j = 0; j < m_inW; j++) {
-				tmpOutImage[i][j] = abs(tmpOutImage_vert[i][j]) + abs(tmpOutImage_hori[i][j]); // 그레디언트 강도 계산
+				//tmpOutImage[i][j] = abs(tmpOutImage_vert[i][j]) + abs(tmpOutImage_hori[i][j]); // 그레디언트 강도 계산
+				tmpOutImage[i][j] = sqrt(pow(tmpOutImage_vert[i][j], 2) + pow(tmpOutImage_hori[i][j], 2)); // 그레디언트 강도 계산
 			}
 		}
 		// 임계값 적용 및 이진화
@@ -1870,7 +1875,7 @@ void CColorImage영상처리Doc::OnSobelImage()
 
 		for (int i = 0; i < m_inH; i++) {
 			for (int j = 0; j < m_inW; j++) {
-				tmpOutImage[i][j] = abs(tmpOutImage_vert[i][j]) + abs(tmpOutImage_hori[i][j]);
+				tmpOutImage[i][j] = sqrt(pow(tmpOutImage_vert[i][j], 2) + pow(tmpOutImage_hori[i][j], 2)); // 그레디언트 강도 계산
 			}
 		}
 		// 임계값 적용 및 이진화
@@ -1893,8 +1898,8 @@ void CColorImage영상처리Doc::OnSobelImage()
 	OnFree2D(grayImage, m_inH);
 }
 
-
-void CColorImage영상처리Doc::OnLaplaceImage()  // 라플라시안 마스크 적용 후 제로 크로싱을 통한 성능 향상
+// 라플라시안 마스크 적용 후 제로 크로싱을 통한 성능 향상 -> 라플라시안(2차 미분 연산)은 결과가 양수와 음수로 나옴. 0에 가까우면 에지가 아님.
+void CColorImage영상처리Doc::OnLaplaceImage() 
 {
 	CConstantDig dlg;
 	if (dlg.DoModal() != IDOK)
@@ -1926,7 +1931,7 @@ void CColorImage영상처리Doc::OnLaplaceImage()  // 라플라시안 마스크 
 	// 테두리 1칸을 0으로 초기화
 	for (int i = 0; i < m_inH + 2; i++) {
 		for (int j = 0; j < m_inW + 2; j++) {
-			tmpOutImagePad[i][j] = 0.0;
+			tmpOutImagePad[i][j] = 127.0;
 		}
 	}
 	// 중심 영역에 tmpOutImage 값 복사
@@ -2043,7 +2048,7 @@ void CColorImage영상처리Doc::OnLogImage()
 		CConstantF dlg;
 		if (dlg.DoModal() != IDOK)
 			return;
-		sigma = (double)dlg.m_constant_f;
+		sigma = (double)dlg.m_constant_f;  // 시그마 작은 값 넣어야 함
 		for (int i = 0; i < size3; i++) {
 			for (int j = 0; j < size3; j++) {
 				double x = sqrt((pow((i - center), 2) + pow((j - center), 2)));
@@ -2137,6 +2142,9 @@ void CColorImage영상처리Doc::OnLogImage()
 
 void CColorImage영상처리Doc::OnDogImage()
 {
+	CConstantDog btn;
+	if (btn.DoModal() != IDOK)
+		return;
 	// TODO: 여기에 구현 코드 추가.
 		// 메모리 해제
 	OnFreeOutimage();
@@ -2147,55 +2155,90 @@ void CColorImage영상처리Doc::OnDogImage()
 	m_outImageR = OnMalloc2D(m_outH, m_outW);
 	m_outImageG = OnMalloc2D(m_outH, m_outW);
 	m_outImageB = OnMalloc2D(m_outH, m_outW);
-	const int size = 7;
-	double** mask = OnmallocDouble2D(size, size);
+	unsigned char** grayImage = OnToGrayScale(m_inImageR, m_inImageG, m_inImageB, m_inH, m_inW);
 
-	// 마스크 초기화
-	mask[0][0] = 0; mask[0][1] = 0; mask[0][2] = -1; mask[0][3] = -1; mask[0][4] = -1; mask[0][5] = 0; mask[0][6] = 0;
-	mask[1][0] = 0; mask[1][1] = -2; mask[1][2] = -3; mask[1][3] = -3; mask[1][4] = -3; mask[1][5] = -2; mask[1][6] = 0;
-	mask[2][0] = -1; mask[2][1] = -3; mask[2][2] = 5; mask[2][3] = 5; mask[2][4] = 5; mask[2][5] = -3; mask[2][6] = -1;
-	mask[3][0] = -1; mask[3][1] = -3; mask[3][2] = 5; mask[3][3] = 16; mask[3][4] = 5; mask[3][5] = -3; mask[3][6] = -1;
-	mask[4][0] = -1; mask[4][1] = -3; mask[4][2] = 5; mask[4][3] = 5; mask[4][4] = 5; mask[4][5] = -3; mask[4][6] = -1;
-	mask[5][0] = 0; mask[5][1] = -2; mask[5][2] = -3; mask[5][3] = -3; mask[5][4] = -3; mask[5][5] = -2; mask[5][6] = 0;
-	mask[6][0] = 0; mask[6][1] = 0; mask[6][2] = -1; mask[6][3] = -1; mask[6][4] = -1; mask[6][5] = 0; mask[6][6] = 0;
+	if (btn.m_radio_dog == 0) {  // DOG 마스크 사용
+		// 마스크 초기화
+		const int size = 7;
+		double** mask = OnmallocDouble2D(size, size);
+		// 마스크 초기화
+		mask[0][0] = 0; mask[0][1] = 0; mask[0][2] = -1; mask[0][3] = -1; mask[0][4] = -1; mask[0][5] = 0; mask[0][6] = 0;
+		mask[1][0] = 0; mask[1][1] = -2; mask[1][2] = -3; mask[1][3] = -3; mask[1][4] = -3; mask[1][5] = -2; mask[1][6] = 0;
+		mask[2][0] = -1; mask[2][1] = -3; mask[2][2] = 5; mask[2][3] = 5; mask[2][4] = 5; mask[2][5] = -3; mask[2][6] = -1;
+		mask[3][0] = -1; mask[3][1] = -3; mask[3][2] = 5; mask[3][3] = 16; mask[3][4] = 5; mask[3][5] = -3; mask[3][6] = -1;
+		mask[4][0] = -1; mask[4][1] = -3; mask[4][2] = 5; mask[4][3] = 5; mask[4][4] = 5; mask[4][5] = -3; mask[4][6] = -1;
+		mask[5][0] = 0; mask[5][1] = -2; mask[5][2] = -3; mask[5][3] = -3; mask[5][4] = -3; mask[5][5] = -2; mask[5][6] = 0;
+		mask[6][0] = 0; mask[6][1] = 0; mask[6][2] = -1; mask[6][3] = -1; mask[6][4] = -1; mask[6][5] = 0; mask[6][6] = 0;
 
-	double** tmpOutImageR = OnConvolution(m_inImageR, m_inH, m_inW, mask, size);
-	double** tmpOutImageG = OnConvolution(m_inImageG, m_inH, m_inW, mask, size);
-	double** tmpOutImageB = OnConvolution(m_inImageB, m_inH, m_inW, mask, size);
+		double** tmpOutImage = OnConvolution(grayImage, m_inH, m_inW, mask, size);
 
-	// 임시 출력 영상 -> 출력 영상
-	for (int i = 0; i < m_outH; i++) {
-		for (int j = 0; j < m_outW; j++) {
-			// R 채널 클리핑
-			if (tmpOutImageR[i][j] < 0.0)
-				m_outImageR[i][j] = 0;
-			else if (tmpOutImageR[i][j] > 255.0)
-				m_outImageR[i][j] = 255;
-			else
-				m_outImageR[i][j] = (unsigned char)tmpOutImageR[i][j];
-
-			// G 채널 클리핑
-			if (tmpOutImageG[i][j] < 0.0)
-				m_outImageG[i][j] = 0;
-			else if (tmpOutImageG[i][j] > 255.0)
-				m_outImageG[i][j] = 255;
-			else
-				m_outImageG[i][j] = (unsigned char)tmpOutImageG[i][j];
-
-			// B 채널 클리핑
-			if (tmpOutImageB[i][j] < 0.0)
-				m_outImageB[i][j] = 0;
-			else if (tmpOutImageB[i][j] > 255.0)
-				m_outImageB[i][j] = 255;
-			else
-				m_outImageB[i][j] = (unsigned char)tmpOutImageB[i][j];
+		// 임시 출력 영상 -> 출력 영상
+		for (int i = 0; i < m_outH; i++) {
+			for (int j = 0; j < m_outW; j++) {
+				if (tmpOutImage[i][j] < 0.0)
+					m_outImageR[i][j] = m_outImageG[i][j] = m_outImageB[i][j] = 0;
+				else if (tmpOutImage[i][j] > 255.0)
+					m_outImageR[i][j] = m_outImageG[i][j] = m_outImageB[i][j] = 255;
+				else
+					m_outImageR[i][j] = m_outImageG[i][j] = m_outImageB[i][j] = (unsigned char)tmpOutImage[i][j];
+			}
 		}
+		OnFree2D(tmpOutImage, m_inH);
+		OnFree2D(mask, size);
 	}
+	else {
+		const int size3 = 3;
+		// 시그마가 다른 3x3 가우시안 마스크 2개 생성(1보다 작은게 좋음)
+		double** maskGauss1 = OnmallocDouble2D(size3, size3);
+		double** maskGauss2 = OnmallocDouble2D(size3, size3);
+		double sigma1 = 0.3;
+		double sigma2 = 0.5;
+		int center = size3 / 2;
 
-	OnFree2D(mask, size);
-	OnFree2D(tmpOutImageR, m_outH);
-	OnFree2D(tmpOutImageG, m_outH);
-	OnFree2D(tmpOutImageB, m_outH);
+		for (int i = 0; i < size3; i++) {
+			for (int j = 0; j < size3; j++) {
+				double x = sqrt((pow((i - center), 2) + pow((j - center), 2)));
+				double gaussian = exp(-(x * x) / (2.0 * sigma1 * sigma1)) / (sigma1 * sqrt(2.0 * 3.141592));
+				maskGauss1[i][j] = gaussian;
+			}
+		}
+		for (int i = 0; i < size3; i++) {
+			for (int j = 0; j < size3; j++) {
+				double x = sqrt((pow((i - center), 2) + pow((j - center), 2)));
+				double gaussian = exp(-(x * x) / (2.0 * sigma2 * sigma2)) / (sigma2 * sqrt(2.0 * 3.141592));
+				maskGauss2[i][j] = gaussian;
+			}
+		}
+		double** tmpOutImage1 = OnConvolution(grayImage, m_inH, m_inW, maskGauss1, size3);
+		double** tmpOutImage2 = OnConvolution(grayImage, m_inH, m_inW, maskGauss2, size3);
+		double** outputImage = OnmallocDouble2D(m_inH, m_inW);
+		CConstantDig dlg2;
+
+		if (dlg2.DoModal() != IDOK)
+			return;
+		int t = (int)dlg2.m_constant;
+		// 두 컨볼루션 결과 빼기
+		for (int i = 0; i < m_inH; i++) {
+			for (int j = 0; j < m_inW; j++){
+				outputImage[i][j] = tmpOutImage1[i][j] - tmpOutImage2[i][j];
+			}
+		}
+		// 이진화
+		for (int i = 0; i < m_outH; i++) {
+			for (int j = 0; j < m_outW; j++) {
+				if (outputImage[i][j] < t)  // 작은 값 넣어야 함
+					m_outImageR[i][j] = m_outImageG[i][j] = m_outImageB[i][j] = 0;
+				else
+					m_outImageR[i][j] = m_outImageG[i][j] = m_outImageB[i][j] = 255;
+			}
+		}
+		OnFree2D(outputImage, m_inH);
+		OnFree2D(tmpOutImage2, m_inH);
+		OnFree2D(tmpOutImage1, m_inH);
+		OnFree2D(maskGauss2, size3);
+		OnFree2D(maskGauss1, size3);
+	}
+	OnFree2D(grayImage, m_inH);
 }
 
 

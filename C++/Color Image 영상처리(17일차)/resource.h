@@ -98,6 +98,7 @@
 #define IDD_CONSTANT_EDGE               328
 #define IDD_DIALOG4                     334
 #define IDM_CONSTANT_LOG                334
+#define IDD_DIALOG5                     336
 #define IDC_EDIT_CONSTANT_F             1000
 #define IDC_EDIT1                       1001
 #define IDC_EDIT2                       1002
@@ -198,7 +199,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        336
+#define _APS_NEXT_RESOURCE_VALUE        338
 #define _APS_NEXT_COMMAND_VALUE         32854
 #define _APS_NEXT_CONTROL_VALUE         1014
 #define _APS_NEXT_SYMED_VALUE           310
