@@ -108,4 +108,7 @@ public:
 	void OnDogHsi();
 	double** OnToGrayscale(unsigned char** inImageR, unsigned char** inImageG, unsigned char** inImageB, int h, int w);
 	unsigned char** OnToGrayScale(unsigned char** inImageR, unsigned char** inImageG, unsigned char** inImageB, int h, int w);
+	void OnCannyImage();
+	void nonmax_suppression(double** sobel, double** direction, int h, int w, double** suppressed);
+	void hysteresis_thresholding(double** suppressed, int h, int w, int lowT, int highT, double** edges);
 };

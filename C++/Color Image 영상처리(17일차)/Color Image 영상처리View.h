@@ -80,6 +80,7 @@ public:
 	afx_msg void OnLaplaceHsi();
 	afx_msg void OnLogHsi();
 	afx_msg void OnDogHsi();
+	afx_msg void OnCannyImage();
 };
 
 #ifndef _DEBUG  // Color Image 영상처리View.cpp의 디버그 버전

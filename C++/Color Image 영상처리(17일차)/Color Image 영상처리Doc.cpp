@@ -24,6 +24,7 @@
 #include "ConstantEdge.h"
 #include "ConstantLog.h"
 #include "ConstantDog.h"
+#include "ConstantCanny.h"
 #include <propkey.h>
 
 #ifdef _DEBUG
@@ -3086,4 +3087,162 @@ unsigned char** CColorImage영상처리Doc::OnToGrayScale(unsigned char** inImag
 		}
 	}
 	return outImage;
+}
+
+
+void CColorImage영상처리Doc::OnCannyImage()
+{
+	// TODO: 여기에 구현 코드 추가.
+	// 메모리 해제
+	OnFreeOutimage();
+	// (중요!) 이미지의 폭과 높이를 결정
+	m_outH = m_inH;
+	m_outW = m_inW;
+	// 메모리 할당
+	m_outImageR = OnMalloc2D(m_outH, m_outW);
+	m_outImageG = OnMalloc2D(m_outH, m_outW);
+	m_outImageB = OnMalloc2D(m_outH, m_outW);
+	unsigned char** grayImage = OnToGrayScale(m_inImageR, m_inImageG, m_inImageB, m_inH, m_inW);
+	const int size3 = 3;
+	// 가우시안 블러링
+	double** maskGauss = OnmallocDouble2D(size3, size3);
+	double sigma = 0.5;
+	int center = size3 / 2;
+
+	for (int i = 0; i < size3; i++) {
+		for (int j = 0; j < size3; j++) {
+			double x = sqrt((pow((i - center), 2) + pow((j - center), 2)));
+			double gaussian = exp(-(x * x) / (2.0 * sigma * sigma)) / (sigma * sqrt(2.0 * 3.141592));
+			maskGauss[i][j] = gaussian;
+		}
+	}
+	double** grayImageBlurr = OnConvolution(grayImage, m_inH, m_inW, maskGauss, size3);
+	unsigned char** tmp = OnMalloc2D(m_inH, m_inW);
+	for (int i = 0; i < m_inH; i++) {  // Onconvolution 함수 오버로딩 하면 되겠지만.. 그냥 형변환해서 사용
+		for (int j = 0; j < m_inW; j++) {
+			tmp[i][j] = (unsigned char)grayImageBlurr[i][j];
+		}
+	}
+	// 소벨 마스크 적용
+	// 수직 마스크
+	double** mask1 = OnmallocDouble2D(size3, size3);
+	double** mask2 = OnmallocDouble2D(size3, size3);
+	mask1[0][0] = -1.; mask1[0][1] = 0.; mask1[0][2] = 1.;
+	mask1[1][0] = -2.; mask1[1][1] = 0.; mask1[1][2] = 2.;
+	mask1[2][0] = -1.; mask1[2][1] = 0.; mask1[2][2] = 1.;
+	// 수평 마스크
+	mask2[0][0] = -1.; mask2[0][1] = -2.; mask2[0][2] = -1.;
+	mask2[1][0] = 0.; mask2[1][1] = 0.; mask2[1][2] = 0.;
+	mask2[2][0] = 1.; mask2[2][1] = 2.; mask2[2][2] = 1.;
+	double** sobel_x = OnConvolution(tmp, m_inH, m_inW, mask1, size3);
+	double** sobel_y = OnConvolution(tmp, m_inH, m_inW, mask2, size3);
+
+	// 에지 강도 및 방향 계산
+	double** gradient_magnitude = OnmallocDouble2D(m_inH, m_inW);
+	double** gradient_direction = OnmallocDouble2D(m_inH, m_inW);
+	for (int i = 0; i < m_inH; i++) {
+		for (int j = 0; j < m_inW; j++) {
+			gradient_magnitude[i][j] = sqrt(sobel_x[i][j] * sobel_x[i][j] + sobel_y[i][j] * sobel_y[i][j]);
+			gradient_direction[i][j] = atan2(sobel_y[i][j], sobel_x[i][j]);
+		}
+	}
+	// 비최대 억제
+	double** suppressed = OnmallocDouble2D(m_inH, m_inW);
+	nonmax_suppression(gradient_magnitude, gradient_direction, m_inH, m_inW, suppressed);
+
+	// 이중 임계값 처리
+	CConstantCanny dlg;
+	if (dlg.DoModal() != IDOK)
+		return;
+	int lowT = (int)dlg.m_constant_low;
+	int highT = (int)dlg.m_constant_high;
+	double** edges = OnmallocDouble2D(m_inH, m_inW);
+	hysteresis_thresholding(suppressed, m_inH, m_inW, lowT, highT, edges);
+
+	// 결과 이미지 저장
+	for (int i = 0; i < m_outH; i++) {
+		for (int j = 0; j < m_outW; j++) {
+			m_outImageR[i][j] = m_outImageG[i][j] = m_outImageB[i][j] = (unsigned char)edges[i][j];
+		}
+	}
+	// 메모리 해제
+	OnFree2D(grayImage, m_inH);
+	OnFree2D(maskGauss, size3);
+	OnFree2D(sobel_x, size3);
+	OnFree2D(sobel_y, size3);
+	OnFree2D(gradient_magnitude, m_inH);
+	OnFree2D(gradient_direction, m_inH);
+	OnFree2D(suppressed, m_inH);
+	OnFree2D(edges, m_inH);
+
+
+
+}
+
+
+void CColorImage영상처리Doc::nonmax_suppression(double** sobel, double** direction, int h, int w, double** suppressed)
+{
+	// TODO: 여기에 구현 코드 추가.
+	for (int i = 1; i < h - 1; i++) {
+		for (int j = 1; j < w - 1; j++) {
+			double angle = direction[i][j] * 180.0 / 3.141592;
+			double q, r;
+			if ((0 <= angle && angle < 22.5) || (157.5 <= angle && angle <= 180)) {
+				q = sobel[i][j + 1];
+				r = sobel[i][j - 1];
+			}
+			else if (22.5 <= angle && angle < 67.5) {
+				q = sobel[i - 1][j + 1];
+				r = sobel[i + 1][j - 1];
+			}
+			else if (67.5 <= angle && angle < 112.5) {
+				q = sobel[i - 1][j];
+				r = sobel[i + 1][j];
+			}
+			else {
+				q = sobel[i + 1][j + 1];
+				r = sobel[i - 1][j - 1];
+			}
+			if (sobel[i][j] >= q && sobel[i][j] >= r) {
+				suppressed[i][j] = sobel[i][j];
+			}
+			else {
+				suppressed[i][j] = 0.0;
+			}
+		}
+	}
+}
+
+
+void CColorImage영상처리Doc::hysteresis_thresholding(double** suppressed, int h, int w, int lowT, int highT, double** edges)
+{
+	// TODO: 여기에 구현 코드 추가.
+	for (int i = 1; i < h - 1; i++) {
+		for (int j = 1; j < w - 1; j++) {
+			if (suppressed[i][j] >= highT) {
+				edges[i][j] = 255.0;
+			}
+			else if (lowT <= suppressed[i][j] && suppressed[i][j] < highT) {
+				int found = 0;
+				for (int k = i - 1; k <= i + 1; k++) {
+					for (int l = j - 1; l <= j + 1; l++) {
+						if (suppressed[k][l] >= highT) {
+							found = 1;
+							break;
+						}
+					}
+					if (found) break;
+				}
+				if (found) {
+					edges[i][j] = 255.0;
+				}
+				else {
+					edges[i][j] = 0.0;
+				}
+			}
+			else {
+				edges[i][j] = 0.0;
+			}
+		}
+	}
 }

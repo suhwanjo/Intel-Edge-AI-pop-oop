@@ -190,6 +190,7 @@
     <ClInclude Include="Color Image 영상처리Doc.h" />
     <ClInclude Include="Color Image 영상처리View.h" />
     <ClInclude Include="Constant2.h" />
+    <ClInclude Include="ConstantCanny.h" />
     <ClInclude Include="ConstantConv.h" />
     <ClInclude Include="ConstantDig.h" />
     <ClInclude Include="ConstantDog.h" />
@@ -219,6 +220,7 @@
     <ClCompile Include="Color Image 영상처리Doc.cpp" />
     <ClCompile Include="Color Image 영상처리View.cpp" />
     <ClCompile Include="Constant2.cpp" />
+    <ClCompile Include="ConstantCanny.cpp" />
     <ClCompile Include="ConstantConv.cpp" />
     <ClCompile Include="ConstantDig.cpp" />
     <ClCompile Include="ConstantDog.cpp" />

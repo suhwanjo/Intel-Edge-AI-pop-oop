@@ -65,6 +65,7 @@ BEGIN_MESSAGE_MAP(CColorImage영상처리View, CView)
 	ON_COMMAND(ID_LAPLACE_HSI, &CColorImage영상처리View::OnLaplaceHsi)
 	ON_COMMAND(ID_LOG_HSI, &CColorImage영상처리View::OnLogHsi)
 	ON_COMMAND(ID_DOG_HSI, &CColorImage영상처리View::OnDogHsi)
+	ON_COMMAND(IDM_CANNY_IMAGE, &CColorImage영상처리View::OnCannyImage)
 END_MESSAGE_MAP()
 
 // CColorImage영상처리View 생성/소멸
@@ -656,5 +657,16 @@ void CColorImage영상처리View::OnDogHsi()
 	ASSERT_VALID(pDoc);
 
 	pDoc->OnDogHsi();
+	Invalidate(TRUE);
+}
+
+
+void CColorImage영상처리View::OnCannyImage()
+{
+	// TODO: 여기에 명령 처리기 코드를 추가합니다.
+	CColorImage영상처리Doc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	pDoc->OnCannyImage();
 	Invalidate(TRUE);
 }

@@ -99,6 +99,8 @@
 #define IDD_DIALOG4                     334
 #define IDM_CONSTANT_LOG                334
 #define IDD_DIALOG5                     336
+#define IDD_DIALOG6                     338
+#define IDD_CONSTANT_CANNY              338
 #define IDC_EDIT_CONSTANT_F             1000
 #define IDC_EDIT1                       1001
 #define IDC_EDIT2                       1002
@@ -194,13 +196,15 @@
 #define ID_LOG_HSI                      32851
 #define ID_DOG_HSI                      32852
 #define ID_32853                        32853
+#define ID_32854                        32854
+#define IDM_CANNY_IMAGE                 32855
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        338
-#define _APS_NEXT_COMMAND_VALUE         32854
+#define _APS_NEXT_RESOURCE_VALUE        340
+#define _APS_NEXT_COMMAND_VALUE         32856
 #define _APS_NEXT_CONTROL_VALUE         1014
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
