@@ -5,7 +5,7 @@ using namespace std;
 
 class Circle {
 public:
-	static int numOfCircles;
+	static int numOfCircles; // í´ë˜ìŠ¤ì˜ ëª¨ë“  ì¸ìŠ¤í„´ìŠ¤(ê°ì²´)ê°€ ê³µìœ í•˜ëŠ” ë³€ìˆ˜
 	int radius;
 public:
 	Circle(int radius = 1) {
@@ -15,7 +15,7 @@ public:
 	~Circle(){
 		numOfCircles--;
 	}
-	static int getNumOfCircle() {
+	static int getNumOfCircle() {  // í´ë˜ìŠ¤ì˜ ì¸ìŠ¤í„´ìŠ¤ ì—†ì´ í˜¸ì¶œ ê°€ëŠ¥
 		return numOfCircles;
 	}
 };
@@ -25,13 +25,13 @@ int Circle::numOfCircles = 0;
 int main() {
 	
 	Circle* p = new Circle[10];
-	cout << "ÇöÀç ¿ø °´Ã¼¼ö: " << Circle::getNumOfCircle() << endl;
+	cout << "í˜„ì¬ ì› ê°ì²´ìˆ˜: " << Circle::getNumOfCircle() << endl;
 	delete[] p;
-	cout << "ÇöÀç ¿ø °´Ã¼¼ö: " << Circle::getNumOfCircle() << endl;
+	cout << "í˜„ì¬ ì› ê°ì²´ìˆ˜: " << Circle::getNumOfCircle() << endl;
 	if (true) {
 		Circle a, b;
-		cout << "ÇöÀç ¿ø °´Ã¼¼ö: " << Circle::getNumOfCircle() << endl;
+		cout << "í˜„ì¬ ì› ê°ì²´ìˆ˜: " << Circle::getNumOfCircle() << endl;
 	}
-	cout << "ÇöÀç ¿ø °´Ã¼¼ö: " << Circle::getNumOfCircle() << endl;
+	cout << "í˜„ì¬ ì› ê°ì²´ìˆ˜: " << Circle::getNumOfCircle() << endl;
 
 }
